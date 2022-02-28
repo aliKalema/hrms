@@ -1,0 +1,1506 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <link rel="apple-touch-icon" sizes="76x76" th:href="@{/img/filename.jpg}" />
+    <link rel="icon" type="image/png" th:href="@{/img/filename.jpg}" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <title>HRMS</title>
+    <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="stylesheet" type="text/css" th:href="@{/webjars/font-awesome/5.15.0/css/all.css}">
+    <script rel="stylesheet"  th:src="@{/webjars/font-awesome/5.15.0/js/all.js}"></script>
+    <link rel="stylesheet" type="text/css" th:href="@{/webjars/material-design-icons/4.0.0/material-icons.css}">
+    <link th:href="@{/webjars/bootstrap/3.3.5/css/bootstrap.min.css}" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap-material-design/0.5.10/css/bootstrap-material-design.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap-select/1.12.4/css/bootstrap-select.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap-clockpicker.css}">
+    <link th:href="@{/css/material-dashboard.css}" rel="stylesheet"/>
+    <link th:href="@{/css/speech_bubble.css}" rel="stylesheet">
+    <link th:href="@{/css/recommend.css}" rel="stylesheet">
+    <link th:href="@{/css/payslip.css}" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/print.min.css}">
+    <link rel="stylesheet" th:href="@{/css/js-year-calendar.min.css}">
+    <link rel="stylesheet" th:href="@{/css/js-year-calendar-custom.css}">
+</head>
+<body>
+<div class="wrapper" id="wrapper" style="display: none">
+
+    <div class="sidebar" data-active-color="primary" data-background-color="black" data-image="/img/sidebar-3.jpg">
+        <div class="logo">
+            <a  class="simple-text logo-mini">
+
+            </a>
+
+            <a href="#" class="simple-text logo-normal">
+                HRMS
+            </a>
+        </div>
+
+        <div class="sidebar-wrapper">
+            <div class="user">
+                <div class="photo">
+                    <img th:src="@{${'/docs-upload/' +user.employee.image.name}}" />
+                </div>
+                <div class="info">
+                    <a data-toggle="collapse" href="#collapseExample" class="collapsed">
+                    <span th:text="${user.username}">
+                        <b class="caret"></b>
+                    </span>
+                    </a>
+                    <div class="clearfix"></div>
+                    <div class="collapse" id="collapseExample">
+                        <ul class="nav">
+                            <li>
+                                <a data-toggle="modal" data-target="#lock-modal">
+                                    <span class="sidebar-mini"> CP </span>
+                                    <span class="sidebar-normal"> Change Password </span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <ul class="nav">
+                <li >
+                    <a th:href="@{/admin/dashboard}">
+                        <i class="material-icons">dashboard</i>
+                        <p> Dashboard </p>
+                    </a>
+                </li>
+                <li>
+                    <a th:href="@{/admin/employee}">
+                        <i class="material-icons">people_alt</i>
+                        <p> Employees </p>
+                    </a>
+                </li>
+                <li >
+                    <a th:href="@{/admin/structure}" >
+                        <i class="material-icons">view_quilt</i>
+                        <p> Structure </p>
+                    </a>
+                </li>
+                <li >
+                    <a th:href="@{/admin/leave}" >
+                        <i class="material-icons">weekend</i>
+                        <p>Leave </p>
+                    </a>
+                </li>
+                <li>
+                    <a data-toggle="collapse" href="#pagesAttendance">
+                        <i class="material-icons">history_toggle_off</i>
+                        <p> Attendance
+                            <b class="caret"></b>
+                        </p>
+                    </a>
+
+                    <div class="collapse" id="pagesAttendance">
+                        <ul class="nav">
+                            <li>
+                                <a th:href="@{/admin/attendance/log}">
+                                    <span class="sidebar-mini">AL</span>
+                                    <span class="sidebar-normal">Attandance Log</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a th:href="@{/admin/attendance/schedule}">
+                                    <span class="sidebar-mini">SC</span>
+                                    <span class="sidebar-normal">Schedule</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li sec:authorize="hasRole('ROLE_HR')">
+                    <a data-toggle="collapse" href="#pagesExamples">
+                        <i class="material-icons sidebar-mini">account_balance_wallet</i>
+                        <p> Payment
+                            <b class="caret"></b>
+                        </p>
+                    </a>
+
+                    <div class="collapse" id="pagesExamples">
+                        <ul class="nav">
+                            <li>
+                                <a th:href="@{/hr/payroll}">
+                                    <span class="sidebar-mini"> PR </span>
+                                    <span class="sidebar-normal"> Payroll </span>
+                                </a>
+                            </li>
+                            <li>
+                                <a th:href="@{/hr/template}">
+                                    <span class="sidebar-mini"> PM </span>
+                                    <span class="sidebar-normal"> Pay Model </span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li sec:authorize="hasRole('ROLE_HR')">
+                    <a th:href="@{/hr/general}">
+                        <i class="material-icons">tune</i>
+                        <p> General </p>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="main-panel">
+
+        <nav class="navbar navbar-transparent navbar-absolute">
+            <div class="container-fluid">
+                <div class="navbar-minimize">
+                    <button id="minimizeSidebar" class="btn btn-round btn-white btn-fill btn-just-icon">
+                        <i class="material-icons visible-on-sidebar-regular">more_vert</i>
+                        <i class="material-icons visible-on-sidebar-mini">view_list</i>
+                    </button>
+                </div>
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="#" th:text="${employee.name}" style="width:300px"></a>
+                </div>
+                <div class="collapse navbar-collapse">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="dropdown">
+                            <a  class="dropdown-toggle" data-toggle="dropdown" data-color="success" >
+                                <i class="material-icons">notifications</i>
+                                <span class="notification" id="unreceived-size">0</span>
+                                <p class="hidden-lg hidden-md">
+                                    Notifications
+                                    <b class="caret"></b>
+                                </p>
+                            </a>
+                            <ul class="dropdown-menu panel-group"  id="unreceived-view"  role="tablist" aria-multiselectable="true">
+                                <li th:each="reminder:${unreceivedReminders}">
+                                    <a th:attr="onclick=${'viewUnReceived('+reminder.id+',this)'}">
+                                        &nbsp;<span th:text="${reminder.day +' '+ reminder.date+' '+reminder.time}"></span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a th:href="@{/logout}" class="dropdown-toggle"  data-color="success">
+                                <i class="material-icons">logout</i>
+                                <p class="hidden-lg hidden-md">Logout</p>
+                            </a>
+                        </li>
+                        <li class="separator hidden-lg hidden-md"></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+
+        <div class="content">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-12" id="termination-label" style="display:none">
+                        <div style="display:flex;justify-content:space-between;width:100%; background: #eb445a;color:#fff;padding: 5px; font-size: 25px;font-weight: 600;border-radius: 8px">
+                            <span style="margin-top:20px;margin-left:8px;">TERMINATED</span>
+                            <button class="btn btn-primary" style="color:#fff">REINSTATE</button>
+                        </div>
+                    </div>
+                    <div class="col-md-12" style="display:flex;justify-content: end">
+                        <div id="action-btn-container">
+                            <button id="edit-employee-btn" class="btn btn-round btn-success"  style="color:#fff;">
+                                <span class="material-icons">edit</span>
+                                EDIT
+                            </button>
+                            <button  data-toggle="modal" data-target="#past-payroll-modal" class="btn btn-round btn-warning" style="color:#fff;">
+                                <span class="material-icons">file_download</span>
+                                PAYSLIP
+                            </button>
+                            <button  sec:authorize="hasRole('ROLE_HR')" id="terminate-btn" class="btn btn-round btn-danger" onclick="openTerminatationModal()" style="color:#fff;">
+                                <span class="material-icons">highlight_off</span>
+                                Off Board
+                            </button>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="nav_tabs_wrapper">
+                            <div class="nav_tabs">
+                                <a href="#details" data-toggle="tab" class="nav_active_1" onclick="navTab1(this)">
+                                    <i class="material-icons nav_tabs_icons">assignment_ind</i>
+                                    <span>Details</span>
+                                    <div class="ripple-container"></div>
+                                </a>
+                                <a href="#leaves" data-toggle="tab" onclick="navTab2(this)">
+                                    <i class="material-icons nav_tabs_icons">weekend</i>
+                                    <span>Leaves</span>
+                                    <div class="ripple-container"></div>
+                                </a>
+                                <a href="#payment" data-toggle="tab" onclick="navTab3(this)">
+                                    <i class="material-icons nav_tabs_icons">money</i>
+                                    <span>Payment</span>
+                                    <div class="ripple-container"></div>
+                                </a>
+                                <div class="animation start-home"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-12 col-md-12">
+                        <div class="tab-content">
+                            <div class="tab-pane active" id="details">
+                                <div class="row" style="margin-top:40px">
+                                    <div class="col-md-4 col-md-4 col-sm-12">
+                                        <div class="card card-profile">
+                                            <div style="display:flex">
+                                                <div class="card-avatar" id="card-avatar">
+                                                    <a href="#pablo">
+                                                        <img class="img-fluid rounded shadow" style="width: 100px;" th:src="@{${'/docs-upload/' +employee.image.name}}"/>
+                                                    </a>
+                                                </div>
+                                                <div class="comments" id="terminate-comment" style="display:none">
+                                                    <div class="comment bubble">
+                                                        <div style="display:flex;flex-direction:column;justify-content:center">
+                                                            <div style="font-size:16px;font-weight:500;margin-top:9px;">EX-STAFF</div>
+                                                            <div style="display:flex;width:100%;justify-content:center">
+                                                                <button  sec:authorize="hasRole('ROLE_HR')" type="button" id="reinstate-btn" class="btn btn-round btn-primary" style="color:#fff;width:100px;display:flex;justify-content:center">
+                                                                   Reinstate
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="comments" id="comment" style="display:none">
+                                                    <div class="comment bubble">
+                                                        <div style="display:flex;flex-direction:column;justify-content:center">
+                                                            <div style="font-size:16px;font-weight:500;margin-top:9px;">Not On Payroll</div>
+                                                            <div style="display:flex;width:100%;justify-content:center">
+                                                                <button  type="button" class="btn btn-round btn-primary" style="color:#fff;width:100px;" data-toggle="modal" data-target="#add-payhead-modal">
+                                                                    <span>Add</span>
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="card-content">
+                                                <table class="table">
+                                                    <tbody>
+                                                    <tr>
+                                                        <td>Id</td>
+                                                        <td class="text-right" th:text="${employee.nationalId}"></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Payroll No</td>
+                                                        <td class="text-right" th:text="${employee.payrollNumber}"></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Gender</td>
+                                                        <td class="text-right" th:text="${employee.gender}"></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Phone</td>
+                                                        <td class="text-right" th:text= "${employee.phone} "></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>Email</td>
+                                                        <td class="text-right" th:text= "${employee.email}"></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>DOB</td>
+                                                        <td class="text-right" th:text= "${employee.dob}"></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>DOJ</td>
+                                                        <td class="text-right" th:text= "${employee.doj}"></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>EOC</td>
+                                                        <td class="text-right" th:text= "${employee.eoc}"></td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-8 col-md-8 col-sm-12">
+                                        <div class="card" style="margin-top: 10px">
+                                            <div class="card-content">
+                                                <div class="row">
+                                                    <div class="col-md-6 label-value-between m-2" style="padding-bottom:10px">
+                                                        <span style="font-weight:500;font-size: 15px">DEPARTMENT</span>
+                                                        <label th:text="${employee.department}" style="font-size:13px"></label>
+                                                    </div>
+                                                    <div class="col-md-6 label-value-between m-2" style="padding-bottom:10px">
+                                                        <span style="font-weight:500;font-size: 15px">SECTION</span>
+                                                        <label th:text="${employee.section}" style="font-size:13px"></label>
+                                                    </div>
+                                                    <div class="col-md-6 label-value-between" style="padding-bottom:10px">
+                                                        <span style="font-weight:500;font-size: 15px">CATEGORY</span>
+                                                        <label th:text="${employee.category} ?: 'NULL'" style="font-size:15px"></label>
+                                                    </div>
+                                                    <div class="col-md-6 label-value-between" style="padding-bottom:10px">
+                                                        <span style="font-weight:500;font-size: 15px">JOBTITLE</span>
+                                                        <label th:text="${employee.jobTitle}" style="font-size:15px"></label>
+                                                    </div>
+                                                    <div class="col-md-6 label-value-between" style="padding-bottom:10px">
+                                                        <span style="font-weight:500;font-size: 15px">LOCATION</span>
+                                                        <label th:text="${employee.location}" style="font-size:15px"></label>
+                                                    </div>
+                                                    <div class="col-md-6 label-value-between" style="padding-bottom:10px">
+                                                        <span style="font-weight:500;font-size: 15px">GRADE</span>
+                                                        <label th:text="${employee.grade}" style="font-size:15px"></label>
+                                                    </div>
+                                                    <div class="col-md-6 label-value-between" style="padding-bottom:10px">
+                                                        <span style="font-weight:500;font-size: 15px">EMPLOYMENT TYPE</span>
+                                                        <label th:text="${employee.employmentType}" style="font-size:15px"></label>
+                                                    </div>
+                                                    <div class="col-md-6 label-value-between" style="padding-bottom:10px">
+                                                        <span style="font-weight:500;font-size: 15px">MANAGER</span>
+                                                        <label th:text="${employee.managerName} ?: 'NULL'" style="font-size:15px"></label>
+                                                    </div>
+                                                    <div class="col-md-6 label-value-between" style="padding-bottom:10px">
+                                                        <span style="font-weight:500;font-size: 15px">PAYMENT MODE</span>
+                                                        <label th:text="${employee.department}" style="font-size:15px"></label>
+                                                    </div>
+                                                    <div class="col-md-6 label-value-between" style="padding-bottom:10px">
+                                                        <span style="font-weight:500;font-size: 15px">APPO</span>
+                                                        <label th:text="${employee.appo} ?: 'NULL'" style="font-size:15px"></label>
+                                                    </div>
+                                                    <div class="col-md-6 label-value-between" style="padding-bottom:10px">
+                                                        <span style="font-weight:500;font-size: 15px">BANK</span>
+                                                        <label th:text="${employee.bankName} ?: 'UNKNOWN'" style="font-size:15px"></label>
+                                                    </div>
+                                                    <div class="col-md-6 label-value-between" style="padding-bottom:10px">
+                                                        <span style="font-weight:500;font-size: 15px">BRANCH</span>
+                                                        <label th:text="${employee.branch} ?: 'UNKNOWN'" style="font-size:15px"></label>
+                                                    </div>
+                                                    <div class="col-md-6 label-value-between" style="padding-bottom:10px">
+                                                        <span style="font-weight:500;font-size: 15px">NSSF</span>
+                                                        <label th:text="${employee.nssfPin}" style="font-size:15px"></label>
+                                                    </div>
+                                                    <div class="col-md-6 label-value-between" style="padding-bottom:10px">
+                                                        <span style="font-weight:500;font-size: 15px">NHIF</span>
+                                                        <label th:text="${employee.nhifPin}" style="font-size:15px"></label>
+                                                    </div>
+                                                    <div class="col-md-6 label-value-between" style="padding-bottom:10px">
+                                                        <span style="font-weight:500;font-size: 15px">ACCOUNT No</span>
+                                                        <label th:text="${employee.accountPin}" style="font-size:15px"></label>
+                                                    </div>
+                                                    <div class="col-md-6 label-value-between" style="padding-bottom:10px">
+                                                        <span style="font-weight:500;font-size: 15px">PAYMENT MODE</span>
+                                                        <label th:text="${employee.paymentMode}" style="font-size:15px"></label>
+                                                    </div>
+                                                    <div class="col-md-6 label-value-between" style="padding-bottom:10px">
+                                                        <span style="font-weight:500;font-size: 15px">KRA</span>
+                                                        <label th:text="${employee.kra}" style="font-size:15px"></label>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row tab-pane" style="width:98%;margin:auto;" id="leaves">
+                                <div class="col-md-12" style="display:flex;justify-content:center;">
+                                    <h3> Remaining Leaves Days</h3>
+                                </div>
+                                <div class="col-md-12" style="display:grid; grid-template-columns: 1fr 1fr 1fr 1fr;grid-gap: 30px;grid-auto-rows: 1fr;">
+                                    <div class="" th:each="leaveCategory :${leaveCategories}">
+                                        <div class="card card-stats" style="min-height:120px">
+                                            <div class="card-header" data-background-color="primary">
+                                                <i class="material-icons" th:text="${leaveCategory.icon}"></i>
+                                            </div>
+                                            <div class="card-content">
+                                                <span class="category" th:text="${leaveCategory.categoryName}"></span>
+                                                <h3 class="card-title" th:text="${leaveCategory.remainingDays}"></h3>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12" style="display:flex;justify-content:center;">
+                                    <h3>Leave Days Used</h3>
+                                </div>
+                                <div class="calendar"></div>
+                            </div>
+                            <div class="tab-pane active" id="payment">
+                                <div class="row" id="payment-container" style="display:none">
+                                    <div class="col-md-12">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <h4 class="card-title text-center"><u>ADDITIONAL PAYHEADS</u></h4>
+                                                <div class="card" >
+                                                    <div class="card-content">
+                                                        <div style="display:flex;justify-content:end">
+                                                            <div>
+                                                                <button class="btn btn-primary" style="color:#fff" data-toggle="modal" data-target="#finacial-modal">add</button>
+                                                            </div>
+                                                        </div>
+                                                        <div class="table-responsive">
+                                                            <table class="table">
+                                                                <thead>
+                                                                <tr>
+                                                                    <th class="text-center">Name</th>
+                                                                    <th class="text-center">Type</th>
+                                                                    <th class="text-center">Amount</th>
+                                                                    <th class="text-center">Always</th>
+                                                                    <th class="text-right">Action</th>
+                                                                </tr>
+                                                                </thead>
+                                                                <tbody id="extra-payhead-table">
+
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-12" id="pay-template-wrapper-cont">
+                                                <h4 class="card-title text-center"><u>PAYMENT MODEL</u></h4>
+                                                <div class="card" >
+                                                    <div class="card-content" >
+                                                        <div style="display:flex;justify-content:space-between">
+                                                            <div><h4 class="card-title" id="paytemplate-name"></h4></div>
+                                                            <div>
+                                                                <button class="btn btn-primary" style="color:#fff" data-toggle="modal" data-target="#add-payhead-modal">CHANGE</button>
+                                                            </div>
+                                                        </div>
+                                                        <div class="payslip-container" >
+                                                            <div class="payslip-header-container">
+                                                                <div class="element-header">
+                                                                    <h4>Earnings</h4>
+                                                                </div>
+                                                                <div class="element-header">
+                                                                    <h4>Tax </h4>
+                                                                </div>
+                                                                <div class="element-header">
+                                                                    <h4>Deductions</h4>
+                                                                </div>
+                                                                <div class="element-header">
+                                                                    <h4>Net Pay</h4>
+                                                                </div>
+                                                            </div>
+                                                            <div class="element-body-container">
+                                                                <div class="element-body">
+                                                                    <ul class="units-list" id="earnings-list">
+
+                                                                    </ul>
+                                                                </div>
+                                                                <div class="element-body">
+                                                                    <ul class="units-list" id="tax-list">
+
+                                                                    </ul>
+                                                                </div>
+                                                                <div class="element-body">
+                                                                    <ul class="units-list" id="deductions-list">
+
+                                                                    </ul>
+                                                                </div>
+                                                                <div class="element-body">
+                                                                    <ul class="units-list" id="total-list">
+
+                                                                    </ul>
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            </div>
+    </div>
+
+</div>
+
+<div class="loader-wrapper">
+    <div class="dot-container">
+        <div class="dot dot1"></div>
+        <div class="dot dot2"></div>
+        <div class="dot dot3"></div>
+    </div>
+</div>
+
+<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel" id="edit-finacial-modal">
+    <div class="modal-dialog " role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title primary-text fw-4" >Edit</h4>
+            </div>
+            <div class="modal-body" >
+                <form id="edit-finacial-form">
+                    <div class="row">
+
+                    </div>
+                    <div class="row">
+                        <div class='col-md-6'>
+                            <div class="input-group">
+                                         <span class="input-group-addon">
+                                            <i class="material-icons">title</i>
+                                        </span>
+                                <div class="form-group label-floating">
+                                    <label class="control-label" for="edit-name">Name</label>
+                                    <input id="edit-name"  type="text" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                        <div class='col-md-6'>
+                            <div class="input-group">
+                                         <span class="input-group-addon">
+                                            <i class="material-icons">attach_money</i>
+                                        </span>
+                                <div class="form-group label-floating">
+                                    <label class="control-label" for="edit-amount">Amount</label>
+                                    <input id="edit-amount"  type="text" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <select class="selectpicker" data-style="btn btn-white btn-round" title="Single Select" id="edit-type" required>
+                                    <option disabled selected value="null">Select Type</option>
+                                    <option value="earning">Earning</option>
+                                    <option value="deduction">Deduction</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="checkbox checkbox-inline">
+                                    <label>
+                                        <input type="checkbox" id="edit-always_checkbox" name="optionsCheckboxes">Every Month
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class='col-md-6'>
+                            <div class="input-group date datepicker-group period-date" data-provide="datepicker">
+                                <label class="bmd-label-floating">Start Month</label>
+                                <input type="text" class="form-control datetimepicker"  id="edit-start-date" required>
+                                <div class="input-group-addon">
+                                    <i class="far fa-calendar-alt" id="edit-start-date-icon"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class='col-md-6'>
+                            <div class="input-group date datepicker-group period-date" data-provide="datepicker" >
+                                <label class="bmd-label-floating">End Month</label>
+                                <input type="text" class="form-control datetimepicker"  id="edit-end-date" required>
+                                <div class="input-group-addon">
+                                    <i class="far fa-calendar-alt" id="edit-end-date-icon"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <input type="submit"  value="submit" class="btn btn-primary" style="color:#ffff">
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel" id="finacial-modal">
+    <div class="modal-dialog " role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title primary-text fw-4" id="gridSystemModalLabel">Addidtional Payhead</h4>
+            </div>
+            <div class="modal-body" >
+                <form id="finacial-form">
+                    <div class="row">
+
+                    </div>
+                    <div class="row">
+                        <div class='col-md-6'>
+                            <div class="input-group">
+                                         <span class="input-group-addon">
+                                            <i class="material-icons">title</i>
+                                        </span>
+                                <div class="form-group label-floating">
+                                    <label class="control-label">Name</label>
+                                    <input id="name"  type="text" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                        <div class='col-md-6'>
+                            <div class="input-group">
+                                         <span class="input-group-addon">
+                                            <i class="material-icons">attach_money</i>
+                                        </span>
+                                <div class="form-group label-floating">
+                                    <label class="control-label">Amount</label>
+                                    <input id="amount"  type="text" class="form-control">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                            <select class="selectpicker" data-style="btn btn-white btn-round" title="Single Select" id="type" required>
+                                <option disabled selected value="null">Select Type</option>
+                                <option value="earning">Earning</option>
+                                <option value="deduction">Deduction</option>
+                            </select>
+                        </div>
+                            <div class="col-md-6">
+                            <div class="checkbox checkbox-inline">
+                                <label>
+                                    <input type="checkbox" id="always_checkbox" name="optionsCheckboxes">Every Month
+                                </label>
+                            </div>
+                        </div>
+                        </div>
+                        <div class='col-md-6'>
+                            <div class="input-group date datepicker-group period-date" data-provide="datepicker">
+                                <label class="bmd-label-floating">Start Month</label>
+                                <input type="text" class="form-control datetimepicker"  id="start-date" required>
+                                <div class="input-group-addon">
+                                    <i class="far fa-calendar-alt" id="start-date-icon"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class='col-md-6'>
+                            <div class="input-group date datepicker-group period-date" data-provide="datepicker" >
+                                <label class="bmd-label-floating">End Month</label>
+                                <input type="text" class="form-control datetimepicker"  id="end-date" required>
+                                <div class="input-group-addon">
+                                    <i class="far fa-calendar-alt" id="end-date-icon"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <input type="submit"  value="submit" class="btn btn-primary" style="color:#ffff">
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel" id="add-payhead-modal">
+    <div class="modal-dialog " role="document">
+        <div class="modal-content">
+            <div class="modal-header" style="display:flex;justify-content:space-between">
+                <div  style="margin-top:10px"><h4 class="modal-title primary-text fw-4" >Add To Payroll</h4></div>
+                <div><a th:href="@{/hr/template/add}" class="btn btn-success">new Modal</a></div>
+            </div>
+            <div class="modal-body">
+                <div class="search-input">
+                    <a href="" target="_blank" hidden></a>
+                    <input type="text" id="add-template-search-input" placeholder="search existing payment modal">
+                    <div class="autocom-box">
+                        <!-- here list are inserted from javascript -->
+                    </div>
+                    <div class="icon" style="margin-top:42px;margin-right:10px"><i class="fas fa-search"></i></div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer"></div>
+    </div>
+</div>
+
+<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel" id="past-payroll-modal">
+    <div class="modal-dialog " role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title primary-text fw-4" >Download Payslip</h4>
+            </div>
+            <div class="modal-body">
+
+                <div class="input-group date datepicker-group period-date" data-provide="datepicker" >
+                    <label class="bmd-label-floating">period</label>
+                    <input type="text" class="form-control datetimepicker" id ="paysli-period-date">
+                    <div class="input-group-addon">
+                        <i class="far fa-calendar-alt"></i>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <button id="download-payslip-btn" class="btn btn-primary" style="color:#ffffff">proceed</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel" id="slip-modal">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="row" style="width:100%;display:flex;justify-content: space-between">
+                    <div class="col-md-4">
+                        <h3 class="modal-title primary-text fw-4" style="margin-top:13px" id="template-name"></h3>
+                    </div>
+                    <div class="col-md-4">
+                        <h3 id="template-name-value"></h3>
+                    </div>
+                    <div class="col-md-4">
+                        <button class="btn btn-round btn-primary" style="color:#fff; float:right"  onclick="submitPayTemplate()">confirm</button>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-body">
+                <div class="payslip-container">
+                    <div class="payslip-header-container">
+                        <div class="element-header">
+                            <h4>Earnings</h4>
+                        </div>
+                        <div class="element-header">
+                            <h4>Tax Calculations</h4>
+                        </div>
+                        <div class="element-header">
+                            <h4>Deductions</h4>
+                        </div>
+                        <div class="element-header">
+                            <h4>Net Pay</h4>
+                        </div>
+                    </div>
+                    <div class="element-body-container">
+                        <div class="element-body">
+                            <ul class="units-list" id="preview-earnings">
+                            </ul>
+                        </div>
+                        <div class="element-body">
+                            <ul class="units-list" id="preview-tax">
+                            </ul>
+                        </div>
+                        <div class="element-body">
+                            <ul class="units-list" id="preview-deductions">
+                            </ul>
+                        </div>
+                        <div class="element-body">
+                            <ul class="units-list" id="preview-net-salary">
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel" id="terminate-modal">
+    <div class="modal-dialog " role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title primary-text fw-4" >Confirm Date of Exit</h4>
+            </div>
+            <div class="modal-body">
+                <div class="input-group date datepicker-group date-picker" data-provide="datepicker" >
+                    <label class="bmd-label-floating">date</label>
+                    <input type="text" class="form-control datetimepicker" id ="eoc-input">
+                    <div class="input-group-addon">
+                        <i class="far fa-calendar-alt"></i>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <button id="submit-terminate" class="btn btn-primary" style="color:#ffffff">Terminate Employee</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade bd-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel" id="lock-modal">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-body" >
+                <div style="display:flex;justify-content: center;margin-top:-70px">
+                    <a href="#pablo">
+                        <img class="avatar" style="height:100px;width: 80px" th:src="@{${'/docs-upload/' +user.employee.image.name}}" alt="...">
+                    </a>
+                </div>
+                <form id="lock-form">
+                    <div class="row">
+                        <div class="col-md-12" style="display: flex;justify-content:center;">
+                            <h4 class="card-title" th:text="${user.username}"></h4>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group label-floating">
+                                <label class="control-label">Current Password</label>
+                                <input type="text" id="current-password" class="form-control secure" autocomplete="off" required>
+                            </div>
+                            <div class="form-group label-floating">
+                                <label class="control-label">New Password <small> (minimum 4 characters)</small></label>
+                                <input type="text" id="new-password" class="form-control secure" autocomplete="off" required>
+                            </div>
+                            <div class="form-group label-floating">
+                                <label class="control-label">Confirm New Password</label>
+                                <input type="text" id="confirm-password" class="form-control secure" autocomplete="off" required>
+                            </div>
+                        </div>
+                        <div class="col-md-12" style="display: flex;justify-content: center">
+                            <button  id="submit-password" class="btn btn-primary btn-round" style="color:#ffffff">Submit</button>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+</body>
+
+<!--   Core JS Files   -->
+<script th:src="@{/webjars/jquery/3.3.1/jquery.js}"></script>
+<!--<script th:src="@{/js/bootstrap.min.css}"></script>-->
+<script th:src="@{/webjars/bootstrap-material-design/0.5.10/js/material.js}"></script>
+<script th:src="@{/webjars/bootstrap/3.3.5/js/bootstrap.js}"></script>
+<script th:src="@{/js/perfect-scrollbar.jquery.min.js}" type="text/javascript"></script>
+<script th:src="@{/js/print.min.js}"></script>
+
+<!-- Library for adding dinamically elements -->
+<script th:src="@{/js/arrive.min.js}" type="text/javascript"></script>
+
+<!-- Forms Validations Plugin -->
+<script th:src="@{/js/jquery.validate.min.js}"></script>
+
+<!--  Plugin for Date Time Picker and Full Calendar Plugin-->
+<script th:src="@{/webjars/momentjs/2.24.0/moment.js}"></script>
+
+<!--  Plugin for the Wizard, full documentation here: https://github.com/VinceG/twitter-bootstrap-wizard -->
+<script th:src="@{/js/jquery.bootstrap-wizard.js}"></script>
+
+<!--  Notifications Plugin, full documentation here: https://bootstrap-notify.remabledesigns.com/    -->
+<script th:src="@{/webjars/bootstrap-notify/3.1.3-1/bootstrap-notify.js}"></script>
+
+<!--   Sharrre Library    -->
+<script th:src="@{/js/jquery.sharrre.js}"></script>
+
+<!-- Vector Map plugin, full documentation here: https://jvectormap.com/documentation/ -->
+<script th:src="@{/js/jquery-jvectormap.js}"></script>
+
+<!-- Sliders Plugin, full documentation here: https://refreshless.com/nouislider/ -->
+<script th:src="@{/js/nouislider.min.js}"></script>
+
+<!--  Plugin for Select, full documentation here: https://silviomoreto.github.io/bootstrap-select -->
+<script th:src="@{/webjars/bootstrap-select/1.12.4/js/bootstrap-select.js}"></script>
+
+<!--  DataTables.net Plugin, full documentation here: https://datatables.net/    -->
+<script th:src="@{/webjars/datatables/1.10.12/js/jquery.dataTables.js}"></script>
+
+<!-- Sweet Alert 2 plugin, full documentation here: https://limonte.github.io/sweetalert2/ -->
+<script th:src="@{/js/sweetalert2.js}"></script>
+
+<!-- Plugin for Fileupload, full documentation here: https://www.jasny.net/bootstrap/javascript/#fileinput -->
+<script th:src="@{/js/jasny-bootstrap.min.js}"></script>
+
+<!--  Full Calendar Plugin, full documentation here: https://github.com/fullcalendar/fullcalendar    -->
+<script th:src="@{/js/fullcalendar.min.js}"></script>
+
+<!-- Plugin for Tags, full documentation here: https://github.com/bootstrap-tagsinput/bootstrap-tagsinputs  -->
+<script th:src="@{/js/jquery.tagsinput.js}"></script>
+
+<script th:src="@{/webjars/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.js}"></script>
+
+<script th:src="@{/js/gsdk-bootstrap-wizard.js}"></script>
+
+<!-- Material Dashboard javascript methods -->
+<script th:src="@{/js/material-dashboard.js}"></script>
+<script th:src="@{/js/glider.min.js}"></script>
+<script th:src="@{/js/wickedpicker.min.js}"></script>
+<script th:src="@{/webjars/sockjs-client/1.1.2/sockjs.min.js}"></script>
+<script th:src="@{/webjars/stomp-websocket/2.3.3-1/stomp.min.js}"></script>
+<script th:src="@{/webjars/font-awesome/5.15.0/js/all.js}"></script>
+<script th:src="@{/js/bootstrap-clockpicker.js}"></script>
+<script th:src="@{/webjars/sockjs-client/1.1.2/sockjs.min.js}"></script>
+<script th:src="@{/webjars/stomp-websocket/2.3.3-1/stomp.min.js}"></script>
+<script th:src="@{/js/js-year-calendar.min.js}"></script>
+<script th:inline="javascript">
+    var employee = [[${employee}]];
+    var payTemplate = [[${payTemplate}]];
+    var unreceivedReminders = [[${unreceivedReminders}]];
+    var leaves =  [[${leaves}]];
+</script>
+<script>
+    $(window).on("load",function(){
+        $(".loader-wrapper").fadeOut("slow");
+        document.getElementById('wrapper').style.display="block";
+    });
+    $(document).ready(function() {
+        console.log(leaves);
+        document.getElementById('always_checkbox').addEventListener('click',alwaysClick);
+        document.getElementById('unreceived-size').innerHTML =  unreceivedReminders.length.toString();
+        const cardAvatar =document.getElementById('card-avatar');
+        if(!employee.active){
+            cardAvatar.style.float="left";
+            cardAvatar.style.margin.left="40px";
+            document.getElementById('terminate-comment').style.display="block";
+            document.getElementById('terminate-btn').style.display="none";
+        }
+        else if(!employee.payroll){
+            cardAvatar.style.float="left";
+            cardAvatar.style.margin.left="40px";
+            document.getElementById('comment').style.display="block";
+            document.getElementById("pay-template-wrapper-cont").style.display="none";
+        }
+        if(employee.payroll){
+            document.getElementById('pay-template-wrapper-cont').style.dispay='block';
+            document.getElementById('paytemplate-name').innerText= payTemplate.name;
+            const earnings = document.getElementById('earnings-list');
+            const deductions = document.getElementById('deductions-list');
+            const taxList = document.getElementById('tax-list');
+            const totalList = document.getElementById('total-list');
+            for(let earn of payTemplate.payslip.earnings){
+                const li = document.createElement('li');
+                li.className = "unit";
+                li.innerHTML = `<div  class="unit-label">${earn.name}</div>
+                                <label class="unit-value">${earn.amount}</label>`;
+                earnings.appendChild(li);
+            }
+            const nssf = document.createElement('li');
+            nssf.className = "unit";
+            nssf.innerHTML = `<div  class="unit-label">NSSF</div>
+                                <label class="unit-value">${payTemplate.payslip.nssf}</label>`;
+            earnings.appendChild(nssf);
+            const grossSalary = document.createElement('li');
+            nssf.className = "unit";
+            nssf.innerHTML = `<div  class="unit-label">Gross Salary</div>
+                                <label class="unit-value">${payTemplate.payslip.taxableIncome}</label>`;
+            earnings.appendChild(grossSalary);
+            for(let earn of payTemplate.payslip.deductions){
+                const li = document.createElement('li');
+                li.className = "unit";
+                li.innerHTML = `<div  class="unit-label">${earn.name}</div>
+                                <label class="unit-value">${earn.amount}</label>`;
+                deductions.appendChild(li);
+            }
+            const nhif = document.createElement('li');
+            nhif.className = "unit";
+            nhif.innerHTML = `<div  class="unit-label">NHIF</div>
+                                <label class="unit-value">${payTemplate.payslip.nhif}</label>`;
+            deductions.appendChild(nhif);
+            const grossTax = document.createElement('li');
+            grossTax.className = "unit";
+            grossTax.innerHTML = `<div  class="unit-label">Tax</div>
+                                <label class="unit-value">${payTemplate.payslip.tax}</label>`;
+            taxList.appendChild(grossTax);
+            for(let relief of payTemplate.payslip.reliefs){
+                const li = document.createElement('li');
+                li.className = "unit";
+                li.innerHTML = `<div  class="unit-label">${relief.name}</div>
+                                <label class="unit-value">${relief.rate}</label>`;
+                taxList.appendChild(li);
+            }
+            const taxableIncome = document.createElement('li');
+            taxableIncome.className = "unit";
+            taxableIncome.innerHTML = `<div  class="unit-label">Gross Salary</div>
+                                <label class="unit-value">${payTemplate.payslip.taxableIncome}</label>`;
+            totalList.appendChild(taxableIncome);
+            const netTax = document.createElement('li');
+            netTax.className = "unit";
+            netTax.innerHTML = `<div  class="unit-label">Net Tax</div>
+                                <label class="unit-value">${payTemplate.payslip.netTax}</label>`;
+            totalList.appendChild(netTax);
+            const totalDeductions = document.createElement('li');
+            totalDeductions.className = "unit";
+            totalDeductions.innerHTML = `<div  class="unit-label">Total Deductions</div>
+                                <label class="unit-value">${payTemplate.payslip.totalDeductions}</label>`;
+            totalList.appendChild(totalDeductions);
+            const netSalary = document.createElement('li');
+            netSalary.className = "unit";
+            netSalary.innerHTML = `<div  class="unit-label">Net Salary</div>
+                                  <label class="unit-value">${payTemplate.payslip.netSalary}</label>`;
+            totalList.appendChild(netSalary);
+        }
+        addAdditionaPayMEntDetails();
+        var popoverTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="popover"]'));
+        var popoverList = popoverTriggerList.map(function(element){
+            return new bootstrap.Popover(element);
+        });
+        const leaveDataSource = [];
+        if(leaves.length>0){
+            for(let leave of leaves){
+                let color;
+                const startDate = new Date(Number(leave.startDate.split('-')[0]),Number(leave.startDate.split('-')[1])-1,Number(leave.startDate.split('-')[2]));
+                const endDate = new Date(Number(leave.endDate.split('-')[0]),Number(leave.endDate.split('-')[1])-1,Number(leave.endDate.split('-')[2]));
+                if(leave.categoryRotate=="annually"){color="#d7d8da";}
+                if(leave.categoryRotate=="monthly"){color="#d7d8da";}
+                if(leave.categoryRotate=="weekly"){color="#d7d8da";}
+                leaveDataSource.push({
+                    startDate: startDate,
+                    endDate: endDate,
+                    color:color,
+                    name:leave.categoryName,
+                });
+            }
+        }
+        new Calendar(document.querySelector(".calendar"),{
+            style:'background',
+            enableContextMenu: true,
+            enableRangeSelection: true,
+            dataSource:leaveDataSource ,
+            mouseOnDay: function(e) {
+                if(e.events.length > 0) {
+                    var content = '';
+                    for(var i in e.events) {
+                        content += '<div class="event-tooltip-content">'
+                            + '<div class="event-name" style="color:' + e.events[i].color + '">' + e.events[i].name + '</div>'
+                            + '</div>';
+                    }
+
+                    $(e.element).popover({
+                        trigger: 'manual',
+                        container: 'body',
+                        html:true,
+                        content: content
+                    });
+
+                    $(e.element).popover('show');
+                }
+            },
+            mouseOutDay: function(e) {
+                if(e.events.length > 0) {
+                    $(e.element).popover('hide');
+                }
+            },
+        });
+    });
+    const currentYear = new Date().getFullYear();
+    let change;
+    $(".date-picker").datepicker({format: "dd-mm-yyyy",});
+    $(".period-date").datepicker( {
+        format: "mm-yyyy",
+        viewMode: "months",
+        minViewMode: "months",
+        autoclose: true
+    });
+    $('#slip-modal').on('hidden.bs.modal', function(e) {
+        document.getElementById('preview-earnings').innerHTML = "";
+        document.getElementById('preview-deductions').innerHTML = "";
+        document.getElementById('preview-tax').innerHTML = "";
+        document.getElementById('preview-net-salary').innerHTML = "";
+    });
+    $('#add-payhead-modal').on('hidden.bs.modal', function(e) {
+        document.getElementById('add-template-search-input').value = "";
+    });
+    $(".period-date").datepicker( {
+        format: "mm-yyyy",
+        viewMode: "months",
+        minViewMode: "months",
+        autoclose: true
+    });
+    document.getElementById('download-payslip-btn').addEventListener('click',downloadPayslip);
+    const url = window.location.href.split('/');
+    document.getElementById('edit-employee-btn').addEventListener('click',function(){window.location= "/admin/employee/edit/"+url[url.length-1];});
+    document.getElementById('submit-terminate').addEventListener('click',submitTermnation);
+    document.getElementById('reinstate-btn').addEventListener('click',reinstate);
+    let temp;
+    const searchWrapper = document.querySelector(".search-input");
+    const inputBox = searchWrapper.querySelector("input");
+    const suggBox = searchWrapper.querySelector(".autocom-box");
+    const icon = searchWrapper.querySelector(".icon");
+    let linkTag = searchWrapper.querySelector("a");
+    let webLink;
+    inputBox.onkeyup = (e)=>{
+        suggBox.innerHTML = '';
+        let userData = e.target.value; //user enetered data
+        let emptyArray = [];
+        if(userData){
+            fetch("/api/hr/templates/search/sort/"+userData)
+                .then(res=>res.json())
+                .then(function(templates){
+                    return templates;
+                })
+                .then(function(templates){
+                    emptyArray = templates;
+                    searchWrapper.classList.add("active");
+                    if(emptyArray.length>0){
+                        for(let template of emptyArray){
+                            let li =  document.createElement('li');
+                            li.className="row";
+                            li.id=`${template.id}`;
+                            li.innerHTML = `<div class="col-md-8"><h4>${template.name}</h4></div>
+                                        <div class="col-md-4"><h4>${template.grossSalary}</h4></div>`;
+                            suggBox.appendChild(li);
+                        }
+                    }
+                    let allList = suggBox.querySelectorAll("li");
+                    for (let i = 0; i < allList.length; i++) {
+                        allList[i].setAttribute("onclick", "select(this)");
+                    }
+                })
+        }else{
+            searchWrapper.classList.remove("active"); //hide autocomplete box
+        }
+    }
+
+    function select(element){
+        let selectData = element.textContent;
+        inputBox.value = selectData;
+        let name= selectData.split(" ")[0]
+        for(let i = 1;i<selectData.split(" ").length-1;i++){
+            name = name +" " +selectData.split(" ")[i];
+        }
+        previewSlip(name);
+        searchWrapper.classList.remove("active");
+    }
+
+    function downloadPayslip(e){
+        e.preventDefault();
+        $('#past-payroll-modal').modal('hide');
+        const date = document.getElementById('paysli-period-date').value;
+        printJS({printable:`/api/hr/payslips/generate/${employee.id}/${date.split("-")[1]}/${date.split("-")[0]}`, type:'pdf', showModal:true});
+    }
+
+    function showSuggestions(list){
+        let listData;
+        if(!list.length){
+            userValue = inputBox.value;
+            listData = `<li>${userValue}</li>`;
+        }else{
+            listData = list.join('');
+        }
+        suggBox.innerHTML = listData;
+    }
+
+    function addAdditionaPayMEntDetails(){
+        if(employee.payroll && employee.additionalPaymentDetails !=null){
+            const extraPayheadtable = document.getElementById('extra-payhead-table');
+            if(employee.additionalPaymentDetails.extraPayheads.length>0){
+                for(let payhead of employee.additionalPaymentDetails.extraPayheads){
+                    const row  = document.createElement('tr');
+                    if(payhead.always) {
+                        row.innerHTML = `<td class="text-center">${payhead.name}</td><td class="text-center">${payhead.type}</td><td class="text-center">${payhead.amount}</td><td style="width:180px;text-align: center">EVERY MONTH</td><td class=" td-actions text-right"><button rel="tooltip" class="btn btn-success btn-round" onclick="editExtraPayhead(${payhead.id},this)"><i class="material-icons">edit</i></button>&nbsp;<button rel="tooltip" class="btn btn-danger btn-round" onclick="deleteExtraPayhead(${payhead.id},this)"><i class="material-icons">delete_forever</i></button></td>`;
+                    }
+                    else{
+                        row.innerHTML=`<td class="text-center">${payhead.name}</td><td class="text-center">${payhead.type}</td><td class="text-center">${payhead.amount}</td><td style="width:180px"><div class="always-dates"><label>START : </label><span>${payhead.startDate}</span></div><div class="always-dates"><label>END : </label><span>${payhead.endDate}</span></div></td><td class=" td-actions text-right"><button rel="tooltip" class="btn btn-success btn-round" onclick="editExtraPayhead(${payhead.id},this)"><i class="material-icons">edit</i></button>&nbsp;<button rel="tooltip" class="btn btn-danger btn-round" onclick="deleteExtraPayhead(${payhead.id},this)"><i class="material-icons">delete_forever</i></button></td>`;
+                    }
+                    extraPayheadtable.appendChild(row);
+                }
+            }
+        }
+    }
+
+    function sumitAdditionalPayhead(e) {
+        e.preventDefault();
+        const type = document.getElementById('type').value;
+        if (type.toLowerCase() =="null") {
+            alert("Select Type");
+        }
+        else{
+        const formData = new FormData();
+        formData.append("name", document.getElementById('name').value);
+        formData.append("amount", document.getElementById('amount').value);
+        formData.append("type", document.getElementById('type').value)
+        if (document.getElementById('always_checkbox').checked === true) {
+            formData.append("always", true);
+            formData.append("startMonth", "");
+            formData.append("startYear", "");
+            formData.append("endMonth", "");
+            formData.append("endYear", "");
+        } else {
+            const startMonth = document.getElementById('start-date').value.split("-")[0];
+            const startYear = document.getElementById('start-date').value.split("-")[1];
+            const endMonth = document.getElementById('end-date').value.split("-")[0];
+            const endYear = document.getElementById('end-date').value.split("-")[1];
+            formData.append("always", false);
+            formData.append("startMonth", startMonth);
+            formData.append("startYear", startYear);
+            formData.append("endMonth", endMonth);
+            formData.append("endYear", endYear);
+        }
+        $('#finacial-modal').modal('hide');
+        document.getElementById('finacial-form').reset();
+        fetch(`/api/hr/additional/payheads/${employee.id}`, {
+            method: 'POST',
+            body: formData
+        }).then(function (res) {
+            if (!res.ok) {
+                errorNotify("Something Went wrong");
+                throw new Error(res.statusText);
+            }
+            return res.json();
+        })
+            .then(function (extraPayhead) {
+                const extraPayheadtable = document.getElementById('extra-payhead-table');
+                const row = document.createElement('tr');
+                row.innerHTML = ``;
+                extraPayheadtable.appendChild(row);
+                successNotify("Payhead Added");
+            })
+         }
+    }
+
+    function editExtraPayhead(id,element){
+        const row = element.parentNode.parentNode;
+        document.getElementById('edit-name').value =  row.children[0].innerHTML;
+        document.getElementById('edit-amount').value =  row.children[2].innerHTML;
+        const type = row.children[1].innerHTML;
+        console.log(type);
+        if(type === "deduction"){
+            $('#edit-type').selectpicker('val','deduction')
+        }
+        else if(type === "earning"){
+            $('#edit-type').selectpicker('val','earning')
+        }
+        if(row.children[3].innerHTML.toLowerCase() === "every month"){
+            document.getElementById('edit-always_checkbox').checked =true;
+        }
+        else{
+            document.getElementById('edit-always_checkbox').checked =false;
+            document.getElementById('edit-start-date').value = row.children[3].children[0].children[1].innerText;
+            document.getElementById('edit-end-date').value = row.children[3].children[1].children[1].innerText;
+        }
+        $('#edit-finacial-modal').modal('show');
+    }
+
+    function deleteExtraPayhead(id,element){
+        swal({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonClass: 'btn btn-success',
+            cancelButtonClass: 'btn btn-danger',
+            confirmButtonText: 'Yes, clear it!',
+            buttonsStyling: false
+        })
+            .then(function(){
+                fetch(`/api/hr/extra/payhead/delete/${id}`)
+                    .then(function(res){
+                        if(!res.ok){
+                            errorNotify("Something Went Wrong");
+                            throw new Error(res.statusText);
+                        }
+                    })
+                swal({
+                    title: 'Deleted!',
+                    text: 'Template Cleared',
+                    type: 'success',
+                    timer: 1500,
+                    confirmButtonClass: "btn btn-success",
+                    buttonsStyling: false
+                })
+            }).catch(swal.noop)
+    }
+
+    function generateLeaveDays(){
+
+    }
+
+    function alwaysClick(){
+        if(document.getElementById('always_checkbox').checked === true){
+            document.getElementById('start-date').disabled = true;
+            document.getElementById('end-date').disabled = true;
+            document.getElementById('start-date-icon').style.color="#9d9fa6";
+            document.getElementById('end-date-icon').style.color="#9d9fa6";
+        }
+        else{
+            document.getElementById('start-date').disabled = false;
+            document.getElementById('end-date').disabled = false;
+            document.getElementById('start-date-icon').style.color="#555";
+            document.getElementById('end-date-icon').style.color="#555";
+        }
+    }
+
+    function previewSlip(text){
+        fetch("/api/hr/template/"+text,)
+            .then(function(res){
+                if(!res.ok){
+                    errorNotify('Something went wrong');
+                    $('#add-payhead-modal').modal('hide');
+                    throw Error(res.statusText);
+                }
+                return res.json();
+            })
+            .then(function(template){
+                temp = template;
+                const slip = temp.payslip;
+                console.log(template);
+                document.getElementById('template-name').innerHTML= temp.name;
+                const previewEarnings = document.getElementById('preview-earnings');
+                const previewDeductions = document.getElementById('preview-deductions');
+                const previewTax = document.getElementById('preview-tax');
+                const previewNetSalary= document.getElementById('preview-net-salary');
+                for(let i=0;i<slip.earnings.length;i++){
+                    let li = document.createElement('li');
+                    li.className='unit';
+                    li.innerHTML = `<div class="unit-label">${slip.earnings[i].name}</div>
+                                <label class="unit-value">${slip.earnings[i].amount}</label>`;
+                    previewEarnings.appendChild(li);
+                }
+                let nssf =  document.createElement('li');
+                nssf.className='unit';
+                nssf.innerHTML = `<div class="unit-label">NSSF</div>
+                                <label class="unit-value">-${slip.nssf}</label>`;
+                previewEarnings.appendChild(nssf);
+                let totalEarnings = document.createElement('li');
+                totalEarnings.className='unit total';
+                totalEarnings.innerHTML = `<div class="unit-label">Gross Salary</div>
+                                       <label class="unit-value">${slip.grossSalary}</label>`;
+                previewEarnings.appendChild(totalEarnings);
+                for(let i=0;i<slip.deductions.length;i++){
+                    let li = document.createElement('li');
+                    li.className='unit';
+                    li.innerHTML = `<div class="unit-label">${slip.deductions[i].name}</div>
+                                 <label class="unit-value">${slip.deductions[i].amount}</label>`;
+                    previewDeductions.appendChild(li);
+                }
+                let nhif = document.createElement('li');
+                nhif.className='unit';
+                nhif.innerHTML = `<div class="unit-label">NHIF</div>
+                                 <label class="unit-value">${slip.nhif}</label>`;
+                previewDeductions.appendChild(nhif);
+                let tax = document.createElement('li');
+                tax.className='unit';
+                tax.innerHTML = `<div class="unit-label">Tax</div>
+                               <label class="unit-value">${slip.tax}</label>`;
+                previewTax.append(tax);
+                for(let i=0;i<slip.reliefs.length;i++){
+                    let li = document.createElement('li');
+                    li.className='unit';
+                    li.innerHTML = `<div class="unit-label">${slip.reliefs[i].name}</div>
+                                  <label class="unit-value">${slip.reliefs[i].rate}</label>`;
+                    previewTax.appendChild(li);
+                }
+                let netTax = document.createElement('li');
+                netTax.className='unit total';
+                netTax.innerHTML = `<div class="unit-label">Net Tax</div>
+                                 <label class="unit-value">${slip.netTax}</label>`;
+                previewTax.append(netTax);
+                previewNetSalary.innerHTML = `<li class="unit" >
+                                            <div class="unit-label" >GrossSalary</div>
+                                            <label class="unit-value">${template.payslip.grossSalary}</label>
+                                        </li>
+                                        <li class="unit" >
+                                            <div class="unit-label" > Net Tax</div>
+                                            <label class="unit-value">${template.payslip.netTax}</label>
+                                        </li>
+                                        <li class="unit" >
+                                            <div class="unit-label" >Deductions</div>
+                                            <label  class="unit-value">${template.payslip.totalDeduction}</label>
+                                        </li>
+                                        <li class="unit" >
+                                            <div class="unit-label" > Net Salary</div>
+                                            <label class="unit-value"> ${template.payslip.netSalary}</label>
+                                        </li>`
+                $('#add-payhead-modal').modal('hide');
+                $('#slip-modal').modal('show');
+            })
+    }
+
+    function submitPayTemplate(){
+        const formData= new FormData();
+        formData.append("employeeId",url[url.length-1]);
+        formData.append("templateId",temp.id);
+        fetch("/api/hr/employee/template/add",{
+            method:'POST',
+            body:formData,
+        })
+            .then(function(res){
+                if(!res.ok){
+                    errorNotify('Something went wrong');
+                    throw Error(res.statusText);
+                }
+                return res;
+            })
+            .then(function(res){
+                $('#slip-modal').modal('hide');
+                successNotify("Employee Added to Payroll");
+                const cardAvatar =document.getElementById('card-avatar');
+                cardAvatar.style.clear="both";
+                cardAvatar.style.margin.left="none";
+                document.getElementById('comment').style.display="none";
+            })
+    }
+
+    function navTab1(el){
+        el.parentNode.children[1].classList.remove("nav_active_2");
+        el.parentNode.children[2].classList.remove("nav_active_3");
+        el.classList.add("nav_active_1");
+    }
+
+    function navTab2(el){
+        el.parentNode.children[0].classList.remove("nav_active_1");
+        el.parentNode.children[2].classList.remove("nav_active_3");
+        el.classList.add("nav_active_2")
+    }
+
+    function navTab3(el){
+        document.getElementById('payment-container').style.display="block";
+        el.parentNode.children[0].classList.remove("nav_active_1");
+        el.parentNode.children[1].classList.remove("nav_active_2");
+        el.classList.add("nav_active_3")
+    }
+
+    function openTerminatationModal(){
+        var today = new Date();
+        var dd = String(today.getDate()).padStart(2, '0');
+        var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+        var yyyy = today.getFullYear();
+        today = dd + '-' + mm + '-' + yyyy;
+        $('#terminate-modal').modal('show');
+        document.getElementById('eoc-input').value = today;
+    }
+
+    function submitTermnation(e){
+        e.preventDefault();
+        const eoc = document.getElementById('eoc-input').value;
+        const formData =  new FormData();
+        formData.append("eoc",eoc);
+        formData.append("id",employee.id);
+        fetch("/api/hr/employee/terminate",{
+            method:'POST',
+            body:formData
+        })
+        .then(function(res){
+            if(!res.ok){
+                errorNotify("Something Went Wrong!");
+                throw new Error(res.statusText);
+            }
+            else{
+                $('#terminate-modal').modal('hide');
+                document.getElementById('comment').style.display="none";
+                document.getElementById('terminate-btn').style.display="none";
+                successNotify("OffBoarding Successfull!");
+                const cardAvatar =document.getElementById('card-avatar');
+                cardAvatar.style.float="left";
+                cardAvatar.style.margin.left="40px";
+                document.getElementById('terminate-comment').style.display="block";
+            }
+        })
+    }
+
+    function reinstate(e){
+        swal({
+            title: 'Confirm',
+            text: "Confirm You Want to Reinstate Employee as Staff!",
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonClass: 'btn btn-success',
+            cancelButtonClass: 'btn btn-danger',
+            confirmButtonText: 'Yes, clear it!',
+            buttonsStyling: false
+        })
+            .then(function(){
+                fetch(`/api/hr/employees/reinstate/${employee.id}`)
+                    .then(function(res){
+                        if(!res.ok){
+                            errorNotify("Something Went Wrong");
+                            throw new Error(res.statusText);
+                        }
+                        successNotify("employee Reinstated!");
+                        document.getElementById('terminate-comment').style.display="none";
+                        document.getElementById('terminate-btn').style.display = "block";
+                        document.getElementById('comment').style.display="block";
+                        $( "#action-btn-container").load(window.location.href + " #action-btn-container");
+                    })
+            }).catch(swal.noop)
+        e.preventDefault();
+    }
+
+</script>
+<script th:src="@{/js/collection.js}"></script>
+</html>

@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.17.0.final using JasperReports Library version 6.17.0-6d93193241dd8cc42629e188b94f9e0bc5722efd  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="monthly_payroll" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="4bb940c5-2185-4f0e-bf73-b80576a83ace">
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="data-adpter-jdbc"/>
+	<parameter name="paramPayrollId" class="java.lang.Integer"/>
+	<queryString language="SQL">
+		<![CDATA[SELECT employee.national_id,concat(employee.last_name, ' ', employee.first_name, ' ',employee.other_names)as name,employee.bank_name,employee.branch,
+DATE_FORMAT(payroll.date,'%M, %Y') AS period,payslip.net_salary,employee.account_pin,payroll.total as payroll_total from payroll 
+INNER JOIN payroll_payslips on payroll.id = payroll_payslips.payroll_id
+INNER JOIN payslip on payroll_payslips.payslips_id =  payslip.id
+INNER JOIN employee on payslip.employee_id = employee.id
+AND payroll.id =   $P{paramPayrollId}]]>
+	</queryString>
+	<field name="national_id" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="national_id"/>
+		<property name="com.jaspersoft.studio.field.label" value="national_id"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="employee"/>
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="name" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="name"/>
+		<property name="com.jaspersoft.studio.field.label" value="name"/>
+	</field>
+	<field name="bank_name" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="bank_name"/>
+		<property name="com.jaspersoft.studio.field.label" value="bank_name"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="employee"/>
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="branch" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="branch"/>
+		<property name="com.jaspersoft.studio.field.label" value="branch"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="employee"/>
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="period" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="period"/>
+		<property name="com.jaspersoft.studio.field.label" value="period"/>
+	</field>
+	<field name="net_salary" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.name" value="net_salary"/>
+		<property name="com.jaspersoft.studio.field.label" value="net_salary"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="payslip"/>
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="account_pin" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="account_pin"/>
+		<property name="com.jaspersoft.studio.field.label" value="account_pin"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="employee"/>
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="payroll_total" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.name" value="total"/>
+		<property name="com.jaspersoft.studio.field.label" value="payroll_total"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="payroll"/>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="70" splitType="Stretch">
+			<image>
+				<reportElement x="500" y="0" width="52" height="59" uuid="fa4b8e8c-a74b-47ee-9499-2566d0f0b9f4"/>
+				<imageExpression><![CDATA["C:/Users/Ali/Downloads/fayaz_logo.jpg"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="0" y="0" width="100" height="20" uuid="abaa31c8-6542-4d01-842f-80424fd7cac3"/>
+				<textElement>
+					<font fontName="Constantia" size="16" isBold="true"/>
+				</textElement>
+				<text><![CDATA[PAYROLL]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="0" y="20" width="100" height="19" uuid="0ad63a60-acc5-4453-b274-1fd8ad61dfca"/>
+				<textElement>
+					<font fontName="Constantia" size="12" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{period}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="0" y="50" width="550" height="1" forecolor="#3171E0" uuid="78b8492a-da0a-40a8-9049-954106f792d8">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+				<graphicElement>
+					<pen lineColor="#3171E0"/>
+				</graphicElement>
+			</line>
+			<textField>
+				<reportElement x="29" y="35" width="100" height="17" uuid="d8169c43-abd9-4cfd-b33e-4f9930a39452">
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{payroll_total}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="35" width="26" height="17" uuid="13fc3b99-0aca-4e07-a948-ec3cfd60fe8a">
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[KSH]]></text>
+			</staticText>
+		</band>
+	</title>
+	<columnHeader>
+		<band height="36" splitType="Stretch">
+			<staticText>
+				<reportElement x="33" y="0" width="60" height="30" uuid="5e845148-3ebf-4517-ac05-c43b8d8a8fd3"/>
+				<textElement>
+					<font fontName="Constantia" size="13"/>
+				</textElement>
+				<text><![CDATA[ID]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="93" y="0" width="104" height="30" uuid="bc9d3a02-ade3-4463-bc00-1a0f3bdd9f94"/>
+				<textElement>
+					<font fontName="Constantia" size="13"/>
+				</textElement>
+				<text><![CDATA[NAME]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="198" y="0" width="78" height="30" uuid="7c55be89-53f4-4bdd-ab1b-52d08e32fd76"/>
+				<textElement>
+					<font fontName="Constantia" size="13"/>
+				</textElement>
+				<text><![CDATA[BANK]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="276" y="0" width="95" height="30" uuid="f20bdd40-1c3d-4eb4-ac3c-a2dccea0aca0"/>
+				<textElement>
+					<font fontName="Constantia" size="13"/>
+				</textElement>
+				<text><![CDATA[BRANCH]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="463" y="0" width="89" height="30" uuid="1c0a7d85-47d7-4c74-8663-2be459c66d7c"/>
+				<textElement>
+					<font fontName="Constantia" size="13"/>
+				</textElement>
+				<text><![CDATA[AMOUNT]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="371" y="0" width="92" height="30" uuid="d7f06b02-e742-4e6e-bd8b-e68bc05e29f0"/>
+				<textElement>
+					<font fontName="Constantia" size="13"/>
+				</textElement>
+				<text><![CDATA[ACCOUNT NO]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="0" width="33" height="30" uuid="78da468c-763e-4efb-8f02-43f33039817d"/>
+				<textElement>
+					<font fontName="Constantia" size="13"/>
+				</textElement>
+				<text><![CDATA[SL]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="25" splitType="Stretch">
+			<textField>
+				<reportElement x="33" y="0" width="62" height="20" uuid="726b13bc-6445-4642-aa6f-5cc090049279">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="361c8af3-4408-46ce-9758-d3bcdd7b8111"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{national_id}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="95" y="0" width="103" height="20" uuid="08da1d79-19ae-4127-acf3-5cd2d8493ff4">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="3823f1c3-e15e-4468-a89c-6e262240fd4d"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{name}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="198" y="0" width="81" height="20" uuid="8bb4fc1d-2216-47cf-b9d6-810cbd7fe102">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="1da7e2ac-29e3-4576-b90a-36218277f0a5"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{bank_name}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="279" y="0" width="92" height="20" uuid="21197251-a7a9-46f3-8a53-1515d5bf5b5a">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="2513200f-e273-455b-9bca-0c9154763b81"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{branch}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="463" y="0" width="89" height="20" uuid="120ab57a-62ea-4e16-8cf9-838869689052">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="6b9b2a98-e523-43c1-9546-f3f8ac4fd17d"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					<property name="com.jaspersoft.studio.unit.width" value="px"/>
+				</reportElement>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{net_salary}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="371" y="0" width="92" height="20" uuid="7b9a722b-3fee-4046-83b1-109b03687b2b">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="88ae33a6-cfaa-4f97-ae54-c819f1fc15bb"/>
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{account_pin}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="0" width="32" height="20" uuid="571b483c-d9c2-40c6-a6b0-44c3cd0ee132">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{REPORT_COUNT}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

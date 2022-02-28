@@ -1,0 +1,1409 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <link rel="apple-touch-icon" sizes="76x76" th:href="@{/img/filename.jpg}" />
+    <link rel="icon" type="image/png" th:href="@{/img/filename.jpg}" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <title>HRMS</title>
+    <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="stylesheet" type="text/css" th:href="@{/webjars/font-awesome/5.15.0/css/all.css}">
+    <script rel="stylesheet"  th:src="@{/webjars/font-awesome/5.15.0/js/all.js}"></script>
+    <link rel="stylesheet" type="text/css" th:href="@{/webjars/material-design-icons/4.0.0/material-icons.css}">
+    <link th:href="@{/webjars/bootstrap/3.3.5/css/bootstrap.min.css}" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap-material-design/0.5.10/css/bootstrap-material-design.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap-select/1.12.4/css/bootstrap-select.css}">
+    <link th:href="@{/webjars/datatables/1.10.12/css/jquery.dataTables.css}" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap-clockpicker.css}">
+    <link th:href="@{/css/material-dashboard.css}" rel="stylesheet"/>
+    <link th:href="@{/css/payslip.css}" rel="stylesheet">
+</head>
+<body >
+
+<div class="wrapper" id="wrapper" style="display: none">
+
+    <div class="sidebar" data-active-color="primary" data-background-color="black" data-image="/img/sidebar-3.jpg">
+        <div class="logo">
+            <a  class="simple-text logo-mini">
+
+            </a>
+
+            <a href="#" class="simple-text logo-normal">
+                HRMS
+            </a>
+        </div>
+
+        <div class="sidebar-wrapper">
+            <div class="user">
+                <div class="photo">
+                    <img th:src="@{${'/docs-upload/' +user.employee.image.name}}" />
+                </div>
+                <div class="info">
+                    <a data-toggle="collapse" href="#collapseExample" class="collapsed">
+                    <span th:text="${user.username}">
+                        <b class="caret"></b>
+                    </span>
+                    </a>
+                    <div class="clearfix"></div>
+                    <div class="collapse" id="collapseExample">
+                        <ul class="nav">
+                            <li>
+                                <a data-toggle="modal" data-target="#lock-modal">
+                                    <span class="sidebar-mini"> CP </span>
+                                    <span class="sidebar-normal"> Change Password </span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <ul class="nav">
+                <li class="active">
+                    <a th:href="@{/admin/employee}">
+                        <i class="material-icons">people_alt</i>
+                        <p> Employees </p>
+                    </a>
+                </li>
+                <li >
+                    <a th:href="@{/admin/structure}" >
+                        <i class="material-icons">view_quilt</i>
+                        <p> Structure </p>
+                    </a>
+                </li>
+                <li >
+                    <a th:href="@{/admin/leave}" >
+                        <i class="material-icons">weekend</i>
+                        <p>Leave </p>
+                    </a>
+                </li>
+                <li>
+                    <a data-toggle="collapse" href="#pagesAttendance">
+                        <i class="material-icons">history_toggle_off</i>
+                        <p> Attendance
+                            <b class="caret"></b>
+                        </p>
+                    </a>
+
+                    <div class="collapse" id="pagesAttendance">
+                        <ul class="nav">
+                            <li>
+                                <a th:href="@{/admin/attendance/log}">
+                                    <span class="sidebar-mini">AL</span>
+                                    <span class="sidebar-normal">Attandance Log</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a th:href="@{/admin/attendance/schedule}">
+                                    <span class="sidebar-mini">SC</span>
+                                    <span class="sidebar-normal">Schedule</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li sec:authorize="hasRole('ROLE_HR')">
+                    <a data-toggle="collapse" href="#pagesExamples">
+                        <i class="material-icons sidebar-mini">account_balance_wallet</i>
+                        <p> Payment
+                            <b class="caret"></b>
+                        </p>
+                    </a>
+
+                    <div class="collapse" id="pagesExamples">
+                        <ul class="nav">
+                            <li>
+                                <a th:href="@{/hr/payroll}">
+                                    <span class="sidebar-mini"> PR </span>
+                                    <span class="sidebar-normal"> Payroll </span>
+                                </a>
+                            </li>
+                            <li>
+                                <a th:href="@{/hr/template}">
+                                    <span class="sidebar-mini"> PM </span>
+                                    <span class="sidebar-normal"> Pay Model </span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li sec:authorize="hasRole('ROLE_HR')">
+                    <a th:href="@{/hr/general}">
+                        <i class="material-icons">tune</i>
+                        <p> General </p>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="main-panel">
+        <nav class="navbar navbar-transparent navbar-absolute">
+            <div class="container-fluid">
+                <div class="navbar-minimize">
+                    <button id="minimizeSidebar" class="btn btn-round btn-white btn-fill btn-just-icon">
+                        <i class="material-icons visible-on-sidebar-regular">more_vert</i>
+                        <i class="material-icons visible-on-sidebar-mini">view_list</i>
+                    </button>
+                </div>
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="#">Employees </a>
+                </div>
+                <div class="collapse navbar-collapse">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li  style="padding-top:2px;border-radius: 5px;border: 1.5px solid #808289;height:44px;margin-right:4px">
+                            <a th:href="@{/admin/employee/add}" class="btn" style="padding-top:8px;">
+                            <span class="material-icons">add</span>
+                                Add
+                            </a>
+                        </li>
+                        <li  style="padding-top:2px;border-radius: 5px;border: 1.5px solid #808289;height:44px;margin-right:4px">
+                            <a data-toggle="modal" data-target="#upload-modal" class="btn" style="padding-top:8px;">
+                                <span class="material-icons">file_upload</span>
+                                Upload
+                            </a>
+                        </li>
+                        <li class="dropdown">
+                            <a  class="dropdown-toggle" data-toggle="dropdown" data-color="success" >
+                                <i class="material-icons">notifications</i>
+                                <span class="notification" id="unreceived-size">0</span>
+                                <p class="hidden-lg hidden-md">
+                                    Notifications
+                                    <b class="caret"></b>
+                                </p>
+                            </a>
+                            <ul class="dropdown-menu panel-group"  id="unreceived-view"  role="tablist" aria-multiselectable="true">
+                                <li th:each="reminder:${unreceivedReminders}">
+                                    <a th:attr="onclick=${'viewUnReceived('+reminder.id+',this)'}">
+                                        &nbsp;<span th:text="${reminder.day +' '+ reminder.date+' '+reminder.time}"></span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a th:href="@{/logout}" class="dropdown-toggle"  data-color="success">
+                                 <span class="material-icons">logout</span>
+                                 <p class="hidden-lg hidden-md">Logout</p>
+                            </a>
+                        </li>
+                        <li class="separator hidden-lg hidden-md"></li>
+                    </ul>
+                    <form class="navbar-form navbar-right" role="search">
+                        <div class="form-group form-search is-empty">
+                            <input type="text" class="form-control" placeholder="Search" id="employees-search-bar">
+                            <span class="material-input"></span>
+                        </div>
+                        <button type="submit" class="btn btn-white btn-round btn-just-icon">
+                            <i class="material-icons">search</i><div class="ripple-container"></div>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </nav>
+
+      <div class="content">
+      <div class="container-fluid">
+          <div class="row">
+              <div class="col-md-12">
+                  <div class="nav_tabs_wrapper">
+                      <div class="nav_tabs">
+                          <a href="#employees" data-toggle="tab" class="nav_active_1" onclick="navTab1(this)">
+                              <i class="material-icons nav_tabs_icons">face</i>
+                              <span>Staff</span>
+                              <div class="ripple-container"></div>
+                          </a>
+                          <a href="#reminders" data-toggle="tab" onclick="navTab2(this)">
+                              <i class="material-icons nav_tabs_icons">notifications_active</i>
+                              <span>Reminder</span>
+                              <div class="ripple-container"></div>
+                          </a>
+                          <a href="#terminated" data-toggle="tab" onclick="navTab3(this)">
+                              <i class="material-icons nav_tabs_icons">person_add_disabled</i>
+                              <span>Ex-Staff</span>
+                              <div class="ripple-container"></div>
+                          </a>
+                          <div class="animation start-home"></div>
+                      </div>
+                  </div>
+              </div>
+              <div class="col-lg-12 col-md-12">
+                          <div class="tab-content">
+                              <div class="tab-pane active" id="employees">
+                                  <div class="card">
+                                      <div class="card-content">
+                                          <div class="toolbar">
+                                              <!--        Here you can write extra buttons/actions for the toolbar              -->
+                                          </div>
+                                          <div class="material-datatables">
+                                              <table id="employees-table" class="table table-striped table-no-bordered table-hover employees-datatable" cellspacing="0" width="100%" style="width:100%">
+                                                  <thead>
+                                                  <tr>
+                                                      <th>Image</th>
+                                                      <th>ID</th>
+                                                      <th>Name</th>
+                                                      <th>Age</th>
+                                                      <th>Gender</th>
+                                                      <th>Location</th>
+                                                      <th>JobTitle</th>
+                                                      <th>Exp</th>
+                                                      <th></th>
+
+                                                  </tr>
+                                                  </thead>
+                                                  <tfoot>
+                                                  <tr>
+                                                      <th>Image</th>
+                                                      <th>ID</th>
+                                                      <th>Name</th>
+                                                      <th>Age</th>
+                                                      <th>Gender</th>
+                                                      <th>Location</th>
+                                                      <th>JobTitle</th>
+                                                      <th>Exp</th>
+                                                      <th></th>
+                                                  </tr>
+                                                  </tfoot>
+
+                                              </table>
+                                          </div>
+                                      </div><!-- end content-->
+                                  </div>
+                              </div>
+                              <div class="row tab-pane" style="width:98%;margin:auto;" id="reminders">
+                                  <div style="display:flex;justify-content:space-between">
+                                      <h4>Reminders</h4>
+                                      <button class="btn btn-primary" onclick="setReminder()" style="color:#fff">Add Reminder</button>
+                                  </div>
+
+                                  <br>
+                                  <div class="row" id="reminders-container">
+                                      <div class="col-md-4" th:each="reminder:${reminders}"  th:id="${'rem-'+reminder.id}">
+                                          <div class="card card-product">
+                                              <div class="card-header">
+                                                  <div class="row">
+                                                      <div class="col-md-12" style="display:flex;justify-content: end">
+                                                          <button  class="btn-success btn-link"  rel="tooltip" data-placement="bottom" th:attr="onclick=${'editReminder('+reminder.id+')'}" title="Edit" style="color:#4caf50">
+                                                              <i class="material-icons">edit</i>
+                                                          </button>
+                                                          <button  class="btn-danger btn-link" rel="tooltip" th:attr="onclick=${'deleteReminder('+reminder.id+',this)'}"  data-placement="bottom" title="Remove" style="color:#f44336">
+                                                              <i class="material-icons">close</i>
+                                                          </button>
+                                                      </div>
+                                                  </div>
+                                              </div>
+                                              <div class="card-content">
+                                                  <h4 class="card-title">
+                                                      <a href="#">MESSAGE</a>
+                                                  </h4>
+                                                  <div class="card-description" th:text="${reminder.message}" th:id="${'rem-description-'+reminder.id}">
+
+                                                  </div>
+                                              </div>
+                                              <div class="card-footer">
+                                                  <div class="price">
+                                                      <h4 th:id="${'rem-date-'+reminder.id}" th:text="${reminder.day+', '+ #temporals.format(reminder.date, 'yyyy-MM-dd')}"></h4>
+                                                  </div>
+                                                  <div class="stats pull-right">
+                                                      <p class="category"><i class="material-icons">query_builder</i> <span th:id="${'rem-time-'+reminder.id}" th:text="${reminder.time}"></span></p>
+                                                  </div>
+                                              </div>
+                                          </div>
+                                      </div>
+                                  </div>
+                              </div>
+                              <div class="tab-pane active" id="terminated">
+                                  <div class="card" id="terminated-container" style="display:none">
+                                      <div class="card-content">
+                                          <div class="toolbar">
+                                              <!--        Here you can write extra buttons/actions for the toolbar              -->
+                                          </div>
+                                          <div class="material-datatables">
+                                              <table id="terminated-table" class="table table-striped table-no-bordered table-hover employees-datatable" cellspacing="0" width="100%" style="width:100%">
+                                                  <thead>
+                                                  <tr>
+                                                      <th>Image</th>
+                                                      <th>ID</th>
+                                                      <th>Name</th>
+                                                      <th>Job title</th>
+                                                      <th>Date of Join</th>
+                                                      <th>Date of Exit</th>
+                                                      <th></th>
+                                                  </tr>
+                                                  </thead>
+                                                  <tfoot>
+                                                  <tr>
+                                                      <th>Image</th>
+                                                      <th>ID</th>
+                                                      <th>Name</th>
+                                                      <th>Job title</th>
+                                                      <th>Date of Join</th>
+                                                      <th>Date of Exit</th>
+                                                      <th></th>
+                                                  </tr>
+                                                  </tfoot>
+
+                                              </table>
+                                          </div>
+                                      </div><!-- end content-->
+                                  </div>
+                              </div>
+                          </div>
+              </div>
+          </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="loader-wrapper">
+    <div class="dot-container">
+        <div class="dot dot1"></div>
+        <div class="dot dot2"></div>
+        <div class="dot dot3"></div>
+    </div>
+</div>
+
+<div hidden id="spinner"></div>
+
+<div class="modal fade" tabindex="-1" role="dialog" data-target=".bd-example-modal-sm" aria-labelledby="gridSystemModalLabel" id="upload-modal">
+    <div class="modal-dialog " role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title primary-text fw-4" >Upload Employees </h4>
+            </div>
+            <div class="modal-body">
+                <div style="background: #f5f5f5;color:#808289;padding:15px 5px;display:flex;flex-direction:column;justify-content: center;width:100%;margin:20px 0px;border-radius:5px;">
+                    <div style="display:flex;justify-content:center">
+                        <i class="material-icons">info</i>&nbsp;
+                        <p>The file Must be a CSV and date format should be dd/mm/yyyy</p>
+                    </div>
+                    <div style="display:flex;justify-content: center;">
+                        <a class="btn btn-default rounded" th:href="@{/api/download/employee/sample}" style="color:#fff;width:40%;">download sample</a>
+                    </div>
+                </div>
+                <form id="upload-form">
+                    <div style="display:flex;justify-content: space-between">
+                        <div>
+                            <div class="fileinput fileinput-new col-md-4" data-provides="fileinput" >
+                          <span class="btn btn-success btn-file float-right">
+                            <span class="fileinput-new float-right">Select file</span>
+                            <span class="fileinput-exists float-right">Change</span>
+                            <input type="file" id ="upload-file" name="image" required accept=".csv, text/csv" >
+                          </span>
+                                <span class="fileinput-filename"></span>
+                                <a href="#" class="close fileinput-exists" data-dismiss="fileinput" style='float: none'>&times;</a>
+                            </div>
+                        </div>
+                        <div>
+                            <input type="submit" value="submit" class="btn btn-primary" style="color:#fff">
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" tabindex="-1" role="dialog" data-target=".bd-example-modal-sm" aria-labelledby="gridSystemModalLabel" id="add-reminder-modal">
+<div class="modal-dialog " role="document">
+<div class="modal-content">
+  <div class="modal-header">
+        <h4 class="modal-title primary-text fw-4" >Add Reminder</h4>
+
+  </div>
+  <div class="modal-body" >
+    <form id="reminder-form">
+        <div class="row">
+          <div class='col-sm-6'>
+              <div class="input-group date datepicker-group" data-provide="datepicker" data-date-format="dd-mm-yyyy">
+                  <label class="bmd-label-floating">Reminder Date</label>
+                  <input type="text" class="form-control datetimepicker" id ="reminder-date" name="reminder-date" required>
+                  <div class="input-group-addon">
+                      <i class="far fa-calendar-alt"></i>
+                  </div>
+              </div>
+           </div>
+           <div class='col-sm-6'>
+               <div class="input-group clockpicker">
+                   <input type="text" class="form-control" name="reminder-time" id="reminder-time" required style="margin-top:25px">
+                   <span class="input-group-addon">
+                         <i class="material-icons">schedule</i>
+                    </span>
+               </div>
+           </div>
+       </div>
+
+        <div class="form-group">
+             <label class="bmd-label-floating"> reminder Message</label>
+             <textarea class="form-control" id="reminder-description" name="reminder-description" rows="3" required></textarea>
+        </div>
+        <div class="form-group">
+            <input type="submit" class="btn btn-primary" value="submit" style="color:#ffffff">
+        </div>
+    </form>
+  </div>
+</div>
+</div>
+</div>
+
+<div class="modal fade" tabindex="-1" role="dialog" data-target=".bd-example-modal-sm" aria-labelledby="gridSystemModalLabel" id="edit-reminder-modal">
+    <div class="modal-dialog " role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title primary-text fw-4" >Edit Reminder</h4>
+            </div>
+            <div class="modal-body" >
+                <form id="edit-reminder-form">
+                    <div class="row">
+                        <div class='col-sm-6'>
+                            <div class="input-group date datepicker-group" data-provide="datepicker" data-date-format="dd-mm-yyyy">
+                                <label class="bmd-label-floating">Reminder Date</label>
+                                <input type="text" class="form-control datetimepicker" id ="edit-reminder-date" name="reminder-date" required>
+                                <div class="input-group-addon">
+                                    <i class="far fa-calendar-alt"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <div class='col-sm-6'>
+                            <div class="input-group">
+                                <input type="text" class="form-control" name="reminder-time" id="edit-reminder-time" required style="margin-top:25px">
+                                <span class="input-group-addon">
+                         <i class="material-icons">schedule</i>
+                    </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="bmd-label-floating"> reminder Message</label>
+                        <textarea class="form-control" id="edit-reminder-description" name="reminder-description" rows="3" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" class="btn btn-primary" value="submit" style="color:#ffffff">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel" id="employee-details-modal">
+<div class="modal-dialog " role="document">
+<div class="modal-content">
+    <div class="modal-header">
+          <h4 class="modal-title primary-text fw-4">Employee Details</h4>
+    </div>
+    <div class="modal-body" >
+        <form id="employee-details-form">
+
+          <div class="row">
+            <div class="col-md-4">
+                <div class="form-group">
+                  <label class="bmd-label-floating">First Name</label>
+                  <input type="text" class="form-control" id='first-name' name='first-name' autocomplete ='off' required>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label class="bmd-label-floating">Last Name</label>
+                  <input type="text" class="form-control" id='last-name' name="last-name" autocomplete ='off' required>
+                </div>
+              </div>
+              <div class="col-md-4">
+                <div class="form-group">
+                  <label class="bmd-label-floating">Other Names</label>
+                  <input type="text" class="form-control" id='other-name' name ='other-name' autocomplete ='off'>
+                </div>
+              </div>
+         </div>
+
+         <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label class="bmd-label-floating">ID Number</label>
+                <input type="number" class="form-control" id='id' name='id' autocomplete ='off' required>
+              </div>
+            </div>
+            <div class="fileinput fileinput-new col-md-4" data-provides="fileinput" >
+              <span class="btn btn-black btn-file float-right">
+                <span class="fileinput-new float-right">Image</span>
+                <span class="fileinput-exists float-right">Change</span>
+                <input type="file" id ="image" name="image" required accept="image/png, image/jpg, image/jpeg" >
+              </span>
+              <span class="fileinput-filename"></span>
+              <a href="#" class="close fileinput-exists" data-dismiss="fileinput" style='float: none'>&times;</a>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label class="bmd-label-floating">Phone</label>
+                <input type="number" class="form-control" id='phone' name='phone' autocomplete ='off' required>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label class="bmd-label-floating">Email</label>
+                <input type="email" class="form-control" id='email' name='email' autocomplete ='off'>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class='col-sm-6'>
+                <div class="input-group date datepicker-group" data-provide="datepicker" data-date-format="dd-mm-yyyy">
+                    <label class="bmd-label-floating">Date of Birth</label>
+                    <input type="text" class="form-control datetimepicker" id ="dob" name="dob" required>
+                    <div class="input-group-addon">
+                        <i class="far fa-calendar-alt"></i>
+                    </div>
+                </div>
+             </div>
+             <div class='col-sm-6'>
+                <div class="input-group date datepicker-group" data-provide="datepicker" data-date-format="dd-mm-yyyy">
+                    <label class="bmd-label-floating">Date of Join</label>
+                    <input type="text" class="form-control datetimepicker" name="doj" id="doj" required>
+                    <div class="input-group-addon">
+                        <i class="far fa-calendar-alt"></i>
+                    </div>
+                </div>
+             </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                <div class="btn-group  d-flex form-row justify-content-between " role="group" data-toggle="buttons" >
+                    <div class="form-check">
+                      <input class="form-check-input" type="radio" value="male" id="male_checkbox" name="gender" checked>
+                      <label class="form-check-label" for="male_checkbox">
+                        Male
+                      </label>
+                    </div>
+                    <div class="form-check">
+                      <input class="form-check-input" type="radio" value="male" id="female_checkbox" name="gender">
+                      <label class="form-check-label" for="female_checkbox">
+                        Female
+                      </label>
+                    </div>
+                 </div>
+                 </div>
+                 <div class="col-md-6">
+                     <div class="form-group">
+                        <button type="submit" class="btn pull-right btn-custom" style="color:#ffffff">Next</button>
+                     </div>
+                 </div>
+            </div>
+      </form>
+    </div>
+</div>
+</div>
+</div>
+
+<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel" id="job-details-modal">
+<div class="modal-dialog " role="document">
+<div class="modal-content">
+    <div class="modal-header">
+          <h4 class="modal-title primary-text fw-4" id="gridSystemModalLabel">Job Details</h4>
+    </div>
+    <div class="modal-body" >
+        <form id="job-details-form">
+
+            <div class="row">
+                <div class="col-md-6">
+                    <select class="selectpicker" data-style="btn btn-white btn-round" title="Single Select" id="department" name="department" required>
+                    <option disabled selected>Department</option>
+                  </select>
+                </div>
+                <div class="col-md-6">
+                    <select class="selectpicker" data-style="btn btn-white btn-round" title="Single Select" id="section" name = "section" required>
+                       <option disabled selected>Section</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                  <select class="selectpicker" data-style="btn btn-white btn-round" title="Single Select" id="job-title" name="job-title" required>
+                     <option disabled selected>Job Title</option>
+                  </select>
+              </div>
+
+                 <div class="col-md-6">
+                <select class="selectpicker" data-style="btn btn-white btn-round" title="Single Select" id="category" name = "category" required>
+                   <option disabled selected>Category</option>
+                </select>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                  <select class="selectpicker" data-style="btn btn-white btn-round" title="Single Select" id="grade" name="grade" required>
+                    <option disabled selected>Grade</option>
+                  </select>
+                </div>
+                <div class="col-md-6">
+                    <select class="selectpicker" data-style="btn btn-white btn-round" title="Single Select" id="location" name="location" required>
+                    <option disabled selected> Location</option>
+                  </select>
+                </div>
+            </div>
+
+            <div class="row">
+             <div class="col-md-6">
+                 <div class="btn-group  d-flex form-row justify-content-between " role="group" data-toggle="buttons" >
+                    <div class="form-check">
+                      <input class="form-check-input" type="radio" value="yes" id="y_checkbox" name="appo" checked>
+                      <label class="form-check-label" for="y_checkbox">
+                        Appo (Y)
+                      </label>
+                    </div>
+                    <div class="form-check">
+                      <input class="form-check-input" type="radio" value="no" id="n_checkbox" name="appo">
+                      <label class="form-check-label" for="n_checkbox">
+                        Appo (N)
+                      </label>
+                    </div>
+                 </div>
+             </div>
+                <div class="col-md-6">
+                    <select class="selectpicker" data-style="btn btn-white btn-round" title="Single Select" id="team" name="team" required>
+                    <option disabled selected>Managers</option>
+                  </select>
+                </div>
+            </div>
+
+            <div class="row">
+            <div class="col-md-6">
+                 <div class="btn-group  d-flex form-row justify-content-between " role="group" data-toggle="buttons" >
+                    <div class="form-check">
+                      <input class="form-check-input" type="radio" value="pamanent" id="perm_checkbox" name="employment-type" checked>
+                      <label class="form-check-label" for="perm_checkbox">
+                        Permanent
+                      </label>
+                    </div>
+                    <div class="form-check">
+                      <input class="form-check-input" type="radio" value="no" id="temp_checkbox" name="employment-type">
+                      <label class="form-check-label" for="temp_checkbox">
+                        Temporary
+                      </label>
+                    </div>
+                 </div>
+             </div>
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    <button type="submit" class="btn pull-right btn-custom" style="color:#ffffff">Next</button>
+                 </div>
+            </div>
+            </div>
+        </form>
+    </div>
+</div>
+</div>
+</div>
+
+<div class="modal fade bd-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel" id="lock-modal">
+<div class="modal-dialog modal-sm" role="document">
+<div class="modal-content">
+    <div class="modal-body" >
+        <div style="display:flex;justify-content: center;margin-top:-70px">
+            <a href="#pablo">
+                <img class="avatar" style="height:100px;width: 80px" th:src="@{${'/docs-upload/' +user.employee.image.name}}" alt="...">
+            </a>
+        </div>
+        <form id="lock-form">
+              <div class="row">
+                  <div class="col-md-12" style="display: flex;justify-content:center;">
+                      <h4 class="card-title" th:text="${user.username}"></h4>
+                  </div>
+                <div class="col-md-12">
+                    <div class="form-group label-floating">
+                        <label class="control-label">Current Password</label>
+                        <input type="text" id="current-password" class="form-control secure" autocomplete="off" required>
+                    </div>
+                    <div class="form-group label-floating">
+                        <label class="control-label">New Password <small> (minimum 4 characters)</small></label>
+                        <input type="text" id="new-password" class="form-control secure" autocomplete="off" required>
+                    </div>
+                    <div class="form-group label-floating">
+                        <label class="control-label">Confirm New Password</label>
+                        <input type="text" id="confirm-password" class="form-control secure" autocomplete="off" required>
+                    </div>
+                  </div>
+                  <div class="col-md-12" style="display: flex;justify-content: center">
+                    <button  id="submit-password" class="btn btn-primary btn-round" style="color:#ffffff">Submit</button>
+                  </div>
+              </div>
+
+        </form>
+    </div>
+</div>
+</div>
+</div>
+
+<div class="modal fade" tabindex="-1" role="dialog" data-target=".bd-example-modal-sm" aria-labelledby="gridSystemModalLabel" id="view-unreceived-modal">
+    <div class="modal-dialog " role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="reminder_icon avatar">
+                    <i class="material-icons">notifications</i>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+
+                    </div>
+                    <div class="col-pmd-8">
+
+                    </div>
+                    <div class="col-md-12">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+
+<!--   Core JS Files   -->
+<script th:src="@{/webjars/jquery/3.3.1/jquery.js}"></script>
+<!--<script th:src="@{/js/bootstrap.min.css}"></script>-->
+<script th:src="@{/webjars/bootstrap-material-design/0.5.10/js/material.js}"></script>
+<script th:src="@{/webjars/bootstrap/3.3.5/js/bootstrap.js}"></script>
+<script th:src="@{/js/perfect-scrollbar.jquery.min.js}" type="text/javascript"></script>
+
+<!-- Library for adding dinamically elements -->
+<script th:src="@{/js/arrive.min.js}" type="text/javascript"></script>
+
+<!-- Forms Validations Plugin -->
+<script th:src="@{/js/jquery.validate.min.js}"></script>
+
+<!--  Plugin for Date Time Picker and Full Calendar Plugin-->
+<script th:src="@{/webjars/momentjs/2.24.0/moment.js}"></script>
+
+<!--  Plugin for the Wizard, full documentation here: https://github.com/VinceG/twitter-bootstrap-wizard -->
+<script th:src="@{/js/jquery.bootstrap-wizard.js}"></script>
+
+<!--  Notifications Plugin, full documentation here: https://bootstrap-notify.remabledesigns.com/    -->
+<script th:src="@{/webjars/bootstrap-notify/3.1.3-1/bootstrap-notify.js}"></script>
+
+<!--   Sharrre Library    -->
+<script th:src="@{/js/jquery.sharrre.js}"></script>
+
+<!-- Vector Map plugin, full documentation here: https://jvectormap.com/documentation/ -->
+<script th:src="@{/js/jquery-jvectormap.js}"></script>
+
+<!-- Sliders Plugin, full documentation here: https://refreshless.com/nouislider/ -->
+<script th:src="@{/js/nouislider.min.js}"></script>
+
+<!--  Plugin for Select, full documentation here: https://silviomoreto.github.io/bootstrap-select -->
+<script th:src="@{/webjars/bootstrap-select/1.12.4/js/bootstrap-select.js}"></script>
+
+<!--  DataTables.net Plugin, full documentation here: https://datatables.net/    -->
+<script th:src="@{/webjars/datatables/1.10.12/js/jquery.dataTables.js}"></script>
+
+<!-- Sweet Alert 2 plugin, full documentation here: https://limonte.github.io/sweetalert2/ -->
+<script th:src="@{/js/sweetalert2.js}"></script>
+
+<!-- Plugin for Fileupload, full documentation here: https://www.jasny.net/bootstrap/javascript/#fileinput -->
+<script th:src="@{/js/jasny-bootstrap.min.js}"></script>
+
+<!--  Full Calendar Plugin, full documentation here: https://github.com/fullcalendar/fullcalendar    -->
+<script th:src="@{/js/fullcalendar.min.js}"></script>
+
+<!-- Plugin for Tags, full documentation here: https://github.com/bootstrap-tagsinput/bootstrap-tagsinputs  -->
+<script th:src="@{/js/jquery.tagsinput.js}"></script>
+
+<script th:src="@{/webjars/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.js}"></script>
+
+<!-- Material Dashboard javascript methods -->
+<script th:src="@{/js/material-dashboard.js}"></script>
+<script th:src="@{/js/wickedpicker.min.js}"></script>
+<script th:src="@{/webjars/sockjs-client/1.1.2/sockjs.min.js}"></script>
+<script th:src="@{/webjars/stomp-websocket/2.3.3-1/stomp.min.js}"></script>
+<script th:src="@{/webjars/font-awesome/5.15.0/js/all.js}"></script>
+<script  th:src="@{/js/bootstrap-clockpicker.js}"></script>
+<script th:inline="javascript">
+    var employees = [[${employees}]];
+    var terminated = [[${terminated}]];
+    var reminders = [[${reminders}]];
+    var unreceivedReminders = [[${unreceivedReminders}]];
+</script>
+<script>
+    // document.onreadystatechange = function() {
+    //     if (document.readyState !== "complete") {
+    //         document.getElementById("spinner").removeAttribute('hidden');
+    //
+    //     } else {
+    //         document.getElementById("spinner").setAttribute('hidden', '');
+    //     }
+    // };
+  $(document).ready(function() {
+    let reminderHolder;
+    var cliockPickerInput = $('.clockpicker').clockpicker({
+        placement: 'popover placement',
+        align: 'popover arrow align',
+        donetext: 'Done',
+        beforeHide: function() {
+            document.getElementById('reminder-time').value  = document.getElementById('clockpicker-hrs').innerText
+                +":"
+                + document.getElementById('clockpicker-mins').innerText;
+        },
+    });
+      $('#terminated-table').DataTable({
+          "sDom": 'lrtip',
+          "lengthMenu": [ [-1,500, 200, 100, 50, 20], ["All", 500, 200, 100, 50, 20] ],
+          "columnDefs": [
+              { orderable: false, targets:  6},
+          ]
+      });
+    $('#employees-table').DataTable({
+        "sDom": 'lrtip',
+        "lengthMenu": [ [-1,500, 200, 100, 50, 20], ["All", 500, 200, 100, 50, 20] ],
+        "columnDefs": [
+            { orderable: false, targets:  8},
+        ]
+    });
+    var employeeTable = $('#employees-table').DataTable();
+    var terminatedTable = $('#terminated-table').DataTable();
+    $('.card .material-datatables label').addClass('form-group');
+    $('#employees-search-bar').keyup(function(){
+        employeeTable.search($(this).val()).draw();
+    });
+    for(let i= 0;i<employees.length;i++){
+        employeeTable.row.add([
+            `<img src="/docs-upload/${employees[i].image.name}" style="width:50px;border:solid 1px #d7d8da;border-radius: 7px;padding:3px;margin-right: 8px;">`,
+            employees[i].nationalId,
+            employees[i].name,
+            employees[i].age,
+            employees[i].gender,
+            employees[i].location,
+            employees[i].jobTitle,
+            employees[i].experience,
+            '<div class="td-actions text-right" style="display:flex"><button rel="tooltip" class="btn btn-success btn-round"  onclick= "editEmployees('+ employees[i].id +')" ><i class="material-icons" style="color:#fff">edit</i></button>&nbsp;<button rel="tooltip" class="btn btn-warning btn-round"  onclick= "viewEmployees('+ employees[i].id +')" ><i class="material-icons" style="color:#fff">visibility</i></button></div>'
+        ]).draw();
+    }
+    if(terminated.length>0){
+        for(let i= 0;i<terminated.length;i++){
+            terminatedTable.row.add([
+                `<img src="/docs-upload/${terminated[i].image.name}" style="width:50px;border:solid 1px #d7d8da;border-radius: 7px;padding:3px;margin-right: 8px;">`,
+                terminated[i].nationalId,
+                terminated[i].name,
+                terminated[i].jobTitle,
+                terminated[i].doj,
+                terminated[i].eoc,
+                '<div class="td-actions text-right" style="display:flex"><button rel="tooltip" class="btn btn-warning btn-round"  onclick= "viewEmployees('+ terminated[i].id +')" ><i class="material-icons" style="color:#fff">visibility</i></button></div>'
+            ]).draw();
+        }
+    }
+});
+  const notifyAudio = new Audio('/audio/pop.mp3');
+  let currentEmployeeId;
+  let currentId;
+  const upcomingReminders = [];
+  const received  = [];
+  document.getElementById('unreceived-size').innerHTML =  unreceivedReminders.length.toString();
+  document.getElementById('upload-form').addEventListener('submit',uploadEmployees);
+  document.getElementById('employee-details-form').addEventListener('submit',employeeDetails);
+  document.getElementById('job-details-form').addEventListener('submit',jobDetails);
+  document.getElementById('reminder-form').addEventListener('submit', submitReminder);
+  document.getElementById('edit-reminder-form').addEventListener('submit',submitEditReminder);
+  document.getElementById('submit-password').addEventListener('click',editPassword);
+  const departmentSelect = document.getElementById('department');
+  getOptions('/api/admin/sections','section');
+  getOptions('/api/admin/centers','location');
+  getOptions('/api/admin/departments','department');
+  getOptions('/api/admin/jobtitles','job-title');
+  getOptions('/api/admin/grades','grade');
+  getOptions('/api/admin/categories','category');
+  getManagers('/api/admin/teams','team');
+
+  function uploadEmployees(e){
+        e.preventDefault();
+        $('#upload-modal').modal('hide');
+        document.getElementById("spinner").removeAttribute('hidden');
+        const file =  document.getElementById('upload-file').files[0];
+        const formData = new FormData();
+        formData.append("file",file);
+        fetch('/api/admin/employees/upload/csv',{
+            method:'POST',
+            body:formData
+        }).then(function (res){
+            if(!res.ok){
+                errorNotify("Something went wrong");
+                document.getElementById("spinner").setAttribute('hidden', '');
+            }else{
+                successNotify("employees Uploaded")
+                window.location.reload();
+            }
+        })
+    }
+
+  function navTab1(el){
+        el.parentNode.children[1].classList.remove("nav_active_2");
+      el.parentNode.children[2].classList.remove("nav_active_3");
+        el.classList.add("nav_active_1");
+  }
+
+  function navTab2(el){
+        el.parentNode.children[0].classList.remove("nav_active_1");
+        el.parentNode.children[2].classList.remove("nav_active_3");
+        el.classList.add("nav_active_2")
+    }
+
+    function navTab3(el){
+        document.getElementById('terminated-container').style.display="block";
+        el.parentNode.children[0].classList.remove("nav_active_1");
+        el.parentNode.children[1].classList.remove("nav_active_2");
+        el.classList.add("nav_active_3")
+    }
+
+
+  function viewReminders(){
+    window.location ='/admin/reminders/auth';
+  }
+
+  function editReminder(reminderId){
+      reminderHolder = reminderId;
+      for(let i=0;i<reminders.length;i++){
+          if(reminders[i].id == reminderId){
+              const reminder = reminders[i];
+              document.getElementById('edit-reminder-description').value= reminder.message;
+              document.getElementById('edit-reminder-date').value= reminder.date;
+              document.getElementById('edit-reminder-time').value= reminder.time;
+          }
+      }
+      $('#edit-reminder-modal').modal('show');
+  }
+
+  function submitEditReminder(e){
+      e.preventDefault();
+      const formData = new FormData();
+      const time = document.getElementById('edit-reminder-time').value.split(":");
+      formData.append("reminder-date",document.getElementById('edit-reminder-date').value);
+      formData.append("reminder-time",`${time[0]}:${time[1]}`);
+      formData.append("description",document.getElementById('edit-reminder-description').value);
+      fetch("/api/admin/reminders/edit/"+reminderHolder,{
+          method: 'POST',
+          body:formData
+      })
+          .then(function(res){
+              if (!res.ok) {
+                  errorNotify('Something went wrong');
+                  throw new Error(res.statusText);
+              }
+              return res.json();
+          })
+          .then(function(reminder){
+              for(let i=0;i<reminders.length;i++){
+                  if(reminders[i].id== reminder.id){
+                      reminders.splice(i,1);
+                      reminders.push(reminder);
+                  }
+              }
+              const remContainer = document.getElementById(`rem-${reminder.id}`);
+              remContainer.innerHTML = `<div class="card card-product">
+                                              <div class="card-header">
+                                                  <div class="row">
+                                                      <div class="col-md-12" style="display:flex;justify-content: end">
+                                                          <button  class="btn-success btn-link"  rel="tooltip" data-placement="bottom" onclick="editReminder(${reminder.id})" title="Edit" style="color:#4caf50">
+                                                              <i class="material-icons">edit</i>
+                                                          </button>
+                                                          <button  class="btn-danger btn-link" rel="tooltip"  data-placement="bottom" onclick="deleteReminder(${reminder.id})" title="Remove" style="color:#f44336">
+                                                              <i class="material-icons">close</i>
+                                                          </button>
+                                                      </div>
+                                                  </div>
+                                              </div>
+                                              <div class="card-content">
+                                                  <h4 class="card-title">
+                                                      <a href="#">MESSAGE</a>
+                                                  </h4>
+                                                  <div class="card-description">
+                                                    ${reminder.message}
+                                                  </div>
+                                              </div>
+                                              <div class="card-footer">
+                                                  <div class="price">
+                                                      <h4>${reminder.day+', '+reminder.date}</h4>
+                                                  </div>
+                                                  <div class="stats pull-right">
+                                                      <p class="category"><i class="material-icons">query_builder</i> <span>${reminder.time}</span></p>
+                                                  </div>
+                                              </div>
+                                          </div>`;
+              successNotify('Reminder Edited!');
+              $("#edit-reminder-modal").modal('hide');
+          })
+  }
+
+  function editPassword(e){
+      e.preventDefault();
+      const newPassword =  document.getElementById('new-password');
+      const currentPassword =  document.getElementById('current-password');
+      const confirmPassword =  document.getElementById('confirm-password');
+      if(newPassword.value === confirmPassword.value){
+          const formData = new FormData();
+          formData.append("newPassword",newPassword.value);
+          formData.append("currentPassword",currentPassword.value);
+          fetch("/api/hr/users/edit",{
+              method:'POST',
+              body:formData
+          })
+          .then(function(res){
+              document.getElementById('lock-form').reset();
+              $('#lock-modal').modal('hide');
+              if(res.status == 409){
+                  errorNotify("Incorrect Password");
+                  throw new Error(res.statusText);
+              }
+              else if(!res.ok){
+                  errorNotify("Something went Wrong");
+                  throw new Error(res.statusText);
+              }
+              else{
+                  successNotify("Password Editted");
+              }
+          })
+      }
+      else{
+          alert("Passwords Dont match");
+          newPassword.value = "";
+          confirmPassword.value= "";
+      }
+  }
+
+  function deleteReminder(reminderId){
+      const reminder = document.getElementById(`rem-${reminderId}`);
+      console.log(reminder);
+      swal({
+          title: 'Confirm you want to remove Reminder',
+          text: "You won't be able to revert this!",
+          type: 'warning',
+          showCancelButton: true,
+          confirmButtonClass: 'btn btn-success',
+          cancelButtonClass: 'btn btn-danger',
+          confirmButtonText: 'Yes, clear it!',
+          buttonsStyling: false
+      })
+          .then(function(){
+              fetch(`/api/admin/reminders/delete/${reminderId}`)
+                  .then(function(res) {
+                      if (!res.ok) {
+                          errorNotify("Something Went Wrong");
+                          throw  new Error(res.statusText);
+                      }
+                  })
+                  .then(function(){
+                      for(let i=0;i<reminders.length;i++){
+                          if(reminders[i].id == reminder.id){
+                              reminders.splice(i,1);
+                          }
+                      }
+                      reminder.remove();
+                      swal({
+                          title: 'Delete',
+                          text: 'Reminder Deleted',
+                          type: 'success',
+                          timer: 1500,
+                          confirmButtonClass: "btn btn-success",
+                          buttonsStyling: false
+                      })
+                  })
+          }).catch(swal.noop);
+  }
+
+  function setReminder(){
+      $('#add-reminder-modal').modal('show');
+  }
+
+  function submitReminder(e){
+      e.preventDefault();
+      const formData = new FormData();
+      formData.append("reminder-date",document.getElementById('reminder-date').value);
+      formData.append("reminder-time",document.getElementById('reminder-time').value);
+      formData.append("description",document.getElementById('reminder-description').value);
+      fetch("/api/admin/reminders",{
+          method: 'POST',
+          body:formData
+      })
+          .then(function(res){
+              if (!res.ok) {
+                  errorNotify('Something went wrong');
+                  form.reset();
+                  throw Error(res.statusText);
+              }
+              return res.json();
+          })
+          .then(function(reminder){
+              const remindersContainer = document.getElementById('reminders-container');
+              const remContainer = document.createElement('div');
+              remContainer.id=`rem-${reminder.id}`;
+              remContainer.className = "col-md-4";
+              remContainer.innerHTML = `<div class="card card-product">
+                                              <div class="card-header">
+                                                  <div class="row">
+                                                      <div class="col-md-12" style="display:flex;justify-content: end">
+                                                          <button  class="btn-success btn-link"  rel="tooltip" data-placement="bottom" onclick="editReminder(${reminder.id})" title="Edit" style="color:#4caf50">
+                                                              <i class="material-icons">edit</i>
+                                                          </button>
+                                                          <button  class="btn-danger btn-link" rel="tooltip"  data-placement="bottom" onclick="deleteReminder(${reminder.id})" title="Remove" style="color:#f44336">
+                                                              <i class="material-icons">close</i>
+                                                          </button>
+                                                      </div>
+                                                  </div>
+                                              </div>
+                                              <div class="card-content">
+                                                  <h4 class="card-title">
+                                                      <a href="#">MESSAGE</a>
+                                                  </h4>
+                                                  <div class="card-description">
+                                                    ${reminder.message}
+                                                  </div>
+                                              </div>
+                                              <div class="card-footer">
+                                                  <div class="price">
+                                                      <h4>${reminder.day+', '+reminder.date}</h4>
+                                                  </div>
+                                                  <div class="stats pull-right">
+                                                      <p class="category"><i class="material-icons">query_builder</i> <span>${reminder.time}</span></p>
+                                                  </div>
+                                              </div>
+                                          </div>`;
+              remindersContainer.appendChild(remContainer);
+              reminders.push(reminder);
+              successNotify('Reminder Added!');
+              $("#add-reminder-modal").modal('hide');
+          })
+  }
+
+  function employeeDetails(e){
+	  e.preventDefault();
+	  const gender = document.querySelector('input[name="gender"]:checked').value;
+	  $('#employee-details-modal').modal('hide');
+	  addedEmployee.setFirstName(document.getElementById('first-name').value);
+	  addedEmployee.setLastName(document.getElementById('last-name').value);
+	  addedEmployee.setOtherNames(document.getElementById('other-name').value);
+	  addedEmployee.setId(document.getElementById('id').value);
+	  addedEmployee.setImage(document.getElementById('image').files[0]);
+	  addedEmployee.setPhone(document.getElementById('phone').value);
+	  addedEmployee.setEmail(document.getElementById('email').value);
+	  addedEmployee.setDob(document.getElementById('dob').value);
+	  addedEmployee.setDoj(document.getElementById('doj').value);
+	  addedEmployee.setGender(gender);
+	  $('#job-details-modal').modal('show');
+  }
+
+  function jobDetails(e){
+	  e.preventDefault();
+	  const appo = document.querySelector('input[name="appo"]:checked').value;
+	  const employmentType = document.querySelector('input[name="employment-type"]:checked').value;
+	  const department=document.getElementById('department').value;
+	  const section =document.getElementById('section').value;
+	  const jobTitle = document.getElementById('job-title').value;
+	  const category = document.getElementById('category').value;
+	  const grade = document.getElementById('grade').value;
+	  const location = document.getElementById('location').value;
+	  console.log(department);
+	  let ok = true;
+	  if(department === "Department"){
+		  alert("department is not selected");
+		  showDropdown(document.getElementById("department"));
+		  ok = false;
+	  }
+	  if(section === "Section"){
+		  alert("department is not selected");
+		  showDropdown(document.getElementById("section"));
+		  ok = false;
+	  }
+	  
+	  if(department === "Location"){
+		  alert("department is not selected");
+		  showDropdown(document.getElementById("location"));
+		  ok = false;
+	  }
+	  
+	  if(grade === "Grade"){
+		  alert("grade is not selected");
+		  showDropdown(document.getElementById("grade"));
+		  ok = false;
+	  }
+	  
+	  if(jobTitle === "Job Title"){
+		  alert("Job Title is not selected");
+		  showDropdown(document.getElementById("job-title"));
+		  ok = false;
+	  }
+	  if(category === "Category"){
+		  alert("Category is not selected");
+		  showDropdown(document.getElementById("category"));
+		  ok = false;
+	  }
+	  if(document.getElementById('team').value.toUpperCase() != 'managers'.toUpperCase() ){
+		  const managers = document.getElementById('team').value.split( );
+		  let managerText ='';
+		  for(let i =0;i<managers.length-1;i++){
+			  managerText = managerText + " "+ managers[i]; 
+		  }
+		  addedEmployee.setManager(managerText);
+	  }
+	  if(ok ==true){
+		  addedEmployee.setAppo(appo);
+		  addedEmployee.setEmploymentType(employmentType);
+		  addedEmployee.setDepartment(department);
+		  addedEmployee.setSection(section);
+		  addedEmployee.setCategory(category);
+		  addedEmployee.setJobTitle(jobTitle);
+		  addedEmployee.setLocation(location);
+		  addedEmployee.setGrade(grade);
+		  $('#job-details-modal').modal('hide');
+		  $('#payment-details-modal').modal('show'); 
+	  }
+	  
+  }
+
+  function submitAddedEmployee(e){
+	  e.preventDefault();
+	  const paymentMode = document.querySelector('input[name="payment-mode"]:checked').value;
+	  addedEmployee.setAccountNumber(document.getElementById('account-number').value);
+	  addedEmployee.setBankName(document.getElementById('bank-name').value);
+	  addedEmployee.setBranch(document.getElementById('branch').value);
+	  addedEmployee.setNssf(document.getElementById('nssf').value);
+	  addedEmployee.setNhif(document.getElementById('nhif').value);
+	  addedEmployee.setKra(document.getElementById('kra').value);
+	  addedEmployee.setPaymentMode(paymentMode);
+	  const formData = addedEmployee.setToFormData();
+		  fetch("/api/admin/employees",{
+			  method:'POST',
+			  body:formData
+		  })
+		   .then(function(res){
+			  if(res.status === 208){
+		   	      document.getElementById('employee-details-form').reset();
+		   	      document.getElementById('job-details-form').reset();
+		   	      document.getElementById('payment-details-form').reset();
+		   	      $('#payment-details-modal').modal('hide');
+		   	      $('.selectpicker').selectpicker('refresh');
+				  errorNotify('Employee already exist');  
+				  throw Error(res.statusText);
+			  }
+			  return res;
+		  })
+		  .then(function(res){
+			  if(!res.ok && !res.status === 208){
+				  document.getElementById('employee-details-form').reset();
+		   	      document.getElementById('job-details-form').reset();
+		   	      document.getElementById('payment-details-form').reset();
+		   	      $('#payment-details-modal').modal('hide');
+		   	      $('.selectpicker').selectpicker('refresh');
+				  errorNotify('Something went wrong');  
+				  throw Error(res.statusText);
+			  }
+			  return res.json();
+		  })
+		  .then(function(employee){
+			  let payroll ='<checkbox diabled style="background:#3880ff;color:#fff">'
+		  			if(employee.payroll === true){
+		  				payroll = '<checkbox checked disabled style="color:#3880ff;background:#fff">';
+		  			}
+			  employeeTable.row.add([
+			        employee.nationalId,
+			        payroll,
+			        employee.name,
+			        employee.age,
+			        employee.gender,
+			        employee.location,
+			        employee.jobTitle,
+			        employee.experience,
+			        '<button  onclick= "editEmployees('+ employee.id +')"class="btn btn-simple btn-warning btn-icon edit"><i class="material-icons" style ="font-size:22px;">edit</i></button>',
+                    '<button  onclick= "viewEmployees('+ employee.id +')"class="btn btn-simple btn-warning btn-icon edit"><i class="material-icons" style ="font-size:22px;">visibility</i></button>',
+			        '<button  onclick= "setReminder('+ employee.id +')"class="btn btn-simple btn-danger btn-icon edit"><i class="material-icons" style ="font-size:22px;">add_alarm</i></button>'
+			    ]).draw();
+		  })
+		  .then(function(){
+			  document.getElementById('employee-details-form').reset();
+			  document.getElementById('job-details-form').reset();
+			  document.getElementById('payment-details-form').reset();
+			  addedEmployee = new Employee();
+			  $('#payment-details-modal').modal('hide');
+			  $('.selectpicker').selectpicker('refresh');
+		  })
+		  .then(function(){
+		   	   successNotify('Employee Added');
+		  })
+	  
+  }
+
+  function viewEmployees(id){
+	  window.location.href = '/admin/employee/'+id;
+  }
+
+  function viewUnReceived(id,element){
+      for(let i=0;i<unreceivedReminders.length;i++){
+          if(unreceivedReminders[i].id === id){
+              showMessage(unreceivedReminders[i]);
+              element.remove();
+              unreceivedReminders.splice(i, 1);
+              document.getElementById('unreceived-size').innerHTML=unreceivedReminders.length.toString();
+          }
+      }
+  }
+
+  function editEmployees(employeeId){
+      window.location=`/admin/employee/edit/${employeeId}`;
+  }
+
+  function getOptions(url,selectId){
+	  fetch(url)
+	  		.then(res=>res.json())
+	  		.then(function(data){
+	  			const select = document.getElementById(selectId);
+	  		   for(let i=0;i<data.length;i++){
+	  			   let option = document.createElement("option");
+	  			   option.value = data[i].name;
+	  			   option.text = data[i].name;
+	  			   select.add(option,select.options[i]);
+	  		   }
+	  		})
+	  		.then(function(){
+	  			$('.selectpicker').selectpicker('refresh');
+	  		})
+  }
+
+  function getManagers(url,selectId){
+        fetch(url)
+        .then(res=>res.json())
+        .then(function(data){
+        const select = document.getElementById(selectId);
+        for(let i=0;i<data.length;i++){
+           let option = document.createElement("option");
+           option.value = data[i].leader;
+           option.text = data[i].leader+" ("+data[i].departmentName+")";
+           select.add(option,select.options[i]);
+        }
+        })
+        .then(function(){
+        $('.selectpicker').selectpicker('refresh');
+        })
+  }
+
+  function showDropdown(element) {
+        let event;
+        event.initMouseEvent('mousedown', true, true, window);
+        element.dispatchEvent(event);
+        event = document.createEvent('MouseEvents');
+    }
+</script>
+<script th:src="@{/js/collection.js}"></script>
+</html>

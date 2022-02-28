@@ -1,0 +1,1038 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+    <link rel="apple-touch-icon" sizes="76x76" th:href="@{/img/filename.jpg}" />
+    <link rel="icon" type="image/png" th:href="@{/img/filename.jpg}" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <title>HRMS</title>
+  <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
+  <meta name="viewport" content="width=device-width" />
+  <link rel="stylesheet" type="text/css" th:href="@{/webjars/font-awesome/5.15.0/css/all.css}">
+  <script rel="stylesheet"  th:src="@{/webjars/font-awesome/5.15.0/js/all.js}"></script>
+  <link th:href="@{/webjars/bootstrap/3.3.5/css/bootstrap.min.css}" rel="stylesheet" />
+  <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap-material-design/0.5.10/css/bootstrap-material-design.css}">
+  <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.css}">
+  <link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap-select/1.12.4/css/bootstrap-select.css}">
+  <link th:href="@{/css/material-dashboard.css}" rel="stylesheet"/>
+  <link th:href="@{/css/fontawesome.min.css}" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" th:href="@{/webjars/material-design-icons/4.0.0/material-icons.css}">
+  <link th:href="@{/css/payslip.css}" rel="stylesheet">
+  </head>
+<body >
+<div class="wrapper" id="wrapper" style="display:none">
+
+    <div class="sidebar" data-active-color="primary" data-background-color="black" data-image="/img/sidebar-3.jpg">
+        <div class="logo">
+            <a  class="simple-text logo-mini">
+
+            </a>
+
+            <a href="#" class="simple-text logo-normal">
+                HRMS
+            </a>
+        </div>
+
+        <div class="sidebar-wrapper">
+            <div class="user">
+                <div class="photo">
+                    <img th:src="@{${'/docs-upload/' +user.employee.image.name}}" />
+                </div>
+                <div class="info">
+                    <a data-toggle="collapse" href="#collapseExample" class="collapsed">
+                    <span th:text="${user.username}">
+                        <b class="caret"></b>
+                    </span>
+                    </a>
+                    <div class="clearfix"></div>
+                    <div class="collapse" id="collapseExample">
+                        <ul class="nav">
+                            <li>
+                                <a data-toggle="modal" data-target="#lock-modal">
+                                    <span class="sidebar-mini"> CP </span>
+                                    <span class="sidebar-normal"> Change Password </span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <ul class="nav">
+                <li>
+                    <a th:href="@{/admin/employee}">
+                        <i class="material-icons">people_alt</i>
+                        <p> Employees </p>
+                    </a>
+                </li>
+                <li >
+                    <a th:href="@{/admin/structure}" >
+                        <i class="material-icons">view_quilt</i>
+                        <p> Structure </p>
+                    </a>
+                </li>
+                <li>
+                    <a th:href="@{/admin/leave}" >
+                        <i class="material-icons">weekend</i>
+                        <p>Leave </p>
+                    </a>
+                </li>
+                <li>
+                    <a data-toggle="collapse" href="#pagesAttendance">
+                        <i class="material-icons">history_toggle_off</i>
+                        <p> Attendance
+                            <b class="caret"></b>
+                        </p>
+                    </a>
+
+                    <div class="collapse" id="pagesAttendance">
+                        <ul class="nav">
+                            <li>
+                                <a th:href="@{/admin/attendance/log}">
+                                    <span class="sidebar-mini">AL</span>
+                                    <span class="sidebar-normal">Attandance Log</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a th:href="@{/admin/attendance/schedule}">
+                                    <span class="sidebar-mini">SC</span>
+                                    <span class="sidebar-normal">Schedule</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li sec:authorize="hasRole('ROLE_HR')">
+                    <a data-toggle="collapse" href="#pagesExamples">
+                        <i class="material-icons sidebar-mini">account_balance_wallet</i>
+                        <p> Payment
+                            <b class="caret"></b>
+                        </p>
+                    </a>
+
+                    <div class="collapse" id="pagesExamples">
+                        <ul class="nav">
+                            <li>
+                                <a th:href="@{/hr/payroll}">
+                                    <span class="sidebar-mini"> PR </span>
+                                    <span class="sidebar-normal"> Payroll </span>
+                                </a>
+                            </li>
+                            <li>
+                                <a th:href="@{/hr/template}">
+                                    <span class="sidebar-mini"> PM </span>
+                                    <span class="sidebar-normal"> Pay Model </span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li sec:authorize="hasRole('ROLE_HR')">
+                    <a th:href="@{/hr/general}">
+                        <i class="material-icons">tune</i>
+                        <p> General </p>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+  <div class="main-panel">
+
+    <nav class="navbar navbar-transparent navbar-absolute">
+      <div class="container-fluid">
+        <div class="navbar-minimize">
+          <button id="minimizeSidebar" class="btn btn-round btn-white btn-fill btn-just-icon">
+            <i class="material-icons visible-on-sidebar-regular">more_vert</i>
+            <i class="material-icons visible-on-sidebar-mini">view_list</i>
+          </button>
+        </div>
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#"> Pay Templates </a>
+        </div>
+        <div class="collapse navbar-collapse">
+          <ul class="nav navbar-nav navbar-right">
+            <li class="dropdown">
+              <a  class="dropdown-toggle simple" data-toggle="dropdown" data-color="success" id="dropdown-not-btn">
+                <i class="material-icons">calculate</i>Tax
+                <p class="hidden-lg hidden-md">
+                  Tax
+                  <b class="caret"></b>
+                </p>
+              </a>
+              <div class="dropdown-menu" id="notification-list" aria-labelledby="dropdown-not-btn" >
+              	<div class="tax-wrapper">
+              		<div class="tax-wrapper-header">
+              		 <div><h4 style="font-weight:700">Tax Rates</h4></div>
+              		 <div>
+              		 	<button class="btn btn-success" style="color:#fff" data-toggle="modal" data-target="#add-tax-modal">
+						  <i class="material-icons">edit</i> Edit
+						</button>
+					 </div>
+              		</div>
+              		<hr>
+              		<div class="tax-wrapper-body" id="tax-wrapper-body"></div>
+              		<hr>
+              		<div class="relief-wrapper-body" id="relief-wrapper-body"></div>
+
+              	</div>
+              </div>
+            </li>
+            <li>
+              <a th:href="@{/logout}" class="dropdown-toggle"  data-color="success">
+                <span class="material-icons">
+                  logout
+                  </span>
+                <p class="hidden-lg hidden-md">Logout</p>
+              </a>
+            </li>
+            <li class="separator hidden-lg hidden-md"></li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <div class="content">
+      <div class="container-fluid">
+      <div class="row">
+          <div class="col-md-12">
+            <div class="card">
+              <div class="card-content">
+                <div class="payhead-toolbar">
+                      <div>
+                          <button class="btn btn-default btn-round" style="color:#ffffff" id="add-earning-deduction" data-toggle="modal" data-target="#add-payhead-modal">Add PayHead</button>
+                      </div>
+                     <div class="btn-group-container">
+                         <div style="color:#fff" class="btn-wrapper">
+                             <button id="save-template-btn" data-toggle="modal" data-target="#template-name-modal" class="btn btn-success btn-fab btn-fab-mini btn-round"><i class="material-icons">save</i></button><br><label>SAVE</label>
+                         </div>
+                         <div class="btn-wrapper">
+                             <button id="clear-template-btn" class="btn btn-danger btn-fab btn-fab-mini btn-round"><i class="material-icons">clear</i></button><br><label>CLEAR</label>
+                         </div>
+                     </div>
+                 </div>
+                <div class="payhead-wrapper">
+                	<div class="earnings-payhead">
+                		<ul class="payhead-list" id="earnings-list">
+
+                		</ul>
+                        <div class="total-container">
+                            <h6 style="margin-right:70px">Total</h6>
+                            <label id="earnings-total" style="margin-top:12px">0</label>
+                        </div>
+                	</div>
+                	<div class="deductions-payhead">
+	                	<ul class="payhead-list" id="deductions-list">
+
+	                	</ul>
+                        <div class="total-container" style="flex-direction: row-reverse;justify-content: end;">
+                            <h6 style="margin-left:70px">Total</h6>
+                            <label id="deductions-total" style="margin-top:12px">0</label>
+                        </div>
+                	</div>
+                </div>
+
+                  <div class="nssf-nhif-relief-container">
+                      <hr>
+                      <div class="nssf-nhif-relief-wrapper">
+                          <div class="nhr-container">
+                              <div class="nhr1">NSSF</div>
+                              <div class="nhr2" id="template-nssf">0</div>
+                              <div class="nhr3">
+                                  <button data-toggle="modal" data-target="#add-nssf-modal" class="btn btn-success btn-fab btn-fab-mini btn-round"><i class="material-icons">edit</i></button>
+                              </div>
+                          </div>
+                          <div class="nhr-container">
+                              <div class="nhr1">NHIF</div>
+                              <div class="nhr2" id="template-nhif">0</div>
+                              <div class="nhr3">
+                                  <button data-toggle="modal" data-target="#add-nhif-modal" class="btn btn-success btn-fab btn-fab-mini btn-round"><i class="material-icons">edit</i></button>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+
+              </div><!-- end content-->
+            </div><!--  end card  -->
+          </div> <!-- end col-md-12 -->
+        </div> <!-- end row -->
+        
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel" id="add-tax-modal">
+  <div class="modal-dialog " role="document">
+  <div class="modal-content">
+      <div class="modal-header">
+            <h4 class="modal-title primary-text fw-4" >Edit Rates</h4>
+      </div>
+      <div class="modal-body">
+      	<div class="rate-container">
+      		<div class="rate-headers">
+      		    <div style="width:20%"></div>
+      			<div class="rate-bands">
+      			<label>Tax Bands/month</label>
+      			</div>
+      			<div class="rate-rate">
+      			<label>Rate</label>
+      			</div>
+      			<div style="width:5%"></div>
+      		</div>
+      		<ul class="rate-list" id="rate-list">
+      		<li class="rate-item">
+      		 	<div class="item-first">less than</div>
+      		 	<div class="item-second">
+      		 	<input type="number"  style="width:80%">
+      		 	</div>
+      		 	<div class="item-third">
+      		 	<label>exempted</label>
+      		 	</div>
+      		 	<div class="item-fourth"></div>
+      		 </li>
+      		 <li class="rate-item">
+      		 	<div class="item-first">next</div>
+      		 	<div class="item-second">
+      		 	<input type="number" style="width:80%">
+      		 	</div>
+      		 	<div class="item-third">
+      		 	<input type="number"  style="width:100px; height:25px"><span>%</span>
+      		 	</div>
+      		 	<div class="item-fourth">
+      		 	<button id="add-nxt-rate" class="btn btn-primary btn-fab btn-fab-mini btn-round" style="float:right">
+				  <i class="material-icons">arrow_downward</i>
+				</button>
+      		 	</div>
+      		 </li>
+      		 <li class="rate-item" id="over-rate">
+      		 	<div class="item-first">over</div>
+      		 	<div class="item-second">
+      		 	<input type="number"  style="width:80%">
+      		 	</div>
+      		 	<div class="item-third">
+      		 	<input type="number"  style="width:100px"><span>%</span>
+      		 	</div>
+      		 	<div class="item-fourth"></div>
+      		 </li>
+      		</ul>
+      		<h4>Reliefs</h4>
+      		<div class="relief-headers">
+      		   <div style="width:20%"></div>
+      			<div class="rate-bands"><label>Relief Name</label></div>
+      			<div class="rate-rate"><label>Rate</label></div>
+      		</div>
+      		<ul class="relief-list" id="relief-list">
+      			<li>
+      				<div class="item-first">
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox">
+                                Everyone
+                            </label>
+                        </div>
+                    </div>
+      				<div class="item-second">
+      				<input type="text">
+      				</div>
+      				<div class="item-third">
+      				<input type="number" style="width:100px;height:25px;">
+      				</div>
+      				<div class="item-fourth">
+	      		 	<button id="add-nxt-relief" class="btn btn-primary btn-fab btn-fab-mini btn-round">
+					  <i class="material-icons">arrow_downward</i>
+					</button>
+	      		 	</div>
+	      		</li>
+      		</ul>
+      		<div class="rate-btn-wrapper">
+      			<div class="float-right"><button class="btn btn-primary"style="color:#fff" id="rate-submit">submit</button></div>
+      		</div>
+      	</div>
+      </div>
+  </div>
+  </div>
+  </div>
+  
+<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel" id="add-payhead-modal">
+  <div class="modal-dialog " role="document">
+  <div class="modal-content">
+      <div class="modal-header">
+            <h4 class="modal-title primary-text fw-4" id="gridSystemModalLabel">Add Payhead</h4>
+      </div>
+      <div class="modal-body">
+      	<form id="payhead-form">
+      	<div class="form-group">
+           <label class="bmd-label-floating">Name</label>
+           <input type="text" class="form-control"  name='name' id="payhead-name" autocomplete ='off' required>
+        </div>
+        <div class="form-group">
+           <label class="bmd-label-floating">Amount</label>
+           <input type="number" class="form-control" name='amount' id="payhead-amount" autocomplete ='off' required>
+        </div>
+        <div class="form-group">
+        <select class="selectpicker" data-style="btn btn-white btn-round" title="Single Select" id="payhead-type" name="payhead-type" required>
+           <option disabled selected>Select Type</option>
+           <option value="deduction">Deduction</option>
+           <option value="earning">Earning</option>
+        </select>
+        </div>
+         <div class="form-group">
+           <button type="submit" class="btn pull-right btn-primary" style="color:#ffffff">Submit</button>
+        </div>
+      	</form>
+      </div>
+      <div class="modal-footer"></div>
+  </div>
+  </div>
+  </div>
+
+<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel" id="add-nssf-modal">
+    <div class="modal-dialog " role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title primary-text fw-4" >Add NSSF</h4>
+            </div>
+            <div class="modal-body">
+                <form  id="nssf-form">
+                    <div class="form-group">
+                        <label class="bmd-label-floating" for="nssf-input" >Nssf</label>
+                        <input type="text" class="form-control" id="nssf-input" autocomplete ='off' required>
+                    </div>
+                    <div class="form-group">
+                        <input  type="submit" class="btn btn-primary" value="submit" style="color:#ffffff">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel" id="add-nhif-modal">
+    <div class="modal-dialog " role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title primary-text fw-4" >Add NHIF</h4>
+            </div>
+            <div class="modal-body">
+                <form  id="nhif-form">
+                    <div class="form-group">
+                        <label class="bmd-label-floating" for="nhif-input">nhif</label>
+                        <input type="number" class="form-control" id="nhif-input"  autocomplete ='off' required>
+                    </div>
+                    <div class="form-group">
+                        <input  type="submit" class="btn btn-primary" value="submit" style="color:#ffffff">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel" id="add-template-reliefs-modal">
+    <div class="modal-dialog " role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title primary-text fw-4" >Add Reliefs</h4>
+            </div>
+            <div class="modal-body">
+                <form  id="template-reliefs-form">
+                    <div class="form-group">
+                        <select class="selectpicker" data-style="btn btn-white btn-round" title="Single Select" id="reliefs-type" name="payhead-type" required>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <input  type="submit" class="btn btn-primary" value="submit" style="color:#ffffff">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel" id="edit-payhead-modal">
+  <div class="modal-dialog " role="document">
+  <div class="modal-content">
+      <div class="modal-header">
+            <h4 class="modal-title primary-text fw-4" >Edit &nbsp; Payhead</h4>
+      </div>
+      <div class="modal-body">
+	      	<div class="form-group">
+	             <label class="bmd-label-floating">Payhead Name</label>
+	             <input type="text" class="form-control" id='edit-payhead-name' autocomplete ='off' required>
+	        </div>
+	        <div class="form-group">
+	             <label class="bmd-label-floating">Payhead Amount</label>
+	             <input type="text" class="form-control" id='edit-payhead-amount'  autocomplete ='off' required>
+	        </div>
+	        <div class="form-group">
+	        	<input id="edit-payhead-btn" class="btn btn-primary" value="submit" style="color:#ffffff">
+	        </div>
+      </div>
+  </div>
+  </div>
+  </div>
+
+<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel" id="template-name-modal">
+    <div class="modal-dialog " role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title primary-text fw-4" >Name the Template</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="bmd-label-floating">Template Name</label>
+                    <input type="text" class="form-control" id='template-name' autocomplete ='off' required>
+                </div>
+
+                <div class="form-group">
+                    <button  class="btn btn-primary" onclick="submitSlipName()" style="color:#ffffff">Submit</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel" id="slip-modal">
+  <div class="modal-dialog modal-lg" role="document">
+  <div class="modal-content">
+      <div class="modal-header">
+      	<div class="row" style="width:100%;display:flex;justify-content: space-between">
+      		<div class="col-md-4">
+      		<h3 class="modal-title primary-text fw-4" style="margin-top:13px">Payslip Preview</h3>
+      		</div>
+            <div class="col-md-4">
+                <h3 id="template-name-value"></h3>
+            </div>
+      		<div class="col-md-4">
+      		<button class="btn btn-round btn-primary" style="color:#fff; float:right"  onclick="submitPayTemplate()">next</button>
+      		</div>
+      	</div>
+      </div>
+      <div class="modal-body">
+                <div class="payslip-container">
+                <div class="payslip-header-container">
+                	<div class="element-header">
+                	<h4>Earnings</h4>
+                	</div>
+                	<div class="element-header">
+                	<h4>Tax Calculations</h4>
+                	</div>
+                	<div class="element-header">
+                	<h4>Deductions</h4>
+                	</div>
+                	<div class="element-header">
+                	<h4>Net Pay</h4>
+                	</div>
+                </div>
+                <div class="element-body-container">
+                	<div class="element-body">
+                		<ul class="units-list" id="preview-earnings">
+                		</ul>
+                	</div>
+                	<div class="element-body">
+                        <ul class="units-list" id="preview-tax">
+                        </ul>
+                	</div>
+                	<div class="element-body">
+                        <ul class="units-list" id="preview-deductions">
+                        </ul>
+                	</div>
+                	<div class="element-body">
+                        <ul class="units-list" id="preview-net-salary">
+                        </ul>
+                	</div>
+                </div>
+                </div>
+      </div>
+  </div>
+  </div>
+  </div>
+
+<div class="loader-wrapper">
+    <div class="dot-container">
+        <div class="dot dot1"></div>
+        <div class="dot dot2"></div>
+        <div class="dot dot3"></div>
+    </div>
+</div>
+
+<div class="modal fade bd-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel" id="lock-modal">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-body" >
+                <div style="display:flex;justify-content: center;margin-top:-70px">
+                    <a href="#pablo">
+                        <img class="avatar" style="height:100px;width: 80px" th:src="@{${'/docs-upload/' +user.employee.image.name}}" alt="...">
+                    </a>
+                </div>
+                <form id="lock-form">
+                    <div class="row">
+                        <div class="col-md-12" style="display: flex;justify-content:center;">
+                            <h4 class="card-title" th:text="${user.username}"></h4>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group label-floating">
+                                <label class="control-label">Current Password</label>
+                                <input type="text" id="current-password" class="form-control secure" autocomplete="off" required>
+                            </div>
+                            <div class="form-group label-floating">
+                                <label class="control-label">New Password <small> (minimum 4 characters)</small></label>
+                                <input type="text" id="new-password" class="form-control secure" autocomplete="off" required>
+                            </div>
+                            <div class="form-group label-floating">
+                                <label class="control-label">Confirm New Password</label>
+                                <input type="text" id="confirm-password" class="form-control secure" autocomplete="off" required>
+                            </div>
+                        </div>
+                        <div class="col-md-12" style="display: flex;justify-content: center">
+                            <button  id="submit-password" class="btn btn-primary btn-round" style="color:#ffffff">Submit</button>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+
+<!--   Core JS Files   -->
+<script th:src="@{/webjars/jquery/3.3.1/jquery.js}"></script>
+<script th:src="@{/webjars/bootstrap-material-design/0.5.10/js/material.js}"></script>
+<script th:src="@{/webjars/bootstrap/3.3.5/js/bootstrap.js}"></script>
+<script th:src="@{/js/perfect-scrollbar.jquery.min.js}" type="text/javascript"></script>
+
+<!-- Library for adding dinamically elements -->
+<script th:src="@{/js/arrive.min.js}" type="text/javascript"></script>
+
+<!-- Forms Validations Plugin -->
+<script th:src="@{/js/jquery.validate.min.js}"></script>
+
+<!--  Plugin for Date Time Picker and Full Calendar Plugin-->
+<script th:src="@{/webjars/momentjs/2.24.0/moment.js}"></script>
+
+<!--  Plugin for the Wizard, full documentation here: https://github.com/VinceG/twitter-bootstrap-wizard -->
+<script th:src="@{/js/jquery.bootstrap-wizard.js}"></script>
+
+<!--  Notifications Plugin, full documentation here: https://bootstrap-notify.remabledesigns.com/    -->
+<script th:src="@{/webjars/bootstrap-notify/3.1.3-1/bootstrap-notify.js}"></script>
+
+<!--   Sharrre Library    -->
+<script th:src="@{/js/jquery.sharrre.js}"></script>
+
+<!-- Vector Map plugin, full documentation here: https://jvectormap.com/documentation/ -->
+<script th:src="@{/js/jquery-jvectormap.js}"></script>
+
+<!-- Sliders Plugin, full documentation here: https://refreshless.com/nouislider/ -->
+<script th:src="@{/js/nouislider.min.js}"></script>
+
+<!--  Plugin for Select, full documentation here: https://silviomoreto.github.io/bootstrap-select -->
+<script th:src="@{/webjars/bootstrap-select/1.12.4/js/bootstrap-select.js}"></script>
+
+<!--  DataTables.net Plugin, full documentation here: https://datatables.net/    -->
+<script th:src="@{/webjars/datatables/1.10.12/js/jquery.dataTables.js}"></script>
+
+<!-- Sweet Alert 2 plugin, full documentation here: https://limonte.github.io/sweetalert2/ -->
+<script th:src="@{/js/sweetalert2.js}"></script>
+
+<!-- Plugin for Fileupload, full documentation here: https://www.jasny.net/bootstrap/javascript/#fileinput -->
+<script th:src="@{/js/jasny-bootstrap.min.js}"></script>
+
+<!--  Full Calendar Plugin, full documentation here: https://github.com/fullcalendar/fullcalendar    -->
+<script th:src="@{/js/fullcalendar.min.js}"></script>
+
+<!-- Plugin for Tags, full documentation here: https://github.com/bootstrap-tagsinput/bootstrap-tagsinputs  -->
+<script th:src="@{/js/jquery.tagsinput.js}"></script>
+
+<script th:src="@{/webjars/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.js}"></script>
+<script th:src="@{/js/tax.js}"></script>
+<script th:src="@{/webjars/sockjs-client/1.1.2/sockjs.min.js}"></script>
+<script th:src="@{/webjars/stomp-websocket/2.3.3-1/stomp.min.js}"></script>
+<!-- Material Dashboard javascript methods -->
+<script th:src="@{/js/material-dashboard.js}"></script>
+<script th:inline="javascript">
+    var unreceivedReminders = [[${unreceivedReminders}]];
+</script>
+<script>
+  getTax();
+  let currentTypeId;
+  let payheadPosition;
+  const taxReliefs=[];
+  let submitSlip;
+  let submitName;
+  document.getElementById('payhead-form').addEventListener('submit',addPayHead);
+  document.getElementById('clear-template-btn').addEventListener('click',clearTemplate);
+  document.getElementById('nssf-form').addEventListener('submit',addNSSF);
+  document.getElementById('nhif-form').addEventListener('submit',addNHIF);
+  document.getElementById('edit-payhead-btn').addEventListener('click',function(){submitEditPayhead(currentTypeId,payheadPosition)});
+
+  function deleteTR(element){
+    element.parentNode.parentNode.remove();
+}
+
+  function addPayHead(e){
+	  e.preventDefault();
+	  const name = document.getElementById('payhead-name').value;
+	  const amount = document.getElementById('payhead-amount').value;
+	  const type = document.getElementById('payhead-type').value;
+	  let list;
+	  const item = document.createElement('li');
+	  item.className="payhead-item";
+	  item.innerHTML =`<div class="payhead-btn-group">
+						  <button class="btn btn-primary" onclick="displayEditPayheadModal(this)" style="padding:7px; color:#fff;"><i class="material-icons">edit</i></button>
+				          <button class="btn btn-danger" onclick="clearTemplate()" style="padding:7px;color:#fff;" ><i class="material-icons">delete</i></button>
+		  				   </div>
+		  				   <div class="payhead-name">${name}</div>
+		  				   <div class="payhead-amount">${amount}</div>`;
+	  if(type.toLowerCase() === 'deduction' ){
+		  list = document.getElementById('deductions-list');
+		  list.appendChild(item);
+		  document.getElementById('payhead-form').reset();
+          const total = document.getElementById('deductions-total');
+          const newTotal =  Number(total.innerText) +Number(amount);
+          total.innerText = newTotal;
+		  $('#add-payhead-modal').modal('hide');
+	  }
+	  else if(type.toLowerCase() === 'earning' ){
+		  list = document.getElementById('earnings-list');
+		  list.appendChild(item);
+          const total = document.getElementById('earnings-total');
+          const newTotal =  Number(total.innerText) +Number(amount);
+          total.innerText = newTotal;
+		  document.getElementById('payhead-form').reset();
+		  $('#add-payhead-modal').modal('hide');
+	  }
+	  else{
+		  swal({
+              title: "Choose Payhead Type",
+              buttonsStyling: false,
+              confirmButtonClass: "btn btn-success"
+          }).catch(swal.noop)
+	  }
+	  $('.selectpicker').selectpicker('refresh');
+  }
+
+  function addNHIF(e){
+    e.preventDefault();
+    document.getElementById('template-nhif').innerHTML = document.getElementById('nhif-input').value;
+    $('#add-nhif-modal').modal('hide');
+  }
+
+  function addNSSF(e){
+    e.preventDefault();
+    document.getElementById('template-nssf').innerHTML = document.getElementById('nssf-input').value;
+    $('#add-nssf-modal').modal('hide');
+  }
+
+  function submitSlipName() {
+    const name = document.getElementById('template-name').value;
+    fetch('/api/hr/paytemplate/name/'+name)
+      .then(res=>res.text())
+      .then(function(text){
+          if(text === 'OK'){
+              $('#template-name-modal').modal('hide');
+              previewSlip(name);
+          }
+          else if(text === 'EXIST'){
+                  swal({
+                      title: 'Duplicate Name',
+                      text: 'A Payment Model Exist with such Name, Click Yes to Override it',
+                      type: 'warning',
+                      showCancelButton: true,
+                      confirmButtonText: 'Yes, Override it!',
+                      cancelButtonText: 'No, change Name',
+                      confirmButtonClass: "btn btn-success",
+                      cancelButtonClass: "btn btn-danger",
+                      closeOnConfirm: false,
+                      closeOnCancel: false,
+                      buttonsStyling: false
+                  }).then(function(){
+                          $('#template-name-modal').modal('hide');
+                          previewSlip(name);
+                  },
+                  function(dismiss){
+                      if(dismiss == 'cancel') {
+                         document.getElementById('template-name').value="";
+                      }
+                  });
+          }
+          else{
+              errorNotify('Something Went Wrong!');
+              $('#template-name-modal').modal('hide');
+          }
+      })
+  }
+
+  function displayEditPayheadModal(element){
+	  const li =element.parentNode.parentNode;
+	  const name = li.children[1].innerText;
+	  const amount = li.children[2].innerText;
+	  currentTypeId = li.parentNode.id;
+	  payheadPosition = Array.from(li.parentNode.children).indexOf(li);
+	  document.getElementById('edit-payhead-name').value= name;
+	  document.getElementById('edit-payhead-amount').value= amount;
+	  $('#edit-payhead-modal').modal('show');
+  }
+  
+  function submitEditPayhead(currentType,payheadPosition){
+	  const payheadType = document.getElementById(currentTypeId);
+	  const li = payheadType.children[payheadPosition];
+	  const name = document.getElementById('edit-payhead-name').value;
+	  const amount = document.getElementById('edit-payhead-amount').value;
+
+      if(currentType == "earnings-list"){
+        const total = document.getElementById('earnings-total');
+        const newTotal =  Number(total.innerText) + Number(amount) -Number(li.children[2].innerText);
+        total.innerHTML = newTotal;
+      }
+      else if(currentType == "deductions-list"){
+          const total = document.getElementById('deductions-total');
+          const newTotal =  Number(total.innerText) + Number(amount) -Number(li.children[2].innerText);
+          total.innerHTML = newTotal;
+      }
+	  li.children[1].innerText = name;
+	  li.children[2].innerText = amount;
+	  $('#edit-payhead-modal').modal('hide');
+  }
+
+  function clearTemplate(){
+	  swal({
+          title: 'Are you sure?',
+          text: "You won't be able to revert this!",
+          type: 'warning',
+          showCancelButton: true,
+          confirmButtonClass: 'btn btn-success',
+          cancelButtonClass: 'btn btn-danger',
+          confirmButtonText: 'Yes, clear it!',
+          buttonsStyling: false
+      })
+       .then(function(){
+        	document.getElementById('earnings-list').innerHTML ="";
+        	document.getElementById('deductions-list').innerHTML ="";
+        	 swal({
+                 title: 'Cleared!',
+                 text: 'Template Cleared',
+                 type: 'success',
+                 timer: 1500,
+                 confirmButtonClass: "btn btn-success",
+                 buttonsStyling: false
+                 })
+      }).catch(swal.noop)
+  }
+
+  function previewSlip(text){
+	  const payslip={
+                      templateName:text,
+			          earnings:[],
+			          deductions:[],
+                      reliefs:[],
+                      nssf:null,
+                      nhif:null,
+	  				 };
+	  document.getElementById('template-name-value').innerText= payslip.name;
+	   payslip.nssf = Number(document.getElementById('template-nssf').innerText);
+	   payslip.nhif = Number(document.getElementById('template-nhif').innerText);
+
+	  const earningsList = document.getElementById('earnings-list').children;
+	  const deductionsList = document.getElementById('deductions-list').children;
+	  for(let i=0;i<earningsList.length;i++){
+		  let name = earningsList[i].children[1].innerText;
+		  let amount = earningsList[i].children[2].innerText;
+		  let payhead = {
+				  	        name:name,
+							amount:Number(amount),
+							type:"earning"
+				  		}
+		  payslip.earnings.push(payhead);
+	  }
+	  for(let i=0;i<deductionsList.length;i++){
+		  let name = deductionsList[i].children[1].innerText;
+		  let amount = deductionsList[i].children[2].innerText;
+		  let payhead = {
+				  	        name:name,
+							amount:Number(amount),
+							type:"deduction"
+				  		}
+		  payslip.deductions.push(payhead);
+	  }
+	  fetch("/api/hr/template/preview",{
+			 method:'POST', 
+			 headers: {
+			      'Accept': 'application/json',
+			      'Content-Type': 'application/json'
+			 },
+			 body:JSON.stringify(payslip)
+		  })
+		  .then(res=>res.json())
+		  .then(function(slip){
+		      console.log(slip);
+		      submitSlip = slip;
+		      const previewEarnings = document.getElementById('preview-earnings');
+		      const previewDeductions = document.getElementById('preview-deductions');
+		      const previewTax = document.getElementById('preview-tax');
+		      const previewNetSalary= document.getElementById('preview-net-salary');
+			  for(let i=0;i<slip.earnings.length;i++){
+                let li = document.createElement('li');
+                li.className='unit';
+                li.innerHTML = `<div class="unit-label">${slip.earnings[i].name}</div>
+                                <label class="unit-value">${slip.earnings[i].amount}</label>`;
+                previewEarnings.appendChild(li);
+              }
+			  let nssf =  document.createElement('li');
+			  nssf.className='unit';
+			  nssf.innerHTML = `<div class="unit-label">NSSF</div>
+                                <label class="unit-value">-${slip.nssf}</label>`;
+			  previewEarnings.appendChild(nssf);
+              let totalEarnings = document.createElement('li');
+              totalEarnings.className='unit total';
+              totalEarnings.innerHTML = `<div class="unit-label">Gross Salary</div>
+                                         <label class="unit-value">${slip.grossSalary}</label>`;
+              previewEarnings.appendChild(totalEarnings);
+              for(let i=0;i<slip.deductions.length;i++){
+                  let li = document.createElement('li');
+                  li.className='unit';
+                  li.innerHTML = `<div class="unit-label">${slip.deductions[i].name}</div>
+                                 <label class="unit-value">${slip.deductions[i].amount}</label>`;
+                  previewDeductions.appendChild(li);
+              }
+              let nhif = document.createElement('li');
+              nhif.className='unit';
+              nhif.innerHTML = `<div class="unit-label">NHIF</div>
+                                 <label class="unit-value">${slip.nhif}</label>`;
+              previewDeductions.appendChild(nhif);
+              let tax = document.createElement('li');
+              tax.className='unit';
+              tax.innerHTML = `<div class="unit-label">Tax</div>
+                               <label class="unit-value">${slip.tax}</label>`;
+              previewTax.append(tax);
+              for(let i=0;i<slip.reliefs.length;i++){
+                  let li = document.createElement('li');
+                  li.className='unit';
+                  li.innerHTML = `<div class="unit-label">${slip.reliefs[i].name}</div>
+                                  <label class="unit-value">${slip.reliefs[i].rate}</label>`;
+                  previewTax.appendChild(li);
+              }
+              let netTax = document.createElement('li');
+              netTax.className='unit';
+              netTax.innerHTML = `<div class="unit-label">Net Tax</div>
+                                 <label class="unit-value">${slip.netTax}</label>`;
+              previewTax.append(netTax);
+              let netGross = document.createElement('li');
+              netGross.className='unit';
+              netGross.innerHTML = `<div class="unit-label">Gross Salary</div>
+                                 <label class="unit-value">${slip.grossSalary}</label>`;
+              previewNetSalary.append(netGross);
+              let netNetTax = document.createElement('li');
+              netNetTax.className='unit ';
+              netNetTax.innerHTML = `<div class="unit-label">Net Tax</div>
+                                     <label class="unit-value">${slip.netTax}</label>`;
+              previewNetSalary.append(netNetTax);
+              let totalDeductions = document.createElement('li');
+              totalDeductions.className='unit ';
+              totalDeductions.innerHTML = `<div class="unit-label">Deductions</div>
+                                         <label class="unit-value">${slip.totalDeduction}</label>`;
+              previewNetSalary.append(totalDeductions);
+              let netSalary= document.createElement('li');
+              netSalary.className='unit';
+              netSalary.innerHTML = `<div class="unit-label">NetSalary</div>
+                                         <label class="unit-value">${slip.netSalary}</label>`;
+              previewNetSalary.append(netSalary);
+              document.getElementById('template-name-value').innerHTML= payslip.templateName;
+		  })
+	  $('#slip-modal').modal('show');
+  }
+
+  function submitPayTemplate(){
+    fetch("/api/hr/paytemplate",{
+        method:'POST',
+        body:JSON.stringify(submitSlip),
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+    })
+    .then(function(res){
+        if(!res.ok){
+            errorNotify('Something went wrong');
+            console.log(err);
+            throw Error(res.statusText);
+        }
+        return res;
+    })
+    .then(function(){
+        swal({
+            title: "Good job!",
+            text: "Template Added Succesfully!",
+            buttonsStyling: false,
+            confirmButtonClass: "btn btn-success",
+            type: "success"
+        }).catch(swal.noop)
+    }).then(function(){
+        window.location.href = '/hr/template';
+    })
+}
+
+  function deletePayhead(element){
+  const li = element.parentNode.parentNode;
+  li.remove();
+  }
+
+  function successNotify(message){
+      $.notify({},{
+          type: 'maximalise',
+          timer: 5000,
+          placement: {
+              from: 'top',
+              align: 'right'
+          },
+          template: '<div data-notify="container" class="col-xs-11 col-sm-3 alert alert-{0}" role="alert">' +
+              '<div class="row">'+
+              '<div class="col-md-3">'+
+              '<span data-notify="icon" class="fas fa-check-circle"></span>'+
+              '</div>'+
+              '<div class="col-md-6">'+
+              '<label style="color:#ffffff ">'+ message +'</label>'+
+              '</div>'+
+              '<div class="col-md-3">'+
+              '<button type="button" aria-hidden="true" class="close" data-notify="dismiss">×</button>'+
+              '</div>'+
+              '</div>'+
+              '</div>'
+      });
+  }
+
+  function errorNotify(message){
+      $.notify({},{
+          type: 'errormalise',
+          timer: 5000,
+          placement: {
+              from: 'top',
+              align: 'right'
+          },
+          template: '<div data-notify="container" class="col-xs-11 col-sm-3 alert alert-{0}" role="alert">' +
+              '<div class="row">'+
+              '<div class="col-md-2">'+
+              '<span data-notify="icon" class="fas fa-check-circle"></span>'+
+              '</div>'+
+              '<div class="col-md-8">'+
+              '<label style="color:#ffffff ">'+ message +'</label>'+
+              '</div>'+
+              '<div class="col-md-2">'+
+              '<button type="button" aria-hidden="true" class="close" data-notify="dismiss">×</button>'+
+              '</div>'+
+              '</div>'+
+              '</div>'
+      });
+  }
+</script>
+<script th:src="@{/js/collection.js}"></script>
+</html>

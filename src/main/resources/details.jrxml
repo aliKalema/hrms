@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.17.0.final using JasperReports Library version 6.17.0-6d93193241dd8cc42629e188b94f9e0bc5722efd  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="details" pageWidth="350" pageHeight="125" columnWidth="350" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="741ddccd-096c-483b-9b5d-847cf203fcb2">
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="data-adpter-jdbc"/>
+	<property name="com.jaspersoft.studio.unit." value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageHeight" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.topMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.bottomMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.leftMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.rightMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnSpacing" value="pixel"/>
+	<parameter name="paramEmployeeId" class="java.lang.Integer" isForPrompting="false"/>
+	<queryString language="SQL">
+		<![CDATA[SELECT concat( employee.last_name,' ',employee.first_name,' ',employee.other_names) AS name,
+	job_title.name AS jobname,
+	employee.account_pin,
+	UPPER(employee.bank_name),
+	UPPER(employee.payment_mode),
+	employee.account_pin,
+	employee.doj
+FROM employee
+	inner join job_title ON 
+	 employee.job_title_id = job_title.id 
+	 AND employee.id =  $P{paramEmployeeId} ]]>
+	</queryString>
+	<field name="name" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="name"/>
+		<property name="com.jaspersoft.studio.field.label" value="name"/>
+	</field>
+	<field name="jobname" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="name"/>
+		<property name="com.jaspersoft.studio.field.label" value="jobname"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="job_title"/>
+	</field>
+	<field name="account_pin" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="account_pin"/>
+		<property name="com.jaspersoft.studio.field.label" value="account_pin"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="employee"/>
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="UPPER(employee.bank_name)" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="UPPER(employee.bank_name)"/>
+		<property name="com.jaspersoft.studio.field.label" value="UPPER(employee.bank_name)"/>
+	</field>
+	<field name="UPPER(employee.payment_mode)" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="UPPER(employee.payment_mode)"/>
+		<property name="com.jaspersoft.studio.field.label" value="UPPER(employee.payment_mode)"/>
+	</field>
+	<field name="COLUMN_6" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="account_pin"/>
+		<property name="com.jaspersoft.studio.field.label" value="account_pin"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="employee"/>
+	</field>
+	<field name="doj" class="java.sql.Date">
+		<property name="com.jaspersoft.studio.field.name" value="doj"/>
+		<property name="com.jaspersoft.studio.field.label" value="doj"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="employee"/>
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<detail>
+		<band height="125" splitType="Stretch">
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+			<textField>
+				<reportElement x="139" y="0" width="202" height="20" uuid="f995186d-bb90-48ca-a555-57d0276b96c9"/>
+				<textElement>
+					<font fontName="Constantia" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{name}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="140" y="20" width="201" height="20" uuid="af86282d-8546-4dd9-8ce2-51b4c2ca8089"/>
+				<textElement>
+					<font fontName="Constantia" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{jobname}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="139" y="100" width="201" height="20" uuid="81f0dca9-bc5c-461f-8109-7bd2580a65fa"/>
+				<textElement>
+					<font fontName="Constantia" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{account_pin}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="139" y="80" width="201" height="20" uuid="6ab41e37-ed50-4b2a-a6c3-329bf401a1a2"/>
+				<textElement>
+					<font fontName="Constantia" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{UPPER(employee.bank_name)}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="139" y="60" width="201" height="20" uuid="9b5859dd-54f7-47f8-af17-5f128b04d425"/>
+				<textElement>
+					<font fontName="Constantia" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{UPPER(employee.payment_mode)}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="139" y="40" width="201" height="20" uuid="93e7c92f-02e4-4759-9dce-f7d5211a4ecf"/>
+				<textElement>
+					<font fontName="Constantia" size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{doj}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="0" width="120" height="20" uuid="92a35f5b-dd90-48f6-b859-f372035f85e7"/>
+				<textElement>
+					<font fontName="Constantia" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Name]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="20" width="120" height="20" uuid="a56165bd-fddb-4756-a9c2-bcd8af58d42b"/>
+				<textElement>
+					<font fontName="Constantia" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Designation]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="60" width="120" height="20" uuid="ad094ee9-37a4-4f3b-96ca-b0cc53a8ac39"/>
+				<textElement>
+					<font fontName="Constantia" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Payment Mode]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="80" width="120" height="20" uuid="d61249ca-d19a-4ee9-942b-e5800d9f7ae6"/>
+				<textElement>
+					<font fontName="Constantia" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Bank Name]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="100" width="120" height="20" uuid="fcad7a4b-87f0-4d79-8c48-9fab311956c5"/>
+				<textElement>
+					<font fontName="Constantia" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Account Number]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="40" width="120" height="20" uuid="bf0ddd5f-9d1a-47b3-97d9-ee3673487467"/>
+				<textElement>
+					<font fontName="Constantia" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Date of Join]]></text>
+			</staticText>
+		</band>
+	</detail>
+</jasperReport>

@@ -1,0 +1,19 @@
+{
+  "properties": [
+    {
+      "name": "uploads.upload-directory",
+      "type": "java.lang.String",
+      "description": "A description for 'uploads.upload-directory'"
+    },
+    {
+      "name": "server.servelet.session.timeout",
+      "type": "java.lang.String",
+      "description": "A description for 'server.servelet.session.timeout'"
+    },
+    {
+      "name": "org.quartz.jobStore.driverDelegateClass",
+      "type": "java.lang.String",
+      "description": "A description for 'org.quartz.jobStore.driverDelegateClass'"
+    }
+
+  ]}

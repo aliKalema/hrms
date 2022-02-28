@@ -1,0 +1,34 @@
+.comments{
+	margin-top: -45px;
+	display:block;
+    width: 150px;
+    margin-right:20px;
+}
+.comments .comment{
+    width:100%;
+}
+.bubble{
+    position: relative;
+    background:#cedcf5;  
+    padding:20px;
+    color:#464545;
+    border-radius:7px; 
+    
+}
+.bubble:after{
+    content:"";
+    display:block;
+    position:absolute;
+    width:0;
+    height: 0;
+    border-top:8px solid transparent;
+    border-bottom:8px solid transparent;
+    border-right:15px solid #cedcf5;
+    left:-15px;
+    top: 15px;
+}
+.bubble-icon{
+	color:#3880ff;
+	transform:scale(1.8);
+	margin-right:12px;
+}

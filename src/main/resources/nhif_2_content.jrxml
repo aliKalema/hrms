@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.18.1.final using JasperReports Library version 6.18.1-9d75d1969e774d4f179fb3be8401e98a0e6d1611  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="nhif_2_content" pageWidth="752" pageHeight="572" orientation="Landscape" columnWidth="752" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="0d62b678-f6c7-4e41-8484-7cae3bd25dde">
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="DataAdapter.xml"/>
+	<parameter name="paramPayrollId" class="java.lang.String"/>
+	<queryString language="SQL">
+		<![CDATA[select employee.payroll_number,employee.first_name,employee.last_name,concat(employee.first_name, ' ',employee.other_names)as name,employee.national_id,employee.nhif_pin,payslip.nhif FROM payslip INNER JOIN employee on payslip.employee_id = employee.id
+inner join payroll_payslips on payslip.id = payroll_payslips.payslips_id AND payroll_payslips.payroll_id =  $P{paramPayrollId}]]>
+	</queryString>
+	<field name="payroll_number" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="payroll_number"/>
+		<property name="com.jaspersoft.studio.field.label" value="payroll_number"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="employee"/>
+	</field>
+	<field name="first_name" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="first_name"/>
+		<property name="com.jaspersoft.studio.field.label" value="first_name"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="employee"/>
+	</field>
+	<field name="last_name" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="last_name"/>
+		<property name="com.jaspersoft.studio.field.label" value="last_name"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="employee"/>
+	</field>
+	<field name="name" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="name"/>
+		<property name="com.jaspersoft.studio.field.label" value="name"/>
+	</field>
+	<field name="national_id" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="national_id"/>
+		<property name="com.jaspersoft.studio.field.label" value="national_id"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="employee"/>
+	</field>
+	<field name="nhif_pin" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="nhif_pin"/>
+		<property name="com.jaspersoft.studio.field.label" value="nhif_pin"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="employee"/>
+	</field>
+	<field name="nhif" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.name" value="nhif"/>
+		<property name="com.jaspersoft.studio.field.label" value="nhif"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="payslip"/>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<detail>
+		<band height="42" splitType="Stretch">
+			<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.HorizontalRowLayout"/>
+			<textField>
+				<reportElement x="0" y="0" width="127" height="42" uuid="e47ab687-92c0-4a4b-bb01-665804c06698"/>
+				<textFieldExpression><![CDATA[$F{payroll_number}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="127" y="0" width="125" height="42" uuid="f67924d6-20a0-43ea-84d0-e7f0a1db1198"/>
+				<textFieldExpression><![CDATA[$F{last_name}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="252" y="0" width="125" height="42" uuid="f9b70e6b-009e-42dc-9cf5-9bd9e9182299"/>
+				<textFieldExpression><![CDATA[$F{name}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="377" y="0" width="125" height="42" uuid="59555290-bcda-48fc-9234-b67af41c7e96"/>
+				<textFieldExpression><![CDATA[$F{national_id}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="502" y="0" width="125" height="42" uuid="45ca71c8-f096-40f2-8557-bddb09be1474"/>
+				<textFieldExpression><![CDATA[$F{nhif_pin}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="627" y="0" width="125" height="42" uuid="536838a9-bc47-416b-ada6-f63e0b041e3f"/>
+				<textFieldExpression><![CDATA[$F{nhif}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

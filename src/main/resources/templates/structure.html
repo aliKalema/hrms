@@ -1,0 +1,2354 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <link rel="apple-touch-icon" sizes="76x76" th:href="@{/img/filename.jpg}" />
+  <link rel="icon" type="image/png" th:href="@{/img/filename.jpg}" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+  <title>HRMS</title>
+  <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
+  <meta name="viewport" content="width=device-width" />
+  <link th:href="@{/webjars/font-awesome/5.15.0/css/all.css}" rel="stylesheet" type="text/css" >
+    <link rel="stylesheet" type="text/css" th:href="@{/webjars/material-design-icons/4.0.0/material-icons.css}">
+  <link th:href="@{/webjars/bootstrap-material-design/0.5.10/css/bootstrap-material-design.css}" rel="stylesheet" type="text/css">
+  <link th:href="@{/webjars/bootstrap-select/1.12.4/css/bootstrap-select.css}" rel="stylesheet" type="text/css">
+  <link th:href="@{/webjars/bootstrap/3.3.5/css/bootstrap.min.css}" rel="stylesheet" />
+  <link th:href="@{/css/material-dashboard.css}" rel="stylesheet"/>
+  <link th:href="@{/webjars/datatables/1.10.12/css/jquery.dataTables.css}" rel="stylesheet">
+  <link th:href="@{/webjars/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.css}" rel="stylesheet">
+  <link th:href="@{/webjars/bootstrap-glyphicons/bdd2cbfba0/css/bootstrap-glyphicons.css}" rel="">
+    <link th:href="@{/css/recommend.css}" rel="stylesheet">
+  <style>
+  	.datepicker,
+	.table-condensed {
+	  width: 320px;
+	  height:250px;
+	}
+	.alert-minimalist, alert-maximalist, alert-errormalist {
+	background-color: #3880ff;
+	border-color: rgba(149, 149, 149, 0.3);
+	border-radius: 3px;
+	color: #ffffff;
+	padding: 15px;
+}
+.alert-minimalist >[data-notify="dismiss"], .alert-maximalise >[data-notify="dismiss"], .alert-errormalise > [data-notify="dismiss"]{
+	top: 50%;
+    left: 50%;
+}
+.alert-minimalist > [data-notify="icon"], .alert-maximalise > [data-notify="icon"], .alert-errormalise > [data-notify="icon"]{
+	font-size:30px;
+	color:#ffffff;
+	margin-top:25%;
+}
+.alert-minimalist > [data-notify="title"], .alert-maximalise > [data-notify="title"], .alert-errormalise > [data-notify="title"]{
+	color: #ffffff;
+	display: block;
+	font-weight: bold;
+	margin-bottom: 5px;
+}
+.alert-minimalist > [data-notify="message"], .alert-maximalise > [data-notify="message"], .alert-errormalise > [data-notify="message"] {
+	font-size: 80%;
+}
+.alert-maximalise {
+	background-color: #69bb7b;
+	color:#ffffff;
+}
+.alert-errormalise{
+    background-color: #f04141;
+    color:#ffffff;
+}
+.nav-tabs > li.active {
+  background-color: rgba(255, 255, 255, 0.2);
+  transition: background-color .1s .2s; 
+  }
+  .custom-flex{
+  display:flex;
+  justify-content:space-between;
+  }
+</style>
+  </head>
+<body >
+<div class="wrapper" id="wrapper" style="display: none">
+
+    <div class="sidebar" data-active-color="primary" data-background-color="black" data-image="/img/sidebar-3.jpg">
+        <div class="logo">
+            <a  class="simple-text logo-mini">
+
+            </a>
+
+            <a href="#" class="simple-text logo-normal">
+                HRMS
+            </a>
+        </div>
+
+        <div class="sidebar-wrapper">
+            <div class="user">
+                <div class="photo">
+                    <img th:src="@{${'/docs-upload/' +user.employee.image.name}}" />
+                </div>
+                <div class="info">
+                    <a data-toggle="collapse" href="#collapseExample" class="collapsed">
+                    <span th:text="${user.username}">
+                        <b class="caret"></b>
+                    </span>
+                    </a>
+                    <div class="clearfix"></div>
+                    <div class="collapse" id="collapseExample">
+                        <ul class="nav">
+                            <li>
+                                <a data-toggle="modal" data-target="#lock-modal">
+                                    <span class="sidebar-mini"> CP </span>
+                                    <span class="sidebar-normal"> Change Password </span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <ul class="nav">
+                <li >
+                    <a th:href="@{/admin/dashboard}">
+                        <i class="material-icons">dashboard</i>
+                        <p> Dashboard </p>
+                    </a>
+                </li>
+                <li>
+                    <a th:href="@{/admin/employee}">
+                        <i class="material-icons">people_alt</i>
+                        <p> Employees </p>
+                    </a>
+                </li>
+                <li class="active">
+                    <a th:href="@{/admin/structure}" >
+                        <i class="material-icons">view_quilt</i>
+                        <p> Structure </p>
+                    </a>
+                </li>
+                <li >
+                    <a th:href="@{/admin/leave}" >
+                        <i class="material-icons">weekend</i>
+                        <p>Leave </p>
+                    </a>
+                </li>
+                <li>
+                    <a data-toggle="collapse" href="#pagesAttendance">
+                        <i class="material-icons">history_toggle_off</i>
+                        <p> Attendance
+                            <b class="caret"></b>
+                        </p>
+                    </a>
+
+                    <div class="collapse" id="pagesAttendance">
+                        <ul class="nav">
+                            <li>
+                                <a th:href="@{/admin/attendance/log}">
+                                    <span class="sidebar-mini">AL</span>
+                                    <span class="sidebar-normal">Attandance Log</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a th:href="@{/admin/attendance/schedule}">
+                                    <span class="sidebar-mini">SC</span>
+                                    <span class="sidebar-normal">Schedule</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li sec:authorize="hasRole('ROLE_HR')">
+                    <a data-toggle="collapse" href="#pagesExamples">
+                        <i class="material-icons sidebar-mini">account_balance_wallet</i>
+                        <p> Payment
+                            <b class="caret"></b>
+                        </p>
+                    </a>
+
+                    <div class="collapse" id="pagesExamples">
+                        <ul class="nav">
+                            <li>
+                                <a th:href="@{/hr/payroll}">
+                                    <span class="sidebar-mini"> PR </span>
+                                    <span class="sidebar-normal"> Payroll </span>
+                                </a>
+                            </li>
+                            <li>
+                                <a th:href="@{/hr/template}">
+                                    <span class="sidebar-mini"> PM </span>
+                                    <span class="sidebar-normal"> Pay Model </span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+                <li sec:authorize="hasRole('ROLE_HR')">
+                    <a th:href="@{/hr/general}">
+                        <i class="material-icons">tune</i>
+                        <p> General </p>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="main-panel" style="min-height:100%">
+        <nav class="navbar navbar-transparent navbar-absolute">
+            <div class="container-fluid">
+                <div class="navbar-minimize">
+                    <button id="minimizeSidebar" class="btn btn-round btn-white btn-fill btn-just-icon">
+                        <i class="material-icons visible-on-sidebar-regular">more_vert</i>
+                        <i class="material-icons visible-on-sidebar-mini">view_list</i>
+                    </button>
+                </div>
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="#">STRUCTURE </a>
+                </div>
+                <div class="collapse navbar-collapse">
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class="dropdown">
+                            <a  class="dropdown-toggle" data-toggle="dropdown" data-color="success" >
+                                <i class="material-icons">notifications</i>
+                                <span class="notification" id="unreceived-size">0</span>
+                                <p class="hidden-lg hidden-md">
+                                    Notifications
+                                    <b class="caret"></b>
+                                </p>
+                            </a>
+                            <ul class="dropdown-menu panel-group"  id="unreceived-view"  role="tablist" aria-multiselectable="true">
+                                <li th:each="reminder:${unreceivedReminders}">
+                                    <a th:attr="onclick=${'viewUnReceived('+reminder.id+',this)'}">
+                                        &nbsp;<span th:text="${reminder.day +' '+ reminder.date+' '+reminder.time}"></span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a th:href="@{/logout}" class="dropdown-toggle"  data-color="success">
+                                <span class="material-icons">logout</span>
+                                <p class="hidden-lg hidden-md">Logout</p>
+                            </a>
+                        </li>
+                        <li class="separator hidden-lg hidden-md"></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+         <div style="margin-top:40px">
+      <div class="nav-center">
+          <ul class="nav nav-pills nav-pills-info nav-pills-icons" role="tablist">
+              <li>
+                  <a class="panel-link" href="#department" role="tab" data-toggle="tab">
+                      <i class="material-icons panel-icon">widgets</i><br>
+                      Department
+                  </a>
+              </li>
+              <li class="active panel-link">
+                  <a href="#location" role="tab" data-toggle="tab">
+                      <i class="material-icons panel-icon">location_on</i><br>
+                      Location
+                  </a>
+              </li>
+              <li class="panel-link">
+                  <a href="#manager" role="tab" data-toggle="tab">
+                      <i class="material-icons panel-icon">supervisor_account</i><br>
+                      Manager
+                  </a>
+              </li>
+              <li class="panel-link">
+                  <a href="#section" role="tab" data-toggle="tab">
+                      <i class="material-icons panel-icon">graphic_eq</i><br>
+                      Section
+                  </a>
+              </li>
+              <li class="panel-link">
+                  <a href="#category" role="tab" data-toggle="tab">
+                      <i class="material-icons panel-icon">view_carousel</i><br>
+                      Category
+                  </a>
+              </li>
+              <li class="panel-link">
+                  <a href="#job-title" role="tab" data-toggle="tab">
+                      <i class="material-icons panel-icon">business_center</i><br>
+                      Job Title
+                  </a>
+              </li>
+          </ul>
+      </div>
+         <div class="tab-content">
+             <div class="tab-pane mar-90" id="department">
+                         <div class="custom-flex" >
+                             <div >
+                                 <h3>Department</h3>
+                             </div>
+                             <div>
+                                 <button class="btn btn-primary float-right"  data-toggle="modal" data-target="#add-department-modal" style="color:#fff">Add Department</button>
+                             </div>
+                         </div>
+                         <ul class="table-list" id="departments-table-body">
+                             <li th:each = "department:${departments}"  th:id="${'dep-wrapper-'+department.id}" style="list-style: none;">
+                                 <div class="card">
+                                     <div class="card-content">
+                                         <div class="row">
+                                             <div class="col-md-8">
+                                                 <span th:text="${department.name}" th:id="${'dep-name-'+department.id}"></span>
+                                             </div>
+                                             <div class="col-md-4 td-actions" style="display:flex;justify-content:end">
+                                                 <button type="button"  th:attr="onclick=${'searchHOd('+department.id+')'}" class="btn-link" rel="tooltip" data-placement="bottom" title="ADD HOD">
+                                                     <i style="color:#3880ff" class="material-icons">person_add_alt</i>
+                                                 </button>
+                                                 <button type="button" rel="tooltip" class="btn-link" th:attr="onclick=${'editDepartment('+department.id+')'}" style="color:#4caf50" data-placement="bottom" title="Edit">
+                                                     <i style="color:#4caf50" class="material-icons">edit</i>
+                                                 </button>
+                                                 <button type="button" rel="tooltip" class="btn-link" th:attr="onclick=${'deleteDepartment('+department.id+')'}" style="color:#f44336" data-placement="bottom" title="DELETE">
+                                                     <i style="color:#f44336" class="material-icons">delete</i>
+                                                 </button>
+                                             </div>
+                                             <div class="col-md-12" style="display:flex">
+                                                 <label style="margin-top:15px;margin-right: 18px;font-size:20px">HOD</label>&nbsp;
+                                                 <img class="avatar" th:id="${'hod_image_'+department.id}" style="width: 55px;margin-right: 20px" th:src="@{${'/docs-upload/'+department.hodImage}}"/>
+                                                 <div style="width: 30%"><span th:text="${department.hodName}" th:id="${'hod_name'+department.id}"></span></div>
+                                             </div>
+                                         </div>
+                                         <div class="panel-group" th:id=" ${department.id}"  role="tablist" th:attr="aria-expanded='false',aria-multiselectable='true'">
+                                             <div class="panel">
+                                                 <div class="panel-heading" role="tab" id="headingOne">
+                                                     <a role="button"  th:attr="data-parent='#'+${department.id}, aria-controls='#'+${department.id}+'-ps',data-toggle='collapse',aria-expanded='false'" th:href="'#'+${department.id}+'-ps' "  >
+                                                         <h4 class="panel-title">
+                                                             Employees
+                                                             <i class="material-icons">keyboard_arrow_down</i>
+                                                         </h4>
+                                                     </a>
+                                                 </div>
+                                                 <div th:id="${department.id}+'-ps'" class="panel-collapse collapse " role="tabpanel" th:attr="aria-labelledby='headingOne'">
+                                                     <div class="panel-body">
+                                                         <div>
+                                                             <table class="table">
+                                                                 <thead class=" text-primary">
+                                                                 <th>ID</th>
+                                                                 <th>Name</th>
+                                                                 <th>Location</th>
+                                                                 <th>Job Title</th>
+                                                                 <th class="text-right"></th>
+                                                                 </thead>
+                                                                <tbody>
+                                                                    <tr th:each="employee: ${department.employees}">
+                                                                        <td th:text="${employee.nationalId}"></td>
+                                                                        <td th:text="${employee.name}"></td>
+                                                                        <td th:text="${employee.location}"></td>
+                                                                        <td th:text="${employee.jobTitle}"></td>
+                                                                        <td>
+                                                                            <button rel="tooltip" class="btn-link"  th:attr="onclick= ${'editEmployee('+employee.id+')'}" data-placement="bottom" title="Edit"><i class="material-icons" style="color:#4caf50">edit</i></button>&nbsp;
+                                                                            <button rel="tooltip" class="btn-link"  th:attr="onclick= ${'removeEmployeeFromDepartment('+department.id+','+employee.id+',this)'}" data-placement="bottom" title="Remove" ><i class="material-icons"  style="color:#f44336" >close</i></button>
+                                                                        </td>
+                                                                    </tr>
+                                                                </tbody>
+                                                             </table>
+                                                         </div>
+                                                     </div>
+                                                 </div>
+                                             </div>
+                                         </div>
+                                     </div>
+                                 </div>
+                             </li>
+                         </ul>
+                 </div>
+
+             <div class="tab-pane active mar-90" id="location">
+                 <div class="custom-flex" >
+                             <div >
+                                 <h3>Location</h3>
+                             </div>
+                             <div>
+                                 <button class="btn btn-primary float-right"  data-toggle="modal" data-target="#add-location-modal" style="color:#fff">Add Location</button>
+                             </div>
+                         </div>
+                     <div  id="locations-content">
+                         <div class="card" th:each="location: ${locations}" th:id="${'loc-wrapper-'+location.id}">
+                             <div class="card-content" id="locations-containers">
+                                 <div class="row">
+                                     <div class="col-md-8" th:text="${location.name}" th:id="${'loc-name-'+location.id}"></div>
+                                     <div class="col-md-4 td-actions" style="display:flex;justify-content:end">
+                                         <button type="button" rel="tooltip" class="btn-link" th:attr="onclick=${'editLocation('+location.id+')'}" style="color:#4caf50" data-placement="bottom" title="Edit">
+                                             <i style="color:#4caf50" class="material-icons">edit</i>
+                                         </button>
+                                         <button type="button" rel="tooltip" class="btn-link" th:attr="onclick=${'deleteLocation('+location.id+')'}" style="color:#f44336" data-placement="bottom" title="DELETE">
+                                             <i style="color:#f44336" class="material-icons">delete</i>
+                                         </button>
+                                     </div>
+                                 </div>
+                                 <div class="panel-group" th:id=" ${location.id}"  role="tablist" th:attr="aria-expanded='false',aria-multiselectable='true'">
+                                     <div class="panel">
+                                         <div class="panel-heading" role="tab" id="headingOne">
+                                             <a role="button"  th:attr="data-parent='#'+${location.id}, aria-controls='#'+${location.id}+'-ps',data-toggle='collapse',aria-expanded='false'" th:href="'#'+${location.id}+'-ps' "  >
+                                                 <h4 class="panel-title">
+                                                     Employees At location
+                                                     <i class="material-icons">keyboard_arrow_down</i>
+                                                 </h4>
+                                             </a>
+                                         </div>
+                                         <div th:id="${location.id}+'-ps'" class="panel-collapse collapse " role="tabpanel" th:attr="aria-labelledby='headingOne'">
+                                             <div class="panel-body">
+                                                 <div>
+                                                     <table class="table">
+                                                         <thead class=" text-primary">
+                                                         <tr>
+                                                             <th>ID</th>
+                                                             <th>NAME</th>
+                                                             <th>DEPARTMENT</th>
+                                                             <th>JOBTITLE</th>
+                                                             <th class="text-right"></th>
+                                                         </tr>
+                                                         </thead>
+                                                         <tbody>
+                                                            <tr th:each="employee :${location.employees}">
+                                                                <td th:text="${employee.nationalId}"></td>
+                                                                <td th:text="${employee.name}"></td>
+                                                                <td th:text="${employee.department}"></td>
+                                                                <td th:text="${employee.jobTitle}"></td>
+                                                                <td>
+                                                                    <button rel="tooltip" class="btn-link"  th:attr="onclick= ${'editEmployee('+employee.id+')'}" data-placement="bottom" title="Edit"><i class="material-icons" style="color:#4caf50">edit</i></button>&nbsp;
+                                                                    <button rel="tooltip" class="btn-link"  th:attr="onclick= ${'removeEmployeeFromLocation('+location.id+','+employee.id+',this)'}" data-placement="bottom" title="Remove" ><i class="material-icons"  style="color:#f44336" >close</i></button>
+                                                                </td>
+                                                            </tr>
+                                                         </tbody>
+                                                     </table>
+                                                 </div>
+                                             </div>
+                                         </div>
+                                     </div>
+                                 </div>
+                             </div>
+                         </div>
+                     </div>
+             </div>
+
+             <div class="tab-pane mar-90" id="manager">
+                <div class="custom-flex" >
+                     <div >
+                         <h3>Managers</h3>
+                     </div>
+                     <div>
+                         <button class="btn btn-primary float-right"  onclick="searchManager()" style="color:#fff">Add Manager</button>
+                     </div>
+                </div>
+                 <div class="row">
+                     <div class="col-md-12">
+                         <div class="custom-card">
+                             <div class="custom-card-header">
+                                 <h6>Managers List</h6>
+                             </div>
+                             <div class="custom-card-content">
+                                 <ul id="team-container" style="padding-bottom:20px;">
+                                     <li class="custom-li custom-li-header">
+                                         <div class="custom-th-wrapper">
+                                             <div><span class="custom-th-img">View All</span></div>
+                                             <div><span class="custom-th-img">Manager</span></div>
+                                             <div style="text-align:center" ><span class="custom-th">Members</span></div>
+                                             <div><span class="custom-th">Department</span></div>
+                                             <div></div>
+                                         </div>
+                                     </li>
+                                 </ul>
+                             </div>
+                         </div>
+                     </div>
+                 </div>
+             </div>
+
+             <div class="tab-pane mar-90" id="section">
+                 <div class="custom-flex" >
+                             <div >
+                                 <h3>Section</h3>
+                             </div>
+                             <div>
+                                 <button class="btn btn-primary float-right"  data-toggle="modal" data-target="#add-section-modal" style="color:#fff">Add Section</button>
+                             </div>
+                         </div>
+                 <div id="section-content">
+                         <div class="card" th:each="section: ${sections}" th:id="${'sec-wrapper-'+section.id}">
+                             <div class="card-content">
+                                 <div class="row">
+                                     <div class="col-md-8" th:text="${section.name}" th:id="${'sec-name-'+section.id}"></div>
+                                     <div class="col-md-4 td-actions" style="display:flex;justify-content:end">
+                                         <button type="button" rel="tooltip" class="btn-link" th:attr="onclick=${'editSection('+section.id+')'}" style="color:#4caf50" data-placement="bottom" title="Edit">
+                                             <i style="color:#4caf50" class="material-icons">edit</i>
+                                         </button>
+                                         <button type="button" rel="tooltip" class="btn-link" th:attr="onclick=${'deleteLocation('+section.id+')'}" style="color:#f44336" data-placement="bottom" title="DELETE">
+                                             <i style="color:#f44336" class="material-icons">delete</i>
+                                         </button>
+                                     </div>
+                                 </div>
+                                 <div class="panel-group" th:id=" ${section.id}+'-sec'"  role="tablist" th:attr="aria-expanded='false',aria-multiselectable='true'">
+                                     <div class="panel">
+                                         <div class="panel-heading" role="tab" id="headingOne">
+                                             <a role="button"  th:attr="data-parent='#'+${section.id}+'-sec', aria-controls='#'+${section.id}+'-sect',data-toggle='collapse',aria-expanded='false'" th:href="'#'+${section.id}+'-sect' "  >
+                                                 <h4 class="panel-title">
+                                                     Employees At Section
+                                                     <i class="material-icons">keyboard_arrow_down</i>
+                                                 </h4>
+                                             </a>
+                                         </div>
+                                         <div th:id="${section.id}+'-sect'" class="panel-collapse collapse " role="tabpanel" th:attr="aria-labelledby='headingOne'">
+                                             <div class="panel-body">
+                                                 <div>
+                                                     <table class="table">
+                                                         <thead class=" text-primary">
+                                                        <tr>
+                                                            <th>ID</th>
+                                                            <th>NAME</th>
+                                                            <th>LOCATION</th>
+                                                            <th>Jobtitle</th>
+                                                            <th></th>
+                                                        </tr>
+                                                         </thead>
+                                                         <tbody>
+                                                         <tr th:each="employee: ${section.employees}">
+                                                             <td th:text="${employee.nationalId}"></td>
+                                                             <td th:text="${employee.name}"></td>
+                                                             <td th:text="${employee.location}"></td>
+                                                             <td th:text="${employee.jobTitle}"></td>
+                                                             <td>
+                                                                 <button rel="tooltip" class="btn-link"  th:attr="onclick= ${'editEmployee('+employee.id+')'}" data-placement="bottom" title="Edit"><i class="material-icons" style="color:#4caf50">edit</i></button>&nbsp;
+                                                                 <button rel="tooltip" class="btn-link"   data-placement="bottom" title="Remove" ><i class="material-icons"  style="color:#f44336" >close</i></button>
+                                                             </td>
+                                                         </tr>
+                                                         </tbody>
+                                                     </table>
+                                                 </div>
+                                             </div>
+                                         </div>
+                                     </div>
+                                 </div>
+                             </div>
+                         </div>
+
+                     </div>
+             </div>
+
+             <div class="tab-pane mar-90" id="category">
+                 <div class="custom-flex" >
+                         <div >
+                             <h3>Category</h3>
+                         </div>
+                         <div>
+                             <button class="btn btn-primary float-right"  data-toggle="modal" data-target="#add-category-modal" style="color:#fff">Add Category</button>
+                         </div>
+                     </div>
+                 <div class="card" th:each="category: ${categories}" th:id="${'cat-wrapper-'+category.id}">
+                         <div class="card-content">
+                             <div class="col-md-8" th:text="${category.name}" th:id="${'cat-name-'+category.id}"></div>
+                             <div class="col-md-4 td-actions" style="display:flex;justify-content:end">
+                                 <button type="button" rel="tooltip" class="btn-link" th:attr="onclick=${'editCategory('+category.id+')'}" style="color:#4caf50" data-placement="bottom" title="Edit">
+                                     <i style="color:#4caf50" class="material-icons">edit</i>
+                                 </button>
+                                 <button type="button" rel="tooltip" class="btn-link" th:attr="onclick=${'deleteCategory('+category.id+')'}" style="color:#f44336" data-placement="bottom" title="DELETE">
+                                     <i style="color:#f44336" class="material-icons">delete</i>
+                                 </button>
+                             </div>
+                             <div class="panel-group" th:id=" ${category.id}+'-cat'"  role="tablist" th:attr="aria-expanded='false',aria-multiselectable='true'">
+                                 <div class="panel">
+                                     <div class="panel-heading" role="tab" id="headingOne">
+                                         <a role="button"  th:attr="data-parent='#'+${category.id}+'-cat', aria-controls='#'+${category.id}+'-cate',data-toggle='collapse',aria-expanded='false'" th:href="'#'+${category.id}+'-cate' "  >
+                                             <h4 class="panel-title">
+                                                 Employees At Category
+                                                 <i class="material-icons">keyboard_arrow_down</i>
+                                             </h4>
+                                         </a>
+                                     </div>
+                                     <div th:id="${category.id}+'-cate'" class="panel-collapse collapse " role="tabpanel" th:attr="aria-labelledby='headingOne'">
+                                         <div class="panel-body">
+                                             <div>
+                                                 <table class="table">
+                                                     <thead class=" text-primary">
+                                                     <th>ID</th>
+                                                     <th>Name</th>
+                                                     <th>Jobtitle</th>
+                                                     <th></th>
+                                                     </thead>
+                                                     <tbody>
+                                                     <tr th:each="employee: ${category.employees}">
+                                                         <td th:text="${employee.nationalId}"></td>
+                                                         <td th:text="${employee.name}"></td>
+                                                         <td th:text="${employee.jobTitle}"></td>
+                                                         <td>
+                                                             <button rel="tooltip" class="btn-link"  th:attr="onclick= ${'editEmployee('+employee.id+')'}" data-placement="bottom" title="Edit"><i class="material-icons" style="color:#4caf50">edit</i></button>&nbsp;
+                                                             <button rel="tooltip" class="btn-link"   data-placement="bottom" title="Remove" ><i class="material-icons"  style="color:#f44336" >close</i></button>
+                                                         </td>
+                                                     </tr>
+                                                     </tbody>
+                                                 </table>
+                                             </div>
+                                         </div>
+                                     </div>
+                                 </div>
+                             </div>
+                         </div>
+                     </div>
+             </div>
+
+             <div class="tab-pane mar-90" id="job-title">
+                 <div class="custom-flex" >
+                     <div >
+                         <h3>Job Title</h3>
+                     </div>
+                     <div>
+                         <button class="btn btn-primary float-right"  data-toggle="modal" data-target="#add-job-title-modal" style="color:#fff">Add Job Title</button>
+                     </div>
+                 </div>
+                 <div class="card" th:each="jobtitle: ${jobTitles}" th:id="${'job-wrapper-'+jobtitle.id}">
+                     <div class="card-content">
+                         <div class="col-md-8" th:text="${jobtitle.name}" th:id="${'job-name-'+jobtitle.id}"></div>
+                         <div class="col-md-4 td-actions" style="display:flex;justify-content:end">
+                             <button type="button" rel="tooltip" class="btn-link" th:attr="onclick=${'editJobTitle('+jobtitle.id+')'}" style="color:#4caf50" data-placement="bottom" title="Edit">
+                                 <i style="color:#4caf50" class="material-icons">edit</i>
+                             </button>
+                             <button type="button" rel="tooltip" class="btn-link" th:attr="onclick=${'deleteJobTitle('+jobtitle.id+')'}" style="color:#f44336" data-placement="bottom" title="DELETE">
+                                 <i style="color:#f44336" class="material-icons">delete</i>
+                             </button>
+                         </div>
+                         <div class="panel-group" th:id="${jobtitle.id}+'-job'"  role="tablist" th:attr="aria-expanded='false',aria-multiselectable='true'">
+                             <div class="panel">
+                                 <div class="panel-heading" role="tab" id="headingOne">
+                                     <a role="button"  th:attr="data-parent='#'+${jobtitle.id}+'-job', aria-controls='#'+${jobtitle.id}+'-jobt',data-toggle='collapse',aria-expanded='false'" th:href="'#'+${jobtitle.id}+'-jobt' "  >
+                                         <h4 class="panel-title">
+                                             Employees At location
+                                             <i class="material-icons">keyboard_arrow_down</i>
+                                         </h4>
+                                     </a>
+                                 </div>
+                                 <div th:id="${jobtitle.id}+'-jobt'" class="panel-collapse collapse " role="tabpanel" th:attr="aria-labelledby='headingOne'">
+                                     <div class="panel-body">
+                                         <div>
+                                             <table class="table">
+                                                 <thead class=" text-primary">
+                                                 <th>ID</th>
+                                                 <th> Name</th>
+                                                 <th>Category</th>
+                                                 <th></th>
+                                                 </thead>
+                                                 <tbody>
+                                                 <tr th:each="employee: ${jobtitle.employees}">
+                                                     <td th:text="${employee.nationalId}"></td>
+                                                     <td th:text="${employee.name}"></td>
+                                                     <td th:text="${employee.category}"></td>
+                                                     <td>
+                                                         <button rel="tooltip" class="btn-link"  th:attr="onclick= ${'editEmployee('+employee.id+')'}" data-placement="bottom" title="Edit"><i class="material-icons" style="color:#4caf50">edit</i></button>&nbsp;
+                                                         <button rel="tooltip" class="btn-link"  data-placement="bottom" title="Remove" ><i class="material-icons"  style="color:#f44336" >close</i></button>
+                                                     </td>
+                                                 </tr>
+                                                 </tbody>
+                                             </table>
+                                         </div>
+                                     </div>
+                                 </div>
+                             </div>
+                         </div>
+                     </div>
+                 </div>
+             </div>
+         </div>
+  </div>
+    </div>
+</div>
+
+<div class="loader-wrapper">
+    <div class="dot-container">
+        <div class="dot dot1"></div>
+        <div class="dot dot2"></div>
+        <div class="dot dot3"></div>
+    </div>
+</div>
+
+<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel" id="team-members-modal">
+    <div class="modal-dialog " role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title primary-text fw-4" >Team Members</h4>
+            </div>
+            <div class="modal-body" id="team-members-modal-body">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel" id="add-location-modal">
+  <div class="modal-dialog " role="document">
+  <div class="modal-content">
+      <div class="modal-header">
+            <h4 class="modal-title primary-text fw-4" >Add &nbsp Location</h4>
+      </div>
+      <div class="modal-body">
+      	<form id="location-form">
+	      	<div class="form-group">
+	             <label class="bmd-label-floating">Location Name</label>
+	             <input type="text" class="form-control" id='location-name' name='location-name' autocomplete ='off' required>
+	        </div>
+	        <div class="form-group">
+	        	<input type="submit"  id="add-location-btn" class="btn btn-primary" value="submit" style="color:#ffffff">
+	        </div>
+        </form>
+      </div>
+  </div>
+  </div>
+  </div>
+
+<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel" id="edit-location-modal">
+    <div class="modal-dialog " role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title primary-text fw-4" >Edit &nbsp Location</h4>
+            </div>
+            <div class="modal-body">
+                    <div class="form-group">
+                        <label class="bmd-label-floating">Location Name</label>
+                        <input type="text" class="form-control" id='edit-location-name' name='location-name' autocomplete ='off' required>
+                    </div>
+                    <div class="form-group">
+                        <button id="submit-edit-location-btn" class="btn btn-primary" style="color:#ffffff">Submit</button>
+                    </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel" id="edit-section-modal">
+    <div class="modal-dialog " role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title primary-text fw-4" >Edit &nbsp Section</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="bmd-label-floating">Section Name</label>
+                    <input type="text" class="form-control" id='edit-section-name' name='location-name' autocomplete ='off' required>
+                </div>
+                <div class="form-group">
+                    <button id="submit-edit-section-btn" class="btn btn-primary" style="color:#ffffff">Submit</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+  
+<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel" id="add-section-modal">
+  <div class="modal-dialog " role="document">
+  <div class="modal-content">
+      <div class="modal-header">
+            <h4 class="modal-title primary-text fw-4" >Add &nbsp; Section</h4>
+      </div>
+      <div class="modal-body">
+      	<form id="section-form">
+	      	<div class="form-group">
+	             <label class="bmd-label-floating">Section Name</label>
+	             <input type="text" class="form-control" id='section-name' name='section-name' autocomplete ='off' required>
+	        </div>
+	        <div class="form-group">
+	        	<input type="submit" class="btn btn-primary" value="submit" style="color:#ffffff">
+	        </div>
+        </form>
+      </div>
+  </div>
+  </div>
+  </div>
+
+<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel" id="add-department-modal">
+  <div class="modal-dialog " role="document">
+  <div class="modal-content">
+      <div class="modal-header">
+            <h4 class="modal-title primary-text fw-4">Add &nbsp; Department</h4>
+      </div>
+      <div class="modal-body">
+      	<form id="department-form">
+	      	<div class="form-group">
+	             <label class="bmd-label-floating">Department Name</label>
+	             <input type="text" class="form-control" id='department-name' name='department-name' autocomplete ='off' required>
+	        </div>
+	        <div class="form-group">
+	        	<input type="submit" class="btn btn-primary" value="submit" style="color:#ffffff">
+	        </div>
+        </form>
+      </div>
+  </div>
+  </div>
+  </div>
+
+<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel" id="edit-department-modal">
+    <div class="modal-dialog " role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title primary-text fw-4">Edit &nbsp; Department</h4>
+            </div>
+            <div class="modal-body">
+                <form id="edit-department-form">
+                    <div class="form-group">
+                        <label class="bmd-label-floating">Department Name</label>
+                        <input type="text" class="form-control" id='edit-department-name' name='department-name' autocomplete ='off' required>
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" class="btn btn-primary" value="submit" style="color:#ffffff">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel" id="confirm-hod--modal">
+    <div class="modal-dialog " role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title primary-text fw-4">Confirm  HOD</h4>
+            </div>
+            <div class="modal-body">
+
+                    <div class="col-md-2 form-group">
+                        <img class="avatar" src="" alt="" id="confirm-hod-image" >
+                    </div>
+                    <div class="col-md-8 form-group">
+                        <label class="bmd-label-floating">Hod Name</label>
+                        <input type="text" class="form-control" id='confirm-hod-name' name='department-name' autocomplete ='off' required>
+                    </div>
+                    <div class="form-group">
+                        <button class="btn btn-primary" id="confirm-hod-btn" onclick="submitHod()" style="color:#ffffff">Confirm</button>
+                        <button class="btn btn-success" id="edit-hod-btn" onclick="editAddHod()" style="color:#ffffff">Edit</button>
+                    </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+  
+<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel" id="add-grade-modal">
+  <div class="modal-dialog " role="document">
+  <div class="modal-content">
+      <div class="modal-header">
+            <h4 class="modal-title primary-text fw-4" >Add &nbsp; Grade</h4>
+      </div>
+      <div class="modal-body">
+      	<form id="grade-form">
+	      	<div class="form-group">
+	             <label class="bmd-label-floating">grade Name</label>
+	             <input type="text" class="form-control" id='grade-name' name='grade-name' autocomplete ='off' required>
+	        </div>
+	        <div class="form-group">
+	        	<input type="submit" class="btn btn-primary" value="submit" style="color:#ffffff">
+	        </div>
+        </form>
+      </div>
+  </div>
+  </div>
+  </div>
+  
+<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel" id="add-job-title-modal">
+  <div class="modal-dialog " role="document">
+  <div class="modal-content">
+      <div class="modal-header">
+            <h4 class="modal-title primary-text fw-4">Add &nbsp; Job Title</h4>
+      </div>
+      <div class="modal-body">
+      	<form id="job-title-form">
+	      	<div class="form-group">
+	             <label class="bmd-label-floating">Job-title Name</label>
+	             <input type="text" class="form-control" id='job-title-name' name='job-title-name' autocomplete ='off' required>
+	        </div>
+	        <div class="form-group">
+	        	<input type="submit" class="btn btn-primary" value="submit" style="color:#ffffff">
+	        </div>
+        </form>
+      </div>
+  </div>
+  </div>
+  </div>
+  
+<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel" id="add-category-modal">
+  <div class="modal-dialog " role="document">
+  <div class="modal-content">
+      <div class="modal-header">
+            <h4 class="modal-title primary-text fw-4">Add &nbsp; Category</h4>
+      </div>
+      <div class="modal-body">
+      	<form id="category-form">
+	      	<div class="form-group">
+	             <label class="bmd-label-floating">Category Name</label>
+	             <input type="text" class="form-control" id='category-name' name='category-name' autocomplete ='off' required>
+	        </div>
+	        <div class="form-group">
+	        	<input type="submit" class="btn btn-primary" value="submit" style="color:#ffffff">
+	        </div>
+        </form>
+      </div>
+  </div>
+  </div>
+  </div>
+
+<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel" id="edit-category-modal">
+    <div class="modal-dialog " role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title primary-text fw-4">Add &nbsp; Category</h4>
+            </div>
+            <div class="modal-body">
+                <form id="editcategory-form">
+                    <div class="form-group">
+                        <label class="bmd-label-floating">Category Name</label>
+                        <input type="text" class="form-control" id='edit-category-name' name='category-name' autocomplete ='off' required>
+                    </div>
+                    <div class="form-group">
+                        <button  class="btn btn-primary" id="submit-edit-category-btn" style="color:#ffffff">submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel" id="edit-job-title-modal">
+    <div class="modal-dialog " role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title primary-text fw-4">Edit &nbsp; JobTitle</h4>
+            </div>
+            <div class="modal-body">
+                    <div class="form-group">
+                        <label class="bmd-label-floating">Category Name</label>
+                        <input type="text" class="form-control" id='edit-job-title-name' name='category-name' autocomplete ='off' required>
+                    </div>
+                    <div class="form-group">
+                        <button  class="btn btn-primary" id="submit-edit-job-title-btn" style="color:#ffffff">submit</button>
+                    </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel" id="add-manager-modal">
+    <div class="modal-dialog " role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title primary-text fw-4" id="gridSystemModalLabel">Add Manager</h4>
+            </div>
+            <div class="modal-body" >
+                <form id="manager-form">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="bmd-label-floating">Manager Name</label>
+                                <input type="text" class="form-control" id='add-manager-name'  autocomplete ='off'>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <select class="selectpicker" data-style="btn btn-light" title="Single Select" id="department-select">
+                                    <option disabled selected>Department</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="bmd-label-floating"> Manager Role</label>
+                                <textarea class="form-control" id="manager-role"  rows="3" required></textarea>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <input type="submit" class="btn btn-primary" value="submit" style="color:#fff">
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+    
+<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel" id="payment-details-modal">
+    <div class="modal-dialog " role="document">
+    <div class="modal-content">
+        <div class="modal-header">
+              <h4 class="modal-title primary-text fw-4">Payment Details</h4>
+        </div>
+        <div class="modal-body" >
+            <form id="payment-details-form">
+                <div class="row">
+                    <div class="col-md-6">
+                      <div class="btn-group  d-flex form-row justify-content-between " role="group" data-toggle="buttons" >
+                          <div class="form-check">
+                            <input class="form-check-input" type="radio" value="bank" id="bank_checkbox" name="payment-mode" checked>
+                            <label class="form-check-label" for="bank_checkbox">
+                              Bank
+                            </label>
+                          </div>
+                          <div class="form-check">
+                            <input class="form-check-input" type="radio" value="cash" id="cash_checkbox" name="payment-mode">
+                            <label class="form-check-label" for="cash_checkbox">
+                              Cash
+                            </label>
+                          </div>
+                       </div>
+                  </div>
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label class="bmd-label-floating">Account Number</label>
+                        <input type="text" class="form-control" id='account-number' name='account-number' autocomplete ='off' >
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label class="bmd-label-floating">Bank Name</label>
+                        <input type="text" class="form-control" id='bank-name' name='bank-name' autocomplete ='off' >
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label class="bmd-label-floating">Branch</label>
+                        <input type="text" class="form-control" id='branch' name='branch' autocomplete ='off' >
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label class="bmd-label-floating">NSSF pin</label>
+                        <input type="text" class="form-control" id='nssf' name='nssf' autocomplete ='off' >
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-group">
+                        <label class="bmd-label-floating">NHIF pin</label>
+                        <input type="text" class="form-control" id='nhif' name='nhif' autocomplete ='off' >
+                      </div>
+                    </div>
+                  </div>   
+                  
+                  <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                          <label class="bmd-label-floating">KRA pin</label>
+                          <input type="text" class="form-control" id='kra' name='kra' autocomplete ='off' >
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                      <div class="form-group">
+                        <button type="submit" class="btn pull-right btn-custom" style="color:#ffffff">Submit</button>
+                     </div>
+                      </div>
+                  </div>
+                  
+            </form>
+        </div>
+    </div>
+    </div>
+    </div>
+
+<div class="modal fade" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel" id="add-leave-modal">
+    <div class="modal-dialog " role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="search-input">
+                    <a href="" target="_blank" hidden></a>
+                    <input type="text" placeholder="Enter Employee Name">
+                    <div class="autocom-box">
+                        <!-- here list are inserted from javascript -->
+                    </div>
+                    <div class="icon" style="margin-top:42px;margin-right:10px"><i class="fas fa-search"></i></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer"></div>
+</div>
+
+<div class="modal fade bd-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="gridSystemModalLabel" id="lock-modal">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-body" >
+                <div style="display:flex;justify-content: center;margin-top:-70px">
+                    <a href="#pablo">
+                        <img class="avatar" style="height:100px;width: 80px" th:src="@{${'/docs-upload/' +user.employee.image.name}}" alt="...">
+                    </a>
+                </div>
+                <form id="lock-form">
+                    <div class="row">
+                        <div class="col-md-12" style="display: flex;justify-content:center;">
+                            <h4 class="card-title" th:text="${user.username}"></h4>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group label-floating">
+                                <label class="control-label">Current Password</label>
+                                <input type="text" id="current-password" class="form-control secure" autocomplete="off" required>
+                            </div>
+                            <div class="form-group label-floating">
+                                <label class="control-label">New Password <small> (minimum 4 characters)</small></label>
+                                <input type="text" id="new-password" class="form-control secure" autocomplete="off" required>
+                            </div>
+                            <div class="form-group label-floating">
+                                <label class="control-label">Confirm New Password</label>
+                                <input type="text" id="confirm-password" class="form-control secure" autocomplete="off" required>
+                            </div>
+                        </div>
+                        <div class="col-md-12" style="display: flex;justify-content: center">
+                            <button  id="submit-password" class="btn btn-primary btn-round" style="color:#ffffff">Submit</button>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+
+<!--   Core JS Files   -->
+<script th:src="@{/webjars/jquery/3.3.1/jquery.js}"></script>
+<script th:src="@{/webjars/bootstrap-material-design/0.5.10/js/material.js}"></script>
+<script th:src="@{/webjars/bootstrap/3.3.5/js/bootstrap.js}"></script>
+<script th:src="@{/js/perfect-scrollbar.jquery.min.js}" type="text/javascript"></script>
+
+<!-- Library for adding dinamically elements -->
+<script th:src="@{/js/arrive.min.js}" type="text/javascript"></script>
+
+<!-- Forms Validations Plugin -->
+<script th:src="@{/js/jquery.validate.min.js}"></script>
+
+<!--  Plugin for Date Time Picker and Full Calendar Plugin-->
+<script th:src="@{/webjars/momentjs/2.24.0/moment.js}"></script>
+
+<!--  Plugin for the Wizard, full documentation here: https://github.com/VinceG/twitter-bootstrap-wizard -->
+<script th:src="@{/js/jquery.bootstrap-wizard.js}"></script>
+
+<!--  Notifications Plugin, full documentation here: https://bootstrap-notify.remabledesigns.com/    -->
+<script th:src="@{/webjars/bootstrap-notify/3.1.3-1/bootstrap-notify.js}"></script>
+
+<!--   Sharrre Library    -->
+<script th:src="@{/js/jquery.sharrre.js}"></script>
+
+<!-- Vector Map plugin, full documentation here: https://jvectormap.com/documentation/ -->
+<script th:src="@{/js/jquery-jvectormap.js}"></script>
+
+<!-- Sliders Plugin, full documentation here: https://refreshless.com/nouislider/ -->
+<script th:src="@{/js/nouislider.min.js}"></script>
+
+<!--  Plugin for Select, full documentation here: https://silviomoreto.github.io/bootstrap-select -->
+<script th:src="@{/webjars/bootstrap-select/1.12.4/js/bootstrap-select.js}"></script>
+
+<!--  DataTables.net Plugin, full documentation here: https://datatables.net/    -->
+<script th:src="@{/webjars/datatables/1.10.12/js/jquery.dataTables.js}"></script>
+
+<!-- Sweet Alert 2 plugin, full documentation here: https://limonte.github.io/sweetalert2/ -->
+<script th:src="@{/js/sweetalert2.js}"></script>
+
+<!-- Plugin for Fileupload, full documentation here: https://www.jasny.net/bootstrap/javascript/#fileinput -->
+<script th:src="@{/js/jasny-bootstrap.min.js}"></script>
+
+<!--  Full Calendar Plugin, full documentation here: https://github.com/fullcalendar/fullcalendar    -->
+<script th:src="@{/js/fullcalendar.min.js}"></script>
+
+<!-- Plugin for Tags, full documentation here: https://github.com/bootstrap-tagsinput/bootstrap-tagsinputs  -->
+<script th:src="@{/js/jquery.tagsinput.js}"></script>
+
+<script th:src="@{/webjars/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.js}"></script>
+
+<!-- Material Dashboard javascript methods -->
+<script th:src="@{/js/material-dashboard.js}"></script>
+<script th:inline="javascript">
+    var departments = [[${departments}]];
+    var unreceivedReminders = [[${unreceivedReminders}]];
+    var teams = [[${teams}]];
+</script>
+<script>
+    $(document).ready(function() {
+        const teamsContainer = document.getElementById('team-container');
+        for(let team of teams){
+            const teamLi = document.createElement('li');
+            teamLi.className = "custom-li custom-tr-container panel-group shadow-sm";
+            teamLi.id="${team.id}-tm";
+            teamLi.innerHTML=`<div class="custom-tr-wrapper">
+                                    <div class="panel-heading" role="tab">
+                                          <a class="btn btn-white btn-fab btn-fab-mini btn-round" onclick="rotate(this)" data-expand="1" style="border:solid 1px #4caf50" data-parent="#${team.id}-tm" aria-controls="#${team.id}-tmss" data-toggle='collapse' aria-expanded="false" href="#${team.id}-tms"><i class="material-icons text-lg "  style="color:#4caf50">expand_more</i><i class="material-icons text-lg " style="color:#4caf50;display:none">expand_less</i></a>
+                                    </div>
+                                     <div style="display:flex;" id="tem-${team.id}-man">
+                                         <div>
+                                             <img src="/docs-upload/${team.manager.image.name}" style="height:50px;border:solid 1px #d7d8da;border-radius: 7px;padding:3px;margin-right: 8px;">
+                                         </div>
+                                         <div style="position: relative;top: 15%;bottom: 25%;">
+                                             <span style="font-size: 1.5rem;font-weight:600;color: #344767">${team.manager.name}</span><br>
+                                             <span style="color:#92949c;display:flex;justify-content:start">${team.manager.nationalId}</span>
+                                         </div>
+                                     </div>
+                                     <div id="avatar-grup-${team.id}" style="display:flex;justify-content:center"></div>
+                                     <div style="position: relative;top: 25%;bottom: 25%;color:#344767;font-weight:400;display: flex;justify-content: center"><span class="custom-td">${team.department.name}</span></div>
+                                     <div class="td-actions" style="display: flex;justify-content: end">
+                                          <button  type="button" class="btn-link"  rel="tooltip" data-placement="top" title="ADD EMPLOYEE"><i class="material-icons" style="color:#03a9f4" onclick="addEmployeeToTeam(${team.id})">person_add</i></button>
+                                          <button  type="button" class="btn-link"  rel="tooltip" data-placement="top" onclick="editTeamManager(${team.id})" title="CHANGE MANAGER"><i class="material-icons" style="color:#4caf50">edit</i></button>
+                                          <button  type="button" class="btn-link"  rel="tooltip" data-placement="top" onclick="deleteTeam(${team.id},this)" title="DELETE TEAM"><i class="material-icons" style="color:#f44336">delete_forever</i></button>
+                                     </div>
+                                  </div>
+                                  <div id="${team.id}-tms" class="panel-collapse collapse" role="tabpanel" aria-labelledby='headingOne' >
+                                        <div class="employee-custom-card-container" id="${team.id}-tms-wrapper"></div>
+                                  </div>`;
+
+            teamsContainer.append(teamLi);
+            if(team.employees.length>0){
+                const teamEmployeesContainer = document.getElementById(`${team.id}-tms-wrapper`);
+                for(let employee of team.employees){
+                    const employeeContainer = document.createElement('div');
+                    employeeContainer.className="employee-custom-card";
+                    employeeContainer.innerHTML=`<div class="employee-custom-card-header">
+                                                    <div style="color: #344767;">${employee.name}</div>
+                                                    <div style ="display: flex;">
+                                                        <div class="btn-text-grp" >
+                                                            <button class="btn-link" onclick="viewEmployee(${employee.id})">
+                                                                <i class="material-icons"  style="font-size:25px;color: #344767">visibility</i>
+                                                            </button>
+                                                        </div>
+                                                        <div class="btn-text-grp">
+                                                            <button onclick="removeEmployeeFromTeam(${team.id},${employee.id},this)" class="btn-link">
+                                                                <i class="material-icons"  style="font-size:25px;color: #f44335">delete_forever</i>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                 <div class="employee-custom-card-body">
+                                                    <div>
+                                                         <img src="/docs-upload/${employee.image.name}" style="height:80px;border:solid 1px #d7d8da;border-radius: 7px;padding:3px;margin-right: 8px;">
+                                                     </div>
+                                                     <div>
+                                                        <div style="display:flex">
+                                                         <label>Job Title</label>
+                                                         <span style="font-weight: 400;margin-left:30px;color: #344767">${employee.jobTitle}</span>
+                                                        </div>
+                                                        <div style="display:flex">
+                                                         <label>Section</label>
+                                                         <span style="font-weight: 400;margin-left:30px;color: #344767">${employee.section}</span>
+                                                        </div>
+                                                        <div style="display:flex">
+                                                         <label>Department</label>
+                                                         <span style="font-weight: 400;margin-left:30px;color: #344767">${employee.department}</span>
+                                                        </div>
+                                                     </div>
+                                                 </div>`;
+                    teamEmployeesContainer.appendChild(employeeContainer);
+                }
+                const avatarGrp =  document.createElement('div');
+                avatarGrp.className="avatar-grp";
+                let k = 0;
+                while(k<5 && k<team.employees.length){
+                    const grpItem =  document.createElement('div');
+                    grpItem.className="avatar-grp-item";
+                    grpItem.id=`tm-${team.id}-em-${team.employees[k].id}-img`;
+                    grpItem.innerHTML = `<img src="/docs-upload/${team.employees[k].image.name}">`;
+                    avatarGrp.appendChild(grpItem);
+                    k++;
+                }
+                if(team.employees.length>5){
+                    const grpItemPlus =  document.createElement('div');
+                    const rem =  team.employees.length - 5;
+                    grpItemPlus.className="avatar-grp-item avatar-grp-item-plus";
+                    grpItemPlus.innerHtml = `<div>${rem}+</div>`;
+                    avatarGrp.appendChild(grpItemPlus);
+                }
+                document.getElementById(`avatar-grup-${team.id}`).appendChild(avatarGrp);
+            }
+        }
+    });
+    document.getElementById('department-form').addEventListener('submit',addDepartment);
+    document.getElementById('edit-department-form').addEventListener('submit',submitEditDepartment);
+    document.getElementById('submit-edit-location-btn').addEventListener('click',submitEditLocation);
+    document.getElementById('submit-edit-section-btn').addEventListener('click',submitEditSection);
+    document.getElementById('submit-edit-category-btn').addEventListener('click',submitEditCategory);
+    document.getElementById('submit-edit-job-title-btn').addEventListener('click',submitEditJobTitle);
+    document.getElementById('section-form').addEventListener('submit',addSection);
+    document.getElementById('add-location-btn').addEventListener('click',addLocation);
+    document.getElementById('section-form').addEventListener('submit',addSection);
+    document.getElementById('category-form').addEventListener('submit',addCategory);
+    document.getElementById('job-title-form').addEventListener('submit',addJobTitle);
+    document.getElementById('grade-form').addEventListener('submit',addGrade);
+    document.getElementById('manager-form').addEventListener('submit',submitManager);
+    getOptions(departments,'department-select');
+    let departmentHolder;
+    let locationHolder;
+    let sectionHolder;
+    let teamHolder;
+    let categoryHolder;
+    let managerHolder;
+    let gradeHolder;
+    let jobTitleHolder;
+    let hodHolder;
+    let searchType;
+    const searchWrapper = document.querySelector(".search-input");
+    const inputBox = searchWrapper.querySelector("input");
+    const suggBox = searchWrapper.querySelector(".autocom-box");
+    const icon = searchWrapper.querySelector(".icon");
+    let linkTag = searchWrapper.querySelector("a");
+    let webLink;
+    inputBox.onkeyup = (e)=>{
+        suggBox.innerHTML = '';
+        let userData = e.target.value; //user enetered data
+        let emptyArray = [];
+        if(userData){
+            fetch("/api/admin/employees/search/sort/"+userData)
+                .then(res=>res.json())
+                .then(function(employees){
+                    return employees;
+                })
+                .then(function(employees){
+                    emptyArray = employees;
+                    searchWrapper.classList.add("active");
+                    if(emptyArray.length>0){
+                        for(let employee of emptyArray){
+                            let li =  document.createElement('li');
+                            li.addEventListener('click',function(){
+                                select(employee);
+                            });
+                            li.className="row";
+                            li.id=`${employee.id}`;
+                            li.innerHTML = `<div class="col-md-2"><img class="avatar" alt="Image placeholder" src="/docs-upload/${employee.image.name}"></div>
+                                           <div class="col-md-7"><h4>${employee.name}</h4></div>
+                                           <div class="col-md-3"><h4>${employee.nationalId}</h4></div>`;
+                            suggBox.appendChild(li);
+                        }
+                    }
+                })
+        }else{
+            searchWrapper.classList.remove("active"); //hide autocomplete box
+        }
+    }
+
+    function rotate(element){
+        if (element.dataset.expand == "1"){
+            element.children[0].style.display = "none";
+            element.children[1].style.display = "block";
+            element.dataset.expand = "0";
+        }
+        else if (element.dataset.expand == "0"){
+            element.children[0].style.display = "block";
+            element.children[1].style.display = "none";
+            element.dataset.expand = "1";
+        }
+    }
+
+    function removeEmployeeFromTeam(teamId,employeeId,element){
+        swal({
+            title: 'Confirm Removing Employee From Team',
+            text: "You won't be able to revert this!",
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonClass: 'btn btn-success',
+            cancelButtonClass: 'btn btn-danger',
+            confirmButtonText: 'Yes, clear it!',
+            buttonsStyling: false
+        })
+            .then(function(){
+                fetch(`/api/admin/teams/remove/${teamId}/${employeeId}`)
+                    .then(function(res){
+                        if(!res.ok){
+                            errorNotify("Something Went Wrong");
+                            throw new Error(res.statusText);
+                        }
+                        element.parentNode.parentNode.parentNode.parentNode.remove();
+                        try{document.getElementById(`tm-${teamId}-em-${employeeId}-img`).remove();}
+                        catch{}
+                        swal({
+                            title: 'Delete',
+                            text: 'Employee Removed From Team',
+                            type: 'success',
+                            timer: 1500,
+                            confirmButtonClass: "btn btn-success",
+                            buttonsStyling: false
+                        })
+                    })
+            }).catch(swal.noop);
+    }
+
+    function deleteTeam(teamId,element){
+        swal({
+            title: 'Confirm Delete Team',
+            text: "You won't be able to revert this!",
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonClass: 'btn btn-success',
+            cancelButtonClass: 'btn btn-danger',
+            confirmButtonText: 'Yes, clear it!',
+            buttonsStyling: false
+        })
+            .then(function(){
+                fetch(`/api/admin/teams/delete/${teamId}`)
+                    .then(function(res){
+                        if(!res.ok){
+                            errorNotify("Something Went Wrong");
+                            throw new Error(res.statusText);
+                        }
+                        element.parentNode.parentNode.parentNode.remove();
+                        swal({
+                            title: 'Delete',
+                            text: 'Team Deleted',
+                            type: 'success',
+                            timer: 1500,
+                            confirmButtonClass: "btn btn-success",
+                            buttonsStyling: false
+                        })
+                    })
+            }).catch(swal.noop);
+    }
+
+    function deleteDepartment(departmentId){
+        swal({
+            title: 'Confirm Delete Department',
+            text: "You won't be able to revert this!",
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonClass: 'btn btn-success',
+            cancelButtonClass: 'btn btn-danger',
+            confirmButtonText: 'Yes, clear it!',
+            buttonsStyling: false
+        })
+            .then(function(){
+                fetch("/api/admin/department/delete/"+departmentId)
+                .then(function(res){
+                    if(!res.ok){
+                        errorNotify("Something Went Wrong");
+                        throw new Error(res.statusText);
+                    }
+                    document.getElementById('dep-wrapper-'+departmentId).remove();
+                    swal({
+                        title: 'Delete',
+                        text: 'Department Deleted',
+                        type: 'success',
+                        timer: 1500,
+                        confirmButtonClass: "btn btn-success",
+                        buttonsStyling: false
+                    })
+                })
+            }).catch(swal.noop)
+    }
+
+    function addLocation(e){
+        e.preventDefault();
+        const locationName =document.getElementById('location-name').value;
+        const formData = new FormData();
+        formData.append("location-name",locationName);
+        document.getElementById('location-name').value = '';
+        $("#add-location-modal").modal('hide');
+        fetch("/api/admin/centers",{
+            method:'POST',
+            body:formData
+        })
+        .then(function(res){
+            if (!res.ok) {
+                errorNotify('Something went wrong');
+                throw Error(res.statusText);
+            }
+            return res.json();
+        })
+        .then(function(location){
+            const locations = document.getElementById('locations-content');
+            const container = document.createElement('div');
+            container.id = `loc-wrapper-${location.id}`;
+            container.className= "card";
+            container.innerHTML = `<div class="card-content" id="locations-containers">
+                                 <div class="row">
+                                     <div class="col-md-8"  id="loc-name-${location.id}">${location.name}</div>
+                                     <div class="col-md-4 td-actions" style="display:flex;justify-content:end">
+                                         <button type="button" rel="tooltip" class="btn-link" onclick="editLocation(${location.id})" style="color:#4caf50" data-placement="bottom" title="Edit">
+                                             <i style="color:#4caf50" class="material-icons">edit</i>
+                                         </button>
+                                         <button type="button" rel="tooltip" class="btn-link" onclick="deleteLocation(${location.id})" style="color:#f44336" data-placement="bottom" title="DELETE">
+                                             <i style="color:#f44336" class="material-icons">delete</i>
+                                         </button>
+                                     </div>
+                                 </div>
+                                 <div class="panel-group" id=" ${location.id}"  role="tablist" aria-expanded='false' aria-multiselectable='true'>
+                                     <div class="panel">
+                                         <div class="panel-heading" role="tab" id="headingOne">
+                                             <a role="button"  data-parent="#${location.id}" aria-controls="#${location.id}-ps" data-toggle='collapse' aria-expanded="false" href="#${location.id}-ps"  >
+                                                 <h4 class="panel-title">
+                                                     Employees At location
+                                                     <i class="material-icons">keyboard_arrow_down</i>
+                                                 </h4>
+                                             </a>
+                                         </div>
+                                         <div id="${location.id}-ps" class="panel-collapse collapse " role="tabpanel" aria-labelledby='headingOne'>
+                                             <div class="panel-body">
+                                                 <div>
+                                                     <table class="table">
+                                                         <thead class=" text-primary">
+                                                         <tr>
+                                                             <th>ID</th>
+                                                             <th>NAME</th>
+                                                             <th>DEPARTMENT</th>
+                                                             <th>JOBTITLE</th>
+                                                             <th class="text-right"></th>
+                                                         </tr>
+                                                         </thead>
+                                                         <tbody>
+
+                                                         </tbody>
+                                                     </table>
+                                                 </div>
+                                             </div>
+                                         </div>
+                                     </div>
+                                 </div>
+                             </div>`;
+            locations.appendChild(container);
+        });
+        console.log(locationName);
+    }
+
+    function viewEmployee(employeeId){
+        location.href=`/admin/employee/${employeeId}`;
+    }
+
+    function submitManager(e){
+        e.preventDefault();
+        const role = document.getElementById('manager-role').value;
+        const department = document.getElementById('department-select').value;
+        document.getElementById('manager-form').reset();
+        $('#add-manager-modal').modal('hide');
+        const formData = new FormData();
+        formData.append("department",department);
+        formData.append("role",role);
+        formData.append("managerId",managerHolder);
+        fetch("/api/admin/team/",{
+            method:'POST',
+            body:formData
+        }).then(function(res){
+            if(!res.ok){
+                errorNotify("Something Went Wrong");
+                throw new Error(res.statusText);
+            }
+            return res.json();
+        })
+        .then(function(team){
+            successNotify("Manager Added");
+            const teamsContainer = document.getElementById('team-container');
+            const teamLi = document.createElement('li');
+                teamLi.className = "custom-li custom-tr-container panel-group shadow-sm";
+                teamLi.id="${team.id}-tm";
+                teamLi.innerHTML=`<div class="custom-tr-wrapper">
+                                    <div class="panel-heading" role="tab">
+                                          <a class="btn btn-white btn-fab btn-fab-mini btn-round" onclick="rotate(this)" data-expand="1" style="border:solid 1px #4caf50" data-parent="#${team.id}-tm" aria-controls="#${team.id}-tmss" data-toggle='collapse' aria-expanded="false" href="#${team.id}-tms"><i class="material-icons text-lg "  style="color:#4caf50">expand_more</i><i class="material-icons text-lg " style="color:#4caf50;display:none">expand_less</i></a>
+                                    </div>
+                                     <div style="display:flex;" id="tem-${team.id}-man">
+                                         <div>
+                                             <img src="/docs-upload/${team.manager.image.name}" style="height:50px;border:solid 1px #d7d8da;border-radius: 7px;padding:3px;margin-right: 8px;">
+                                         </div>
+                                         <div style="position: relative;top: 15%;bottom: 25%;">
+                                             <span style="font-size: 1.5rem;font-weight:600;color: #344767">${team.manager.name}</span><br>
+                                             <span style="color:#92949c;display:flex;justify-content:start">${team.manager.nationalId}</span>
+                                         </div>
+                                     </div>
+                                     <div id="avatar-grup-${team.id}" style="display:flex;justify-content:center"></div>
+                                     <div style="position: relative;top: 25%;bottom: 25%;color:#344767;font-weight:400;display: flex;justify-content: center"><span class="custom-td">${team.department.name}</span></div>
+                                     <div class="td-actions" style="display: flex;justify-content: end">
+                                          <button  type="button" class="btn-link"  rel="tooltip" data-placement="top" title="ADD EMPLOYEE"><i class="material-icons" style="color:#03a9f4" onclick="addEmployeeToTeam(${team.id})">person_add</i></button>
+                                          <button  type="button" class="btn-link"  rel="tooltip" data-placement="top" onclick="editTeamManager(${team.id})" title="CHANGE MANAGER"><i class="material-icons" style="color:#4caf50">edit</i></button>
+                                          <button  type="button" class="btn-link" onclick="deleteTeam(${team.id},this)" rel="tooltip" data-placement="top" title="DELETE TEAM"><i class="material-icons" style="color:#f44336">delete_forever</i></button>
+                                     </div>
+                                  </div>
+                                  <div id="${team.id}-tms" class="panel-collapse collapse" role="tabpanel" aria-labelledby='headingOne' >
+                                        <div class="employee-custom-card-container" id="${team.id}-tms-wrapper"></div>
+                                  </div>`;
+
+                teamsContainer.append(teamLi);
+        })
+    }
+
+    function addGrade(e){
+        e.preventDefault();
+        const form = document.getElementById('grade-form');
+        const formData = new FormData(form);
+        fetch("/api/admin/grades",{
+            method:'POST',
+            body:formData
+        })
+            .then(function(res){
+                if (!res.ok) {
+                    errorNotify('Something went wrong');
+                    $("#add-grade-modal").modal('hide');
+                    form.reset();
+                    throw Error(res.statusText);
+                }
+                return res;
+            })
+            .then(res=>res.json())
+            .then(function(grade){
+                const option = document.createElement('option');
+                option.value = grade.name;
+                option.text = grade.name;
+                const select = document.getElementById('grade');
+                select.add(option, select.options.length);
+                successNotify('Grade Added');
+            })
+            .then(function(){
+                $("#add-grade-modal").modal('hide');
+                form.reset();
+                $('.selectpicker').selectpicker('refresh');
+            });
+    }
+
+
+    function addJobTitle(e){
+        e.preventDefault();
+        const form = document.getElementById('job-title-form');
+        const formData = new FormData(form);
+        fetch("/api/admin/jobtitles",{
+            method:'POST',
+            body:formData
+        })
+            .then(function(res){
+                if (!res.ok) {
+                    $("#add-job-title-modal").modal('hide');
+                    form.reset();
+                    errorNotify('Something went wrong');
+                    throw Error(response.statusText);
+                }
+                return res;
+            })
+            .then(res=>res.json())
+            .then(function(title){
+                const option = document.createElement('option');
+                option.value = title.name;
+                option.text = title.name;
+                const select = document.getElementById('job-title');
+                select.add(option, select.options.length);
+                successNotify('Job Title Added');
+            })
+            .then(function(){
+                $("#add-job-title-modal").modal('hide');
+                form.reset();
+                $('.selectpicker').selectpicker('refresh');
+            });
+    }
+
+    function addDepartment(e){
+        e.preventDefault();
+        const form = document.getElementById('department-form');
+        const formData = new FormData(form);
+        fetch("/api/admin/departments",{
+            method:'POST',
+            body:formData
+        })
+            .then(function(res){
+                if (!res.ok) {
+                    $("#add-department-modal").modal('hide');
+                    form.reset();
+                    errorNotify('Something went wrong');
+                    throw Error(res.statusText);
+                }
+                return res.json();
+            })
+            .then(function(department){
+                const listItem =   document.createElement('li');
+                listItem.id=`dep-wrapper-${department.id}`;
+                listItem.style.listStyle = 'none';
+                listItem.innerHTML =
+                    `<div class="card">
+                        <div class="card-content">
+                           <div class="row">
+                                                 <div class="col-md-8">
+                                                     <span id="dep-name-${department.id}">${department.name}</span>
+                                                 </div>
+                                                 <div class="col-md-4 td-actions" style="display:flex;justify-content:end">
+                                                 <button type="button" rel="tooltip"  onclick="searchHOd(${department.id})" class="btn-link" data-placement="bottom" title="ADD HOD">
+                                                     <i style="color:#3880ff" class="material-icons">person_add_alt</i>
+                                                 </button>
+                                                 <button type="button" rel="tooltip" class="btn-link" onclick="editDepartment(${department.id})" style="color:#4caf50" data-placement="bottom" title="Edit">
+                                                     <i style="color:#4caf50" class="material-icons">edit</i>
+                                                 </button>
+                                                 <button type="button" rel="tooltip" class="btn-link" onclick="deleteDepartment(${department.id})" style="color:#f44336" data-placement="bottom" title="DELETE">
+                                                     <i style="color:#f44336" class="material-icons">delete</i>
+                                                 </button>
+                                             </div>
+                                                 <div class="col-md-12" style="display:flex">
+                                                 <label style="margin-top:15px;margin-right: 18px;font-size:20px">HOD</label>&nbsp;
+                                                 <img class="avatar" id="hod_image_${department.id}" style="width: 55px;margin-right: 20px" src="/docs-upload/default-avatar.png"/>
+                                                 <div style="width: 30%"><span  id="hod_name_${department.id}"></span></div>
+                                             </div>
+                                             </div>
+                            <div class="panel-group" id="${department.id}" role="tablist"
+                                 aria-expanded='false' aria-multiselectable='true'>
+                                <div class="panel">
+                                    <div class="panel-heading" role="tab" id="headingOne">
+                                        <a role="button"
+                                          data-parent='#${department.id}'  aria-controls='#${department.id}-ps' data-toggle='collapse' aria-expanded='false'
+                                           href="#${department.id}-ps">
+                                            <h4 class="panel-title">
+                                                Employees
+                                                <i class="material-icons">keyboard_arrow_down</i>
+                                            </h4>
+                                        </a>
+                                    </div>
+                                    <div id="${department.id}-ps" class="panel-collapse collapse "
+                                         role="tabpanel" aria-labelledby="headingOne">
+                                        <div class="panel-body">
+                                            <div>
+                                                <table class="table">
+                                                    <thead class=" text-primary">
+                                                    <th>ID</th>
+                                                    <th>Name</th>
+                                                    <th>Location</th>
+                                                    <th>Job Title</th>
+                                                    <th class="text-right"></th>
+                                                    </thead>
+                                                    <tbody>
+
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>`;
+                document.getElementById('departments-table-body').appendChild(listItem)
+                successNotify('Department Added');
+            })
+            .then(function(){
+                $("#add-department-modal").modal('hide');
+                form.reset();
+            });
+    }
+
+    function addCategory(e){
+        e.preventDefault();
+        const form = document.getElementById('category-form');
+        const formData = new FormData(form);
+        fetch("/api/admin/categories",{
+            method:'POST',
+            body:formData
+        })
+            .then(function(res){
+                if (!res.ok) {
+                    errorNotify('Something went wrong');
+                    $("#add-category-modal").modal('hide');
+                    form.reset();
+                    throw Error(response.statusText);
+                }
+                return res;
+            })
+            .then(res=>res.json())
+            .then(function(category){
+                const option = document.createElement('option');
+                option.value = category.name;
+                option.text = category.name;
+                const select = document.getElementById('category');
+                select.add(option, select.options.length);
+                successNotify('Category Added');
+            })
+            .then(function(){
+                $("#add-category-modal").modal('hide');
+                form.reset();
+                $('.selectpicker').selectpicker('refresh');
+            });
+    }
+
+    function editDepartment(departmentId){
+        departmentHolder = departmentId;
+        document.getElementById('edit-department-name').value = document.getElementById('dep-name-'+departmentId).innerHTML;
+        $('#edit-department-modal').modal('show');
+    }
+
+    function submitEditDepartment(e){
+        e.preventDefault();
+        const name = document.getElementById('edit-department-name').value;
+        document.getElementById('edit-department-form').reset();
+        $('#edit-department-modal').modal('hide');
+        const formData = new FormData();
+        formData.append("name",name);
+        fetch(`/api/admin/department/edit/${departmentHolder}`,{
+            method:'POST',
+            body:formData
+        })
+        .then(function(res){
+            if(!res.ok){
+                errorNotify("Something Went Wrong");
+                throw new Error(res.statusText);
+            }
+            return res.json();
+        })
+        .then(function(department){
+            document.getElementById('dep-name-'+department.id).innerHTML =  department.name;
+            successNotify("Edit Successful!");
+        })
+    }
+
+    function showSuggestions(list){
+        let listData;
+        if(!list.length){
+            userValue = inputBox.value;
+            listData = `<li>${userValue}</li>`;
+        }else{
+            listData = list.join('');
+        }
+        suggBox.innerHTML = listData;
+    }
+
+    function select(employee){
+        $("#add-leave-modal").modal('hide');
+        if(searchType === "hod"){
+            hodHolder = employee.id;
+            document.getElementById('confirm-hod-image').src = `/docs-upload/${employee.image.name}`;
+            document.getElementById('confirm-hod-name').value = employee.name;
+            $('#confirm-hod--modal').modal('show');
+        }
+        else if(searchType === "manager"){
+            managerHolder = employee.id;
+            document.getElementById('add-manager-name').value = employee.name;
+            document.getElementById('add-manager-name').disabled = true;
+            $('#add-manager-modal').modal('show');
+        }
+        else if(searchType==="changeTeam"){
+            fetch(`/api/admin/teams/edit/manager/${teamHolder}/${employee.id}`)
+                .then(function(res){
+                    if(!res.ok){
+                      throw new Error(res.statusText);
+                    }
+                    return res.json();
+                })
+                .then(function(manager){
+                    const container = document.getElementById(`tem-${teamHolder}-man`);
+                    container.innerHTML=`<div>
+                                     <img src="/docs-upload/${manager.image.name}" style="height:50px;border:solid 1px #d7d8da;border-radius: 7px;padding:3px;margin-right: 8px;">
+                                 </div>
+                                 <div style="position: relative;top: 15%;bottom: 25%;">
+                                     <span style="font-size: 1.5rem;font-weight:600;color: #344767">${manager.name}</span><br>
+                                     <span style="color:#92949c;display:flex;justify-content:start">${manager.nationalId}</span>
+                                 </div>`;
+                })
+        }
+        else if(searchType === "teamemployee"){
+            fetch(`/api/admin/teams/${teamHolder}/${employee.id}`)
+                .then(function(res){
+                    if(!res.ok){
+                        errorNotify('Something Went Wrong!');
+                        throw new Error(res.statusText);
+                    }
+                    return res.json();
+                })
+                .then(function(employee){
+                        const teamEmployeesContainer = document.getElementById(`${teamHolder}-tms-wrapper`);
+                        const employeeContainer = document.createElement('div');
+                        employeeContainer.className="employee-custom-card";
+                        employeeContainer.innerHTML=`<div class="employee-custom-card-header">
+                                                    <div style="color: #344767;">${employee.name}</div>
+                                                    <div style ="display: flex;">
+                                                        <div class="btn-text-grp" >
+                                                            <button class="btn-link" onclick="viewEmployee(${employee.id})">
+                                                                <i class="material-icons"  style="font-size:25px;color: #344767">visibility</i>
+                                                            </button>
+                                                        </div>
+                                                        <div class="btn-text-grp">
+                                                            <button onclick="removeEmployeeFromTeam(${teamHolder},${employee.id},this)" class="btn-link">
+                                                                <i class="material-icons"  style="font-size:25px;color: #f44335">delete_forever</i>
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                 <div class="employee-custom-card-body">
+                                                    <div>
+                                                         <img src="/docs-upload/${employee.image.name}" style="height:80px;border:solid 1px #d7d8da;border-radius: 7px;padding:3px;margin-right: 8px;">
+                                                     </div>
+                                                     <div>
+                                                        <div style="display:flex">
+                                                         <label>Job Title</label>
+                                                         <span style="font-weight: 400;margin-left:30px;color: #344767">${employee.jobTitle}</span>
+                                                        </div>
+                                                        <div style="display:flex">
+                                                         <label>Section</label>
+                                                         <span style="font-weight: 400;margin-left:30px;color: #344767">${employee.section}</span>
+                                                        </div>
+                                                        <div style="display:flex">
+                                                         <label>Department</label>
+                                                         <span style="font-weight: 400;margin-left:30px;color: #344767">${employee.department}</span>
+                                                        </div>
+                                                     </div>
+                                                 </div>`;
+                        teamEmployeesContainer.appendChild(employeeContainer);
+                        successNotify("Employee Added To Team");
+                })
+        }
+    }
+
+    function editAddHod(){
+        $("#add-leave-modal").modal('show');
+        $('#confirm-hod--modal').modal('hide');
+    }
+
+    function submitHod(){
+        fetch(`/api/admin/department/hod/${departmentHolder}/${hodHolder}`)
+            .then(function(res){
+                if(!res.ok){
+                    errorNotify("Something Went Wrong!");
+                    $('#confirm-hod--modal').modal('hide');
+                    throw new Error(res.statusText);
+                }
+                return res.json();
+            })
+        .then(function(department){
+            document.getElementById(`hod_image_${department.id}`).src = `/docs-upload/${department.hodImage}`;
+            document.getElementById(`hod_name_${department.id}`).innerHTML = `${department.hodName}`;
+            $('#confirm-hod--modal').modal('hide');
+            successNotify("HOD edited");
+        });
+    }
+
+    function removeEmployeeFromDepartment(depId,emplId,element){
+        swal({
+            title: 'Confirm Remove Employee From Department',
+            text: "You won't be able to revert this!",
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonClass: 'btn btn-success',
+            cancelButtonClass: 'btn btn-danger',
+            confirmButtonText: 'Yes, clear it!',
+            buttonsStyling: false
+        })
+            .then(function(){
+                fetch(`/api/admin/department/employees/remove/${depId}/${emplId}`)
+                    .then(function(res) {
+                        if (!res.ok) {
+                            errorNotify("Something Went Wrong");
+                            throw  new Error(res.statusText);
+                        }
+                    })
+                    .then(function(department){
+                        element.parentNode.parentNode.remove();
+                        swal({
+                            title: 'Delete',
+                            text: 'Department Deleted',
+                            type: 'success',
+                            timer: 1500,
+                            confirmButtonClass: "btn btn-success",
+                            buttonsStyling: false
+                        })
+                        document.getElementById(`${'hod_name'+department.id}`).innerHTML =  department.hodName;
+                        document.getElementById(`${'hod_name'+department.id}`).src = department.hodImage;
+                    })
+            }).catch(swal.noop);
+    }
+
+    function editEmployee(emplId){
+        window.location = `/admin/employee/edit/${emplId}`;
+    }
+
+    function editLocation(locationId){
+        locationHolder = locationId;
+        document.getElementById('edit-location-name').value = document.getElementById('loc-name-'+locationId).innerHTML;
+        $('#edit-location-modal').modal('show');
+    }
+
+    function editSection(sectionId){
+        sectionHolder = sectionId;
+        document.getElementById('edit-section-name').value = document.getElementById('sec-name-'+sectionId).innerHTML;
+        $('#edit-section-modal').modal('show');
+    }
+
+    function editCategory(categoryId){
+        categoryHolder = categoryId;
+        document.getElementById('edit-category-name').value = document.getElementById('cat-name-'+categoryId).innerHTML;
+        $('#edit-category-modal').modal('show');
+    }
+
+    function editJobTitle(jobTitleId){
+        jobTitleHolder = jobTitleId;
+        document.getElementById('edit-job-title-name').value = document.getElementById('loc-name-'+jobTitleId).innerHTML;
+        $('#edit-job-title-modal').modal('show');
+    }
+
+    function deleteLocation(locationId){
+        swal({
+            title: 'Confirm Delete Section',
+            text: "You won't be able to revert this!",
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonClass: 'btn btn-success',
+            cancelButtonClass: 'btn btn-danger',
+            confirmButtonText: 'Yes, clear it!',
+            buttonsStyling: false
+        })
+            .then(function(){
+                fetch("/api/admin/location/delete/"+locationId)
+                    .then(function(res){
+                        if(!res.ok){
+                            errorNotify("Something Went Wrong");
+                            throw new Error(res.statusText);
+                        }
+                        document.getElementById('sec-wrapper-'+locationId).remove();
+                        swal({
+                            title: 'Delete',
+                            text: 'Department Deleted',
+                            type: 'success',
+                            timer: 1500,
+                            confirmButtonClass: "btn btn-success",
+                            buttonsStyling: false
+                        })
+                    })
+            }).catch(swal.noop)
+    }
+
+    function removeEmployeeFromLocation(locationId,employeeId,element){
+        swal({
+            title: 'Confirm Remove Employee From Location',
+            text: "You won't be able to revert this!",
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonClass: 'btn btn-success',
+            cancelButtonClass: 'btn btn-danger',
+            confirmButtonText: 'Yes, clear it!',
+            buttonsStyling: false
+        })
+            .then(function(){
+                fetch(`/api/admin/location/employees/remove/${locationId}/${employeeId}`)
+                    .then(function(res) {
+                        if (!res.ok) {
+                            errorNotify("Something Went Wrong");
+                            throw  new Error(res.statusText);
+                        }
+                    })
+                    .then(function(){
+                        element.parentNode.parentNode.remove();
+                        swal({
+                            title: 'Delete',
+                            text: 'Department Deleted',
+                            type: 'success',
+                            timer: 1500,
+                            confirmButtonClass: "btn btn-success",
+                            buttonsStyling: false
+                        })
+                    })
+            }).catch(swal.noop);
+    }
+
+    function editSection(sectionId){
+        sectionHolder = sectionId;
+        document.getElementById('edit-section-name').value = document.getElementById('sec-name-'+sectionId).innerHTML;
+        $('#edit-section-modal').modal('show');
+    }
+
+    function submitEditSection(e){
+        e.preventDefault();
+        const name = document.getElementById('edit-section-name').value;
+        $('#edit-category-modal').modal('hide');
+        const formData = new FormData();
+        formData.append("name",name);
+        fetch(`/api/admin/category/edit/${locationHolder}`,{
+            method:'POST',
+            body:formData
+        })
+            .then(function(res){
+                if(!res.ok){
+                    errorNotify("Something Went Wrong");
+                    throw new Error(res.statusText);
+                }
+                return res.json();
+            })
+            .then(function(category){
+                document.getElementById('cat-name-'+category.id).innerHTML =  category.name;
+                successNotify("Edit Successful!");
+            })
+    }
+
+    function submitEditLocation(e){
+        e.preventDefault();
+        const name = document.getElementById('edit-location-name').value;
+        $('#edit-location-modal').modal('hide');
+        const formData = new FormData();
+        formData.append("name",name);
+        fetch(`/api/admin/location/edit/${locationHolder}`,{
+            method:'POST',
+            body:formData
+        })
+            .then(function(res){
+                if(!res.ok){
+                    errorNotify("Something Went Wrong");
+                    throw new Error(res.statusText);
+                }
+                return res.json();
+            })
+            .then(function(location){
+                document.getElementById('loc-name-'+location.id).innerHTML =  location.name;
+                successNotify("Edit Successful!");
+            })
+    }
+
+    function submitEditJobTitle(e){
+        e.preventDefault();
+        const name = document.getElementById('edit-job-title-name').value;
+        $('#edit-job-title-modal').modal('hide');
+        const formData = new FormData();
+        formData.append("name",name);
+        fetch(`/api/admin/jobtitle/edit/${sectionHolder}`,{
+            method:'POST',
+            body:formData
+        })
+            .then(function(res){
+                if(!res.ok){
+                    errorNotify("Something Went Wrong");
+                    throw new Error(res.statusText);
+                }
+                return res.json();
+            })
+            .then(function(jobtitle){
+                document.getElementById('job-name-'+jobtitle.id).innerHTML =  jobtitle.name;
+                successNotify("Edit Successful!");
+            })
+    }
+
+    function deleteSection(sectionId){
+        swal({
+            title: 'Confirm Delete Section',
+            text: "You won't be able to revert this!",
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonClass: 'btn btn-success',
+            cancelButtonClass: 'btn btn-danger',
+            confirmButtonText: 'Yes, clear it!',
+            buttonsStyling: false
+        })
+            .then(function(){
+                fetch("/api/admin/section/delete/"+sectionId)
+                    .then(function(res){
+                        if(!res.ok){
+                            errorNotify("Something Went Wrong");
+                            throw new Error(res.statusText);
+                        }
+                        document.getElementById('sec-wrapper-'+sectionId).remove();
+                        swal({
+                            title: 'Delete',
+                            text: 'Department Deleted',
+                            type: 'success',
+                            timer: 1500,
+                            confirmButtonClass: "btn btn-success",
+                            buttonsStyling: false
+                        })
+                    })
+            }).catch(swal.noop)
+    }
+
+    // function deleteLocation(locationId){
+    //     swal({
+    //         title: 'Confirm Delete Department',
+    //         text: "You won't be able to revert this!",
+    //         type: 'warning',
+    //         showCancelButton: true,
+    //         confirmButtonClass: 'btn btn-success',
+    //         cancelButtonClass: 'btn btn-danger',
+    //         confirmButtonText: 'Yes, clear it!',
+    //         buttonsStyling: false
+    //     })
+    //         .then(function(){
+    //             fetch("/api/admin/location/delete/"+locationId)
+    //                 .then(function(res){
+    //                     if(!res.ok){
+    //                         errorNotify("Something Went Wrong");
+    //                         throw new Error(res.statusText);
+    //                     }
+    //                     document.getElementById('loc-wrapper-'+locationId).remove();
+    //                     swal({
+    //                         title: 'Delete',
+    //                         text: 'Department Deleted',
+    //                         type: 'success',
+    //                         timer: 1500,
+    //                         confirmButtonClass: "btn btn-success",
+    //                         buttonsStyling: false
+    //                     })
+    //                 })
+    //         }).catch(swal.noop)
+    // }
+
+    function deleteCategory(categoryId){
+        swal({
+            title: 'Confirm Delete Category',
+            text: "You won't be able to revert this!",
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonClass: 'btn btn-success',
+            cancelButtonClass: 'btn btn-danger',
+            confirmButtonText: 'Yes, clear it!',
+            buttonsStyling: false
+        })
+            .then(function(){
+                fetch("/api/admin/cateory/delete/"+categoryId)
+                    .then(function(res){
+                        if(!res.ok){
+                            errorNotify("Something Went Wrong");
+                            throw new Error(res.statusText);
+                        }
+                        document.getElementById('cat-wrapper-'+categoryId).remove();
+                        swal({
+                            title: 'Delete',
+                            text: 'Department Deleted',
+                            type: 'success',
+                            timer: 1500,
+                            confirmButtonClass: "btn btn-success",
+                            buttonsStyling: false
+                        })
+                    })
+            }).catch(swal.noop)
+    }
+
+    function deleteJobTitle(jobTitleId){
+        swal({
+            title: 'Confirm Delete JobTitle',
+            text: "You won't be able to revert this!",
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonClass: 'btn btn-success',
+            cancelButtonClass: 'btn btn-danger',
+            confirmButtonText: 'Yes, clear it!',
+            buttonsStyling: false
+        })
+            .then(function(){
+                fetch("/api/admin/jobtitle/delete/"+jobTitleId)
+                    .then(function(res){
+                        if(!res.ok){
+                            errorNotify("Something Went Wrong");
+                            throw new Error(res.statusText);
+                        }
+                        document.getElementById('job-wrapper-'+jobtitleId).remove();
+                        swal({
+                            title: 'Delete',
+                            text: 'Department Deleted',
+                            type: 'success',
+                            timer: 1500,
+                            confirmButtonClass: "btn btn-success",
+                            buttonsStyling: false
+                        })
+                    })
+            }).catch(swal.noop)
+    }
+
+    function searchHOd(departmentId){
+        searchType="hod";
+        departmentHolder = departmentId;
+        $('#add-leave-modal').modal('show');
+    }
+
+    function editTeamManager(teamId){
+        searchType="changeTeam";
+        teamHolder = teamId;
+        $('#add-leave-modal').modal('show');
+    }
+
+    function addEmployeeToTeam(teamId){
+        searchType="teamemployee";
+        teamHolder = teamId;
+        $('#add-leave-modal').modal('show');
+    }
+
+    function searchManager(){
+        searchType="manager";
+        $('#add-leave-modal').modal('show');
+    }
+
+    function searchEmployee(id){
+        teamHolder = id;
+        searchType="teamemployee";
+        $('#add-leave-modal').modal('show');
+    }
+
+    function addSection(e){
+        e.preventDefault();
+        const form = document.getElementById('section-form');
+        const formData = new FormData(form);
+        fetch("/api/admin/sections",{
+            method:'POST',
+            body:formData
+        })
+            .then(function(res){
+                if (!res.ok) {
+                    $("#add-section-modal").modal('hide');
+                    form.reset();
+                    errorNotify('Something went wrong');
+                    throw Error(res.statusText);
+                }
+                return res.json();
+            })
+            .then(function(section){
+               const container  = document.createElement('div');
+               div.className = "card";
+               container.id = `sec-wrapper-${section.id}`;
+               container.innerHTML = `<div class="card-content">
+                                 <div class="row">
+                                     <div class="col-md-8"  id="sec-name-${section.id}">${section.name}</div>
+                                     <div class="col-md-4 td-actions" style="display:flex;justify-content:end">
+                                         <button type="button" rel="tooltip" class="btn-link" onclick="editSection(${section.id})" style="color:#4caf50" data-placement="bottom" title="Edit">
+                                             <i style="color:#4caf50" class="material-icons">edit</i>
+                                         </button>
+                                         <button type="button" rel="tooltip" class="btn-link" onclick="deleteSection(${section.id})" style="color:#f44336" data-placement="bottom" title="DELETE">
+                                             <i style="color:#f44336" class="material-icons">delete</i>
+                                         </button>
+                                     </div>
+                                 </div>
+                                 <div class="panel-group" id="${section.id}-sec"  role="tablist" aria-expanded='false' aria-multiselectable='true'>
+                                     <div class="panel">
+                                         <div class="panel-heading" role="tab" id="headingOne">
+                                             <a role="button" data-parent="#${section.id}-sec" aria-controls="#${section.id}-sect" data-toggle='collapse' aria-expanded="false" href="#${section.id}-sect">
+                                                 <h4 class="panel-title">
+                                                     Employees At Section
+                                                     <i class="material-icons">keyboard_arrow_down</i>
+                                                 </h4>
+                                             </a>
+                                         </div>
+                                         <div id="${section.id}-sect" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+                                             <div class="panel-body">
+                                                 <div>
+                                                     <table class="table">
+                                                         <thead class=" text-primary">
+                                                        <tr>
+                                                            <th>ID</th>
+                                                            <th>NAME</th>
+                                                            <th>LOCATION</th>
+                                                            <th>MANAGER</th>
+                                                        </tr>
+                                                         </thead>
+
+                                                     </table>
+                                                 </div>
+                                             </div>
+                                         </div>
+                                     </div>
+                                 </div>
+                         </div>`;
+               document.getElementById('section-content').appendChild(container);
+            });
+    }
+
+    function editManager(teamId){
+
+    }
+
+
+    function submitEditCategory(){
+
+    }
+    function getOptions(options,selectId){
+        const select = document.getElementById(selectId);
+        for(let opt of options){
+            let option = document.createElement("option");
+            option.value = opt.name;
+            option.text = opt.name;
+            select.add(option,select.opt);
+        }
+        $('.selectpicker').selectpicker('refresh');
+    }
+
+</script>
+<script th:src="@{/js/collection.js}"></script>
+</html>

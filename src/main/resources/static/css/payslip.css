@@ -1,0 +1,199 @@
+.payslip-header-container{
+	display:flex;
+	border-bottom:1px solid #888888; 
+}
+.payslip-btn-group{
+	display:flex;
+	justify-content:space-between;
+}
+.element-body{
+    border-right:1px solid #888888;
+    width:25%;
+    padding:8px;
+}
+.element-body-container{
+	display:flex;
+}
+.element-header{
+	display:flex;
+	justify-content:center;
+	width:25%;
+}
+.element-body:nth-child(4){
+	border-right:none;
+}
+.units-list{
+	padding:0px;
+	margin:0px;
+    list-style-type: none;
+}
+.unit{
+	display:flex;
+}
+.unit-label{
+	width:57%;
+}
+.unit-value{
+	padding-left:8px;
+}
+.tax-wrapper-header{
+	width:350px;
+	display:flex;
+	justify-content:space-between;
+	padding:8px;
+}
+.rate-list, .relief-list{
+	padding:0px;
+	margin:0px;
+    list-style-type: none;
+}
+.rate-headers{
+	display:flex;
+	border-bottom:1px solid #888888;
+}
+.rate-bands{
+	width:35%;
+}
+.rate-rate{
+	width:25%;
+}
+.rate-item{
+	display:flex;
+}
+.item-first{
+	width:20%;
+}
+.item-second{
+	width:35%;
+}
+.item-third{
+	width:35%;
+	display:flex;
+}
+.item-fourth{
+	width:5%;
+	display:flex;
+	justify-content:end;
+}
+.rate-list{
+	margin-top:12px;
+}
+.rate-item{
+	margin-bottom:8px;
+}
+.rate-item input{
+	height:25px;
+}
+.relief-headers{
+	display:flex;
+}
+.relief-list li{
+	display:flex;
+}
+.rate-btn-wrapper{
+	display:flex;
+	justify-content:flex-end;
+}
+.tax-item{
+	display:flex;
+}
+.tax-item div{
+	width:33.3%;
+}
+.nssf-wrapper-body{
+	display:flex;
+	justify-content:space-around;
+}
+.payhead-toolbar{
+	display:flex;
+	justify-content:space-between;
+}
+.payhead-wrapper{
+	display:flex;
+	border-top:1px solid #888888;
+	min-height: 50px;
+}
+.earnings-payhead{
+	width:50%;
+	border-right:1px solid #888888;
+}
+.deductions-payhead{
+	width:50%;
+}
+.payhead-list{
+	margin:0px;
+	padding:0px;
+	list-style:none
+}
+.payhead-item{
+	display:flex;
+	margin-left:10px;
+}
+.payhead-name{
+	width:50%;
+	font-size:20px;
+	font-weight:550;
+	margin-top:15px;
+	margin-left:30px;
+	color:#696b68;
+}
+.payhead-amount{
+	font-size:18px;
+	font-weight:350;
+	margin-top:18px;
+	margin-left:30px;
+	color:#494949;
+}
+.btn-group-container{
+	display:flex;
+}
+.btn-wrapper{
+	text-align:center;
+	padding-left:3px;
+}
+.relief-item{
+	display:flex;
+	justify-content:space-between;
+	padding-right: 67px;
+	padding-bottom: 30px;
+}
+.nssf-nhif-relief-container{
+	width:100%;
+}
+.nssf-nhif-relief-wrapper{
+	width:100%;
+	display:flex;
+	justify-content:space-between;
+}
+.nssf-nhif-relief-toolbar{
+	margin:auto;
+	display:flex;
+	justify-content: space-between;
+}
+.nhr-container{
+	width:46%;
+	display:flex;
+	justify-content:space-between;
+	margin-bottom:15px;
+}
+.template-reliefs-list{
+	margin:0px;
+	padding:0px;
+	list-style:none
+}
+.template-reliefs-list li{
+	display:flex;
+}
+.total{
+	margin-top: auto;
+}
+.units-list{
+	display:flex;
+	flex-direction:column
+}
+.total-container{
+	display:flex;
+}
+
+
+

@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.18.1.final using JasperReports Library version 6.18.1-9d75d1969e774d4f179fb3be8401e98a0e6d1611  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="nhif_2" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="842" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="b52a85d7-d5aa-4391-b671-6f2633880611">
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="DataAdapter.xml"/>
+	<property name="com.jaspersoft.studio.unit." value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageHeight" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.topMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.bottomMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.leftMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.rightMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnSpacing" value="pixel"/>
+	<parameter name="paramPayPeriod" class="java.sql.Date"/>
+	<queryString language="SQL">
+		<![CDATA[select DATE_FORMAT(date,'%M, %Y') as pay_period,payroll.date,payroll.id,general.employer_name,general.employer_code from payroll inner join general on payroll.general_id = general.id 
+AND  payroll.date= $P{paramPayPeriod}]]>
+	</queryString>
+	<field name="pay_period" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="pay_period"/>
+		<property name="com.jaspersoft.studio.field.label" value="pay_period"/>
+	</field>
+	<field name="date" class="java.sql.Date">
+		<property name="com.jaspersoft.studio.field.name" value="date"/>
+		<property name="com.jaspersoft.studio.field.label" value="date"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="payroll"/>
+	</field>
+	<field name="id" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.name" value="id"/>
+		<property name="com.jaspersoft.studio.field.label" value="id"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="payroll"/>
+	</field>
+	<field name="employer_name" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="employer_name"/>
+		<property name="com.jaspersoft.studio.field.label" value="employer_name"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="general"/>
+	</field>
+	<field name="employer_code" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.name" value="employer_code"/>
+		<property name="com.jaspersoft.studio.field.label" value="employer_code"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="general"/>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<detail>
+		<band height="400" splitType="Stretch">
+			<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.FreeLayout"/>
+			<frame>
+				<reportElement x="0" y="0" width="842" height="30" uuid="6b14dedc-d1ef-407b-a2ff-d52ff1756035">
+					<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.HorizontalRowLayout"/>
+				</reportElement>
+				<staticText>
+					<reportElement x="0" y="0" width="142" height="30" uuid="9d8ad7e3-2514-43d5-abee-6548477b7e52"/>
+					<textElement textAlignment="Left"/>
+					<text><![CDATA[EMPLOYER CODE]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="142" y="0" width="140" height="30" uuid="4d7274cd-c162-4515-a40f-4c28d43425b0"/>
+					<textElement textAlignment="Left"/>
+					<textFieldExpression><![CDATA[$F{employer_code}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="282" y="0" width="140" height="30" uuid="ee958ebb-9a52-4fe7-9bae-107b5e63935c"/>
+					<textElement textAlignment="Left"/>
+					<text><![CDATA[]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="422" y="0" width="140" height="30" uuid="849fa9f3-8d3a-405a-9bf5-7d845aacbd92"/>
+					<textElement textAlignment="Left"/>
+					<text><![CDATA[]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="562" y="0" width="140" height="30" uuid="b9fda04a-1fc5-46ee-bf07-e1b0999e317c"/>
+					<textElement textAlignment="Left"/>
+					<text><![CDATA[]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="702" y="0" width="140" height="30" uuid="d1b7dbbe-11be-4017-826a-b8318a2cf423"/>
+					<textElement textAlignment="Left"/>
+					<text><![CDATA[]]></text>
+				</staticText>
+			</frame>
+			<frame>
+				<reportElement x="0" y="30" width="842" height="30" uuid="72f8c7ad-e889-48cb-bed9-b1c11fb4c1aa">
+					<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.HorizontalRowLayout"/>
+				</reportElement>
+				<staticText>
+					<reportElement x="0" y="0" width="142" height="30" uuid="47018813-13c7-4147-a175-3548b8ddbef4"/>
+					<textElement textAlignment="Left"/>
+					<text><![CDATA[EMPLOYER NAME]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="142" y="0" width="140" height="30" uuid="8d7fd64e-8bc2-462c-8a20-5aeb7d437aee"/>
+					<textElement textAlignment="Left"/>
+					<textFieldExpression><![CDATA[$F{employer_name}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="282" y="0" width="140" height="30" uuid="6e0f7361-b5b3-42fc-985d-fb18b7cf9f42"/>
+					<textElement textAlignment="Left"/>
+					<text><![CDATA[]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="422" y="0" width="140" height="30" uuid="6031f460-c41a-4361-a09e-b7a8bf8ea41b"/>
+					<textElement textAlignment="Left"/>
+					<text><![CDATA[]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="562" y="0" width="140" height="30" uuid="b6856053-c062-4cdd-8ba1-84d4afba675e"/>
+					<textElement textAlignment="Left"/>
+					<text><![CDATA[]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="702" y="0" width="140" height="30" uuid="6b8b3610-ee77-4556-927a-be5c626632ac"/>
+					<textElement textAlignment="Left"/>
+					<text><![CDATA[]]></text>
+				</staticText>
+			</frame>
+			<frame>
+				<reportElement x="0" y="60" width="842" height="30" uuid="a18a75c2-2ecb-4957-9915-e621a0699266">
+					<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.HorizontalRowLayout"/>
+				</reportElement>
+				<staticText>
+					<reportElement x="0" y="0" width="142" height="30" uuid="7d8632de-5e79-42ea-9432-88dc4aa5c202"/>
+					<textElement textAlignment="Left"/>
+					<text><![CDATA[MONTH OF CONTRIBUTION]]></text>
+				</staticText>
+				<textField>
+					<reportElement x="142" y="0" width="140" height="30" uuid="7f2e255a-1769-4a77-849b-a94265db930d"/>
+					<textElement textAlignment="Left"/>
+					<textFieldExpression><![CDATA[$F{pay_period}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement x="282" y="0" width="140" height="30" uuid="cf45e60b-2dfa-4cdf-a417-32a86c3966cc"/>
+					<textElement textAlignment="Left"/>
+					<text><![CDATA[]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="422" y="0" width="140" height="30" uuid="3c4ad260-4fd9-4a78-9e69-5ef757de8b19"/>
+					<textElement textAlignment="Left"/>
+					<text><![CDATA[]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="562" y="0" width="140" height="30" uuid="890ab7df-e8d5-441b-805b-402667eda725"/>
+					<textElement textAlignment="Left"/>
+					<text><![CDATA[]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="702" y="0" width="140" height="30" uuid="7ec10573-97e4-4ee1-8d44-881f86e8aed1"/>
+					<textElement textAlignment="Left"/>
+					<text><![CDATA[]]></text>
+				</staticText>
+			</frame>
+			<frame>
+				<reportElement x="0" y="90" width="842" height="30" uuid="6a4217a1-f2dc-411b-9c14-2090de9f488c">
+					<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.HorizontalRowLayout"/>
+				</reportElement>
+				<staticText>
+					<reportElement x="0" y="0" width="142" height="30" uuid="24d86dc9-4e6c-4ab5-a956-d6e2cf0b26d9"/>
+					<text><![CDATA[]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="142" y="0" width="140" height="30" uuid="d957a2ca-a6e7-412b-b5f3-b4c5aa56eaa5"/>
+					<text><![CDATA[]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="282" y="0" width="140" height="30" uuid="61238209-b149-4249-bd3a-5f960f8ffa6a"/>
+					<text><![CDATA[]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="422" y="0" width="140" height="30" uuid="9f7add1a-1c08-4a1f-8dfb-5ea354a76974"/>
+					<text><![CDATA[]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="562" y="0" width="140" height="30" uuid="16386799-e245-4aee-ad8a-2b2fe8ae699b"/>
+					<text><![CDATA[]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="702" y="0" width="140" height="30" uuid="761750cf-a495-480f-8df3-40f0054cbc23"/>
+					<text><![CDATA[]]></text>
+				</staticText>
+			</frame>
+			<frame>
+				<reportElement x="0" y="120" width="842" height="30" uuid="89678544-b810-4187-83a2-c3707b715bb8">
+					<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.HorizontalRowLayout"/>
+				</reportElement>
+				<staticText>
+					<reportElement x="0" y="0" width="142" height="30" uuid="53acd831-038b-44bf-bbbf-2a59a529f35c"/>
+					<text><![CDATA[PAYROLL NO]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="142" y="0" width="140" height="30" uuid="54e3b8ff-01b7-43f2-8414-a06eff8aae4a"/>
+					<text><![CDATA[LAST NAME]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="282" y="0" width="140" height="30" uuid="e44406ab-e530-4758-ab5c-36b26c07409e"/>
+					<text><![CDATA[FIRST NAME]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="422" y="0" width="140" height="30" uuid="bef63b4d-4c94-4180-9893-390e9800c331"/>
+					<text><![CDATA[ID NO]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="562" y="0" width="140" height="30" uuid="a4d2e0aa-9515-4727-94e8-0dab6af7f588"/>
+					<text><![CDATA[NHIF NO]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="702" y="0" width="140" height="30" uuid="a75db45e-d9e1-4ec2-9205-9c90fb1ca630"/>
+					<text><![CDATA[AMOUNTS]]></text>
+				</staticText>
+			</frame>
+		</band>
+	</detail>
+</jasperReport>
